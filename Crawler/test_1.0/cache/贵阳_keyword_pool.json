@@ -1,0 +1,585 @@
+{
+  "city_name": "贵阳",
+  "updated_at": "2026-04-13 21:24:26",
+  "keywords": {
+    "口腔护士长": {
+      "count": 8,
+      "score": 24,
+      "source_titles": [
+        "口腔护士长"
+      ]
+    },
+    "新媒体运营": {
+      "count": 7,
+      "score": 21,
+      "source_titles": [
+        "新媒体运营"
+      ]
+    },
+    "口腔护士": {
+      "count": 6,
+      "score": 18,
+      "source_titles": [
+        "口腔护士"
+      ]
+    },
+    "仓库管理员": {
+      "count": 5,
+      "score": 15,
+      "source_titles": [
+        "仓库管理员"
+      ]
+    },
+    "护士长": {
+      "count": 5,
+      "score": 15,
+      "source_titles": [
+        "护士长",
+        "护士长（贵阳）"
+      ]
+    },
+    "客服": {
+      "count": 10,
+      "score": 14,
+      "source_titles": [
+        "客服 双休 朝九晚六",
+        "集团  客服   急招   无责任底薪4500",
+        "暑假 兼职 客服 实习",
+        "客服",
+        "客服专员"
+      ]
+    },
+    "护士": {
+      "count": 6,
+      "score": 14,
+      "source_titles": [
+        "护士",
+        "口腔医生、口腔助理、前台、护士",
+        "招执业口腔医生或助理医生，护士"
+      ]
+    },
+    "送货员": {
+      "count": 5,
+      "score": 13,
+      "source_titles": [
+        "送货员",
+        "送货员，库管员"
+      ]
+    },
+    "新媒体": {
+      "count": 9,
+      "score": 11,
+      "source_titles": [
+        "新媒体",
+        "新媒体运营",
+        "新媒体 运营专员"
+      ]
+    },
+    "库房管理员": {
+      "count": 3,
+      "score": 9,
+      "source_titles": [
+        "库房管理员"
+      ]
+    },
+    "教务老师": {
+      "count": 3,
+      "score": 9,
+      "source_titles": [
+        "教务老师"
+      ]
+    },
+    "纯客服": {
+      "count": 4,
+      "score": 8,
+      "source_titles": [
+        "纯客服（无责3000）",
+        "纯客服（无销售性质）薪资6000+接受无经验"
+      ]
+    },
+    "教务": {
+      "count": 4,
+      "score": 6,
+      "source_titles": [
+        "教务",
+        "教务老师"
+      ]
+    },
+    "客服 朝九晚六": {
+      "count": 2,
+      "score": 6,
+      "source_titles": [
+        "客服 双休 朝九晚六"
+      ]
+    },
+    "教务管理": {
+      "count": 2,
+      "score": 6,
+      "source_titles": [
+        "教务管理"
+      ]
+    },
+    "汽配送货员": {
+      "count": 2,
+      "score": 6,
+      "source_titles": [
+        "汽配送货员"
+      ]
+    },
+    "电动车送货员": {
+      "count": 2,
+      "score": 6,
+      "source_titles": [
+        "电动车送货员"
+      ]
+    },
+    "物流": {
+      "count": 5,
+      "score": 5,
+      "source_titles": [
+        "物流主管",
+        "贵阳俱进招聘物流运营",
+        "物流专员",
+        "物流文员",
+        "贵州太朴招聘物流/仓储项目经理"
+      ]
+    },
+    "库管员": {
+      "count": 2,
+      "score": 4,
+      "source_titles": [
+        "送货员，库管员",
+        "库管员"
+      ]
+    },
+    "配送员": {
+      "count": 2,
+      "score": 4,
+      "source_titles": [
+        "贵州鑫圣隆贸易有...招聘配送员",
+        "配送员"
+      ]
+    },
+    "朝九晚六": {
+      "count": 3,
+      "score": 3,
+      "source_titles": [
+        "双休 客服岗 朝九晚六",
+        "客服 双休 朝九晚六"
+      ]
+    },
+    "上五休二！ 客服岗！": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "上五休二！ 客服岗！"
+      ]
+    },
+    "义诊护士": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "义诊护士"
+      ]
+    },
+    "全职护士": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "全职护士"
+      ]
+    },
+    "前台教务": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "前台教务"
+      ]
+    },
+    "司机兼送货员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "司机兼送货员"
+      ]
+    },
+    "司机送货员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "司机送货员"
+      ]
+    },
+    "喜上母婴护士长": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "喜上母婴护士长"
+      ]
+    },
+    "字节跳动客服岗！": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "（互联网大厂）字节跳动客服岗！五险一金"
+      ]
+    },
+    "客服专员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "客服专员"
+      ]
+    },
+    "客服岗 朝九晚六": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "双休 客服岗 朝九晚六"
+      ]
+    },
+    "客服文员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "客服文员"
+      ]
+    },
+    "总护士长": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "总护士长"
+      ]
+    },
+    "手术室护士长": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "手术室护士长"
+      ]
+    },
+    "教务咨询师": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "教务咨询师"
+      ]
+    },
+    "教务班主任": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "教务班主任"
+      ]
+    },
+    "教务行政专员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "教务行政专员"
+      ]
+    },
+    "新媒体 运营专员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "新媒体 运营专员"
+      ]
+    },
+    "新媒体营销": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "新媒体营销"
+      ]
+    },
+    "物流专员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "物流专员"
+      ]
+    },
+    "物流主管": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "物流主管"
+      ]
+    },
+    "物流总监": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "物流总监"
+      ]
+    },
+    "物流文员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "物流文员"
+      ]
+    },
+    "物流站长": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "物流站长"
+      ]
+    },
+    "物流网管": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "物流网管"
+      ]
+    },
+    "物流驾驶员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "物流驾驶员"
+      ]
+    },
+    "电动车送货员和打杂": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "电动车送货员和打杂"
+      ]
+    },
+    "电话客服": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "电话客服"
+      ]
+    },
+    "线上客服": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "线上客服"
+      ]
+    },
+    "网络客服": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "网络客服"
+      ]
+    },
+    "贵阳俱进 物流运营": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "贵阳俱进招聘物流运营"
+      ]
+    },
+    "轮胎送货员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "轮胎送货员"
+      ]
+    },
+    "送货业务员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "送货业务员"
+      ]
+    },
+    "送货员 库管员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "送货员，库管员"
+      ]
+    },
+    "送货师傅": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "送货师傅"
+      ]
+    },
+    "配件仓库管理员": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "配件仓库管理员"
+      ]
+    },
+    "面包车送货司机": {
+      "count": 1,
+      "score": 3,
+      "source_titles": [
+        "面包车送货司机"
+      ]
+    },
+    "兼职": {
+      "count": 2,
+      "score": 2,
+      "source_titles": [
+        "暑假 兼职 客服 实习"
+      ]
+    },
+    "实习": {
+      "count": 2,
+      "score": 2,
+      "source_titles": [
+        "暑假 兼职 客服 实习"
+      ]
+    },
+    "急招": {
+      "count": 2,
+      "score": 2,
+      "source_titles": [
+        "集团  客服   急招   无责任底薪4500"
+      ]
+    },
+    "接受": {
+      "count": 2,
+      "score": 2,
+      "source_titles": [
+        "纯客服（无销售性质）薪资6000+接受无经验"
+      ]
+    },
+    "无责任底薪4500": {
+      "count": 2,
+      "score": 2,
+      "source_titles": [
+        "集团  客服   急招   无责任底薪4500"
+      ]
+    },
+    "暑假": {
+      "count": 2,
+      "score": 2,
+      "source_titles": [
+        "暑假 兼职 客服 实习"
+      ]
+    },
+    "薪资6000": {
+      "count": 2,
+      "score": 2,
+      "source_titles": [
+        "纯客服（无销售性质）薪资6000+接受无经验"
+      ]
+    },
+    "集团": {
+      "count": 2,
+      "score": 2,
+      "source_titles": [
+        "集团  客服   急招   无责任底薪4500"
+      ]
+    },
+    "上五休二！": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "上五休二！ 客服岗！"
+      ]
+    },
+    "仓储项目": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "贵州太朴招聘物流/仓储项目经理"
+      ]
+    },
+    "仓储项目经理": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "贵州太朴招聘物流/仓储项目经理"
+      ]
+    },
+    "前台": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "口腔医生、口腔助理、前台、护士"
+      ]
+    },
+    "口腔": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "口腔医生、口腔助理、前台、护士"
+      ]
+    },
+    "口腔助理": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "口腔医生、口腔助理、前台、护士"
+      ]
+    },
+    "口腔医生": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "口腔医生、口腔助理、前台、护士"
+      ]
+    },
+    "客服岗": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "双休 客服岗 朝九晚六"
+      ]
+    },
+    "客服岗！": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "上五休二！ 客服岗！"
+      ]
+    },
+    "教务行政": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "教务行政专员"
+      ]
+    },
+    "物流运营": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "贵阳俱进招聘物流运营"
+      ]
+    },
+    "电话": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "电话客服"
+      ]
+    },
+    "线上": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "线上客服"
+      ]
+    },
+    "网络": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "网络客服"
+      ]
+    },
+    "货运司机": {
+      "count": 1,
+      "score": 1,
+      "source_titles": [
+        "贵州中翼航空物流招聘货运司机"
+      ]
+    }
+  }
+}

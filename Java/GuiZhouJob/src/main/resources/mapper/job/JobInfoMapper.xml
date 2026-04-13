@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.txd.guizhoujob.job.mapper.JobInfoMapper">
+
+    <resultMap id="JobInfoResultMap" type="org.txd.guizhoujob.job.entity.JobInfo">
+        <id property="id" column="id"/>
+        <result property="jobTitle" column="job_title"/>
+        <result property="companyName" column="company_name"/>
+        <result property="city" column="city"/>
+        <result property="workAddress" column="work_address"/>
+        <result property="educationText" column="education_text"/>
+        <result property="experienceText" column="experience_text"/>
+        <result property="salaryText" column="salary_text"/>
+        <result property="salaryMin" column="salary_min"/>
+        <result property="salaryMax" column="salary_max"/>
+        <result property="jobDescription" column="job_description"/>
+        <result property="publishTime" column="publish_time"/>
+        <result property="dataBatchNo" column="data_batch_no"/>
+        <result property="jobHash" column="job_hash"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, job_title, company_name, city, work_address, education_text,
+        experience_text, salary_text, salary_min, salary_max, job_description,
+        publish_time, data_batch_no, job_hash, status, create_time, update_time
+    </sql>
+
+    <select id="countByCondition" resultType="java.lang.Long">
+        select count(1)
+        from job_info
+        where status = 1
+        <if test="keyword != null and keyword != ''">
+            and (
+            job_title like concat('%', #{keyword}, '%')
+            or company_name like concat('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="city != null and city != ''">
+            and city = #{city}
+        </if>
+        <if test="salaryMin != null">
+            and salary_max &gt;= #{salaryMin}
+        </if>
+        <if test="salaryMax != null">
+            and salary_min &lt;= #{salaryMax}
+        </if>
+    </select>
+
+    <select id="selectPageByCondition" resultMap="JobInfoResultMap">
+        select <include refid="Base_Column_List"/>
+        from job_info
+        where status = 1
+        <if test="keyword != null and keyword != ''">
+            and (
+            job_title like concat('%', #{keyword}, '%')
+            or company_name like concat('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="city != null and city != ''">
+            and city = #{city}
+        </if>
+        <if test="salaryMin != null">
+            and salary_max &gt;= #{salaryMin}
+        </if>
+        <if test="salaryMax != null">
+            and salary_min &lt;= #{salaryMax}
+        </if>
+        order by publish_time desc, id desc
+        limit #{pageSize} offset ${(pageNum - 1) * pageSize}
+    </select>
+
+    <select id="selectById" resultMap="JobInfoResultMap">
+        select <include refid="Base_Column_List"/>
+        from job_info
+        where id = #{id}
+        limit 1
+    </select>
+</mapper>

@@ -1,0 +1,84 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "3PYtp1kU1sF",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "a2FvH8U90g77P-r1Jj1oENvGrSn0pdnx0V7V5FYhpu5Ysqz_LoHkMjsPCd-tlfm-6LobdgkfVJ1I93EzxfD2kMWZPvUQSpk_j_YnZc_9FHrqO85noP9T9XaINhsnbuNv-DlIrH1-_IaoA1j9j3rjOj4BLVSMI574oqOCBE2sFcOCwvUCB-enxUBiXWjFXZI0kNwC6rRjGvAIwn_U26qXWBer--MTRqyrLh4XuJ0~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20250703/607f1f3d68754fd02b6e5cf64236db0cfade15184142167500838c63b11d0e3c5898de07ab5d4dad_s.jpg.webp",
+        "bossCert": 3,
+        "encryptBossId": "a54c88bd45cd43be0XRy39i_FFRS",
+        "bossName": "蒋女士",
+        "bossTitle": "行政经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "ee5d4e2634ec61121HR40tu6F1VS",
+        "expectId": 0,
+        "jobName": "4s店续保专员",
+        "lid": "3PYtp1kU1sF.search.1",
+        "salaryDesc": "",
+        "jobLabels": [
+          "1-3年",
+          "大专"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "保险产品营销",
+          "客户服务",
+          "续保业务",
+          "车险",
+          "汽车4S店/后市场",
+          "销售工作经验",
+          "保险从业经验",
+          "车险业务经验",
+          "熟悉保险业务流程",
+          "优秀的沟通协调能力",
+          "优秀的数据能力"
+        ],
+        "jobExperience": "1-3年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "大专",
+        "cityName": "贵阳",
+        "areaDistrict": "",
+        "businessDistrict": "",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260100,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 106.745565,
+          "latitude": 26.404726
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "5ea03046083490811Xx_09i8GVs~",
+        "brandName": "贵州利和",
+        "brandLogo": "https://img.bosszhipin.com/beijin/icon/894ce6fa7e58d64d57e7f22d2f3a9d18afa7fcceaa24b8ea28f56f1bb14732c0.png",
+        "brandStageName": "不需要融资",
+        "brandIndustry": "4S店/后市场",
+        "brandScaleName": "100-499人",
+        "welfareList": [
+          "五险一金"
+        ],
+        "industry": 100803,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "source_name": "boss_zhipin",
+  "city_name": "贵阳",
+  "city_code": "101260100",
+  "target_count": 100,
+  "actual_count": 100,
+  "batch_name": "贵阳_2604151857",
+  "output_dir": "D:\\graduation Project\\Crawler\\test_1.0\\output\\贵阳_2604151857",
+  "csv_path": "D:\\graduation Project\\Crawler\\test_1.0\\output\\贵阳_2604151857\\贵阳_2604151857.csv",
+  "jsonl_path": "D:\\graduation Project\\Crawler\\test_1.0\\output\\贵阳_2604151857\\贵阳_2604151857.jsonl",
+  "debug_dir": "D:\\graduation Project\\Crawler\\test_1.0\\output\\贵阳_2604151857\\debug",
+  "seen_cache_path": "D:\\graduation Project\\Crawler\\test_1.0\\cache\\贵阳_seen_hashes.txt",
+  "keyword_pool_cache_path": "D:\\graduation Project\\Crawler\\test_1.0\\cache\\贵阳_keyword_pool.json",
+  "start_time": "2026-04-15 18:57:35",
+  "end_time": "2026-04-15 18:57:51",
+  "max_pages_per_keyword": 3,
+  "max_rounds": 4,
+  "max_new_per_keyword_per_round": 10,
+  "expansion_limit_per_round": 12,
+  "low_novelty_threshold": 0.08,
+  "low_novelty_streak_limit": 6,
+  "stop_due_to_low_novelty": false,
+  "keyword_categories": {
+    "tech": [
+      "Java",
+      "Python",
+      "前端",
+      "后端",
+      "测试",
+      "运维",
+      "数据分析",
+      "大数据"
+    ],
+    "sales": [
+      "销售",
+      "客户经理",
+      "电话销售",
+      "渠道销售",
+      "招商",
+      "商务"
+    ],
+    "admin": [
+      "行政",
+      "文员",
+      "人事",
+      "前台",
+      "助理",
+      "内勤"
+    ],
+    "finance": [
+      "会计",
+      "出纳",
+      "财务",
+      "审计",
+      "税务"
+    ],
+    "education": [
+      "教师",
+      "老师",
+      "培训",
+      "教务",
+      "辅导老师"
+    ],
+    "medical": [
+      "护士",
+      "医生",
+      "药师",
+      "医助",
+      "康复"
+    ],
+    "service": [
+      "客服",
+      "收银",
+      "服务员",
+      "店员",
+      "营业员",
+      "导购"
+    ],
+    "factory": [
+      "操作工",
+      "普工",
+      "质检",
+      "生产",
+      "仓管"
+    ],
+    "logistics": [
+      "司机",
+      "配送",
+      "仓库",
+      "装卸",
+      "物流"
+    ],
+    "design_ops": [
+      "设计师",
+      "平面设计",
+      "新媒体",
+      "运营",
+      "剪辑",
+      "文案"
+    ]
+  },
+  "used_keywords": [
+    "Java",
+    "口腔护士长",
+    "电话销售",
+    "新媒体运营",
+    "司机",
+    "口腔护士",
+    "内勤",
+    "护士长",
+    "平面设计",
+    "仓库管理员"
+  ],
+  "recent_novelty_rates": [
+    0.6667,
+    0.6667,
+    0.6667,
+    0.6667,
+    0.6667,
+    0.6667,
+    0.6667,
+    0.6667,
+    0.6667,
+    0.6667
+  ],
+  "top_expansion_keywords": [
+    "口腔护士长",
+    "新媒体运营",
+    "仓库管理员",
+    "口腔护士",
+    "电话销售",
+    "平面设计师",
+    "护士长",
+    "新媒体",
+    "护士",
+    "客服",
+    "Java",
+    "送货员",
+    "电话",
+    "平面",
+    "教务老师",
+    "库房管理员",
+    "纯客服",
+    "教务",
+    "总护士长",
+    "教务管理",
+    "汽配送货员",
+    "物流驾驶员",
+    "电动车送货员",
+    "java工程师",
+    "客服 朝九晚六",
+    "高级java开发",
+    "物流",
+    "库管员",
+    "配送员",
+    "销售内勤"
+  ],
+  "stats": {
+    "pages_fetched": 10,
+    "jobs_seen": 150
+  }
+}

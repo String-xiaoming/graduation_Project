@@ -10,7 +10,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from DrissionPage import ChromiumPage
-
+ 
 
 SOURCE_NAME = "boss_zhipin"
 LISTEN_URL = "https://www.zhipin.com/wapi/zpgeek/search/joblist.json"
@@ -18,12 +18,14 @@ LISTEN_URL = "https://www.zhipin.com/wapi/zpgeek/search/joblist.json"
 DEFAULT_CITY = "贵阳"
 DEFAULT_TARGET_COUNT = 100
 
-MAX_PAGES_PER_KEYWORD = 3
-MAX_ROUNDS = 4
-MAX_NEW_PER_KEYWORD_PER_ROUND = 10
-PAGE_SLEEP_SECONDS = (0.8, 1.6)
+DEFAULT_MAX_PAGES_PER_KEYWORD = 3
+DEFAULT_MAX_ROUNDS = 4
+DEFAULT_MAX_NEW_PER_KEYWORD_PER_ROUND = 10
+DEFAULT_PAGE_SLEEP_SECONDS = (1.6, 3.2)
+DEFAULT_KEYWORD_SLEEP_SECONDS = (1.2, 2.8)
+DEFAULT_ROUND_SLEEP_SECONDS = (5.0, 9.0)
 
-EXPANSION_LIMIT_PER_ROUND = 12
+DEFAULT_EXPANSION_LIMIT_PER_ROUND = 12
 MAX_EXPANSION_KEYWORDS = 80
 MAX_TITLE_SAMPLES_PER_KEYWORD = 5
 
@@ -52,38 +54,59 @@ CSV_FIELDS = [
     "status",
 ]
 
-CITY_CODE_MAP = {
-    "贵阳": "101260100",
-    "guiyang": "101260100",
-    "遵义": "101260200",
-    "zunyi": "101260200",
-    "安顺": "101260300",
-    "anshun": "101260300",
-    "六盘水": "101260400",
-    "liupanshui": "101260400",
-    "毕节": "101260500",
-    "bijie": "101260500",
-    "铜仁": "101260600",
-    "tongren": "101260600",
-    "黔东南": "101260700",
-    "qiandongnan": "101260700",
-    "黔南": "101260800",
-    "qiannan": "101260800",
-    "黔西南": "101260900",
-    "qianxinan": "101260900",
+CITY_CONFIG_MAP = {
+    "guiyang": {"city_name": "贵阳", "city_code": "101260100", "aliases": ["贵阳", "guiyang"]},
+    "zunyi": {"city_name": "遵义", "city_code": "101260200", "aliases": ["遵义", "zunyi"]},
+    "anshun": {"city_name": "安顺", "city_code": "101260300", "aliases": ["安顺", "anshun"]},
+    "liupanshui": {"city_name": "六盘水", "city_code": "101260400", "aliases": ["六盘水", "liupanshui"]},
+    "bijie": {"city_name": "毕节", "city_code": "101260500", "aliases": ["毕节", "bijie"]},
+    "tongren": {"city_name": "铜仁", "city_code": "101260600", "aliases": ["铜仁", "tongren"]},
+    "qiandongnan": {"city_name": "黔东南", "city_code": "101260700", "aliases": ["黔东南", "qiandongnan"]},
+    "qiannan": {"city_name": "黔南", "city_code": "101260800", "aliases": ["黔南", "qiannan"]},
+    "qianxinan": {"city_name": "黔西南", "city_code": "101260900", "aliases": ["黔西南", "qianxinan"]},
 }
 
 KEYWORD_CATEGORIES = {
-    "tech": ["Java", "Python", "前端", "后端", "测试", "运维", "数据分析", "大数据"],
+    "tech": [
+        "Java", "Python", "前端", "后端", "测试", "运维", "数据分析", "大数据",
+        "产品经理", "UI设计", "UE设计", "软件测试", "运维开发", "数据库管理",
+        "网络安全", "系统架构师", "算法工程师", "AI训练师",
+    ],
     "sales": ["销售", "客户经理", "电话销售", "渠道销售", "招商", "商务"],
-    "admin": ["行政", "文员", "人事", "前台", "助理", "内勤"],
+    "admin": ["行政", "文员", "人事", "前台", "助理", "内勤", "行政助理", "后勤专员", "档案管理", "固定资产管理", "行政主管"],
     "finance": ["会计", "出纳", "财务", "审计", "税务"],
-    "education": ["教师", "老师", "培训", "教务", "辅导老师"],
-    "medical": ["护士", "医生", "药师", "医助", "康复"],
+    "education": ["教师", "老师", "培训", "教务", "辅导老师", "教学主管", "课程顾问", "教务管理", "幼教", "助教", "家教", "培训师", "留学顾问"],
+    "medical": ["护士", "医生", "药师", "医助", "康复", "药剂师", "检验师", "康复治疗师", "影像技师", "口腔医生", "中医", "医药代表", "医疗器械销售"],
     "service": ["客服", "收银", "服务员", "店员", "营业员", "导购"],
-    "factory": ["操作工", "普工", "质检", "生产", "仓管"],
-    "logistics": ["司机", "配送", "仓库", "装卸", "物流"],
-    "design_ops": ["设计师", "平面设计", "新媒体", "运营", "剪辑", "文案"],
+    "factory": ["操作工", "普工", "质检", "生产", "仓管", "车工", "铣工", "焊工", "电工", "装配工", "模具工", "CNC编程", "厂长", "生产主管", "设备维修"],
+    "logistics": ["司机", "配送", "仓库", "装卸", "物流", "快递员", "仓储主管", "调度员", "单证员", "报关员", "货运代理", "供应链经理", "理货员"],
+    "design_ops": ["设计师", "平面设计", "新媒体", "运营", "剪辑", "文案", "插画师", "原画师", "3D建模", "室内设计", "服装设计", "包装设计", "品牌设计", "创意总监"],
+    "legal": ["律师", "法务", "合规", "专利代理人", "实习律师", "知识产权顾问", "诉讼律师", "法律顾问", "商标代理人", "法律助理"],
+    "real_estate": ["置业顾问", "房产经纪人", "地产策划", "估价师", "开发报建", "地产招商", "房产店长", "楼盘案场", "权证专员", "房产评估"],
+    "construction": ["土木工程师", "施工员", "预算员", "造价师", "资料员", "监理", "安全员", "测量员", "结构工程师", "给排水工程师", "电气工程师", "暖通工程师", "一级建造师"],
+    "procurement": ["采购专员", "采购经理", "供应商开发", "招标专员", "采购助理", "供应链管理", "采购主管", "战略采购", "采购工程师"],
+    "marketing_pr": ["市场专员", "品牌策划", "公关", "媒介投放", "活动执行", "市场经理", "市场调研", "品牌经理", "公关经理", "媒介专员"],
+    "catering": ["厨师", "配菜", "面点师", "后厨", "餐厅经理", "送餐员", "烘焙师", "凉菜师傅", "洗碗工", "餐饮店长"],
+    "beauty": ["美容师", "美发师", "美甲师", "化妆师", "纹绣师", "养发师", "美容顾问", "美体师", "皮肤管理师", "彩妆师"],
+    "security": ["保安", "安检员", "秩序维护", "消防中控", "巡逻员", "保镖", "门卫", "安防专员", "保安队长"],
+    "consulting": ["咨询顾问", "咨询师", "分析师", "战略咨询", "管理顾问", "IT咨询", "财务咨询", "人力咨询", "咨询助理"],
+    "project_management": ["项目经理", "项目专员", "项目助理", "项目主管", "PMO", "项目工程师", "项目总监", "敏捷教练"],
+    "advertising_exhibition": ["广告文案", "AE", "会展策划", "展览设计", "广告销售", "媒介策划", "活动搭建", "会展执行"],
+    "media_publishing": ["编辑", "记者", "主播", "编导", "校对", "出版专员", "新媒体编辑", "内容策划", "撰稿人", "翻译"],
+    "travel_hotel": ["导游", "旅游顾问", "酒店前台", "客房服务员", "礼宾员", "酒店经理", "计调", "景区讲解", "票务专员"],
+    "finance_investment": ["投资顾问", "理财经理", "风控专员", "信贷审核", "基金经理", "投行分析师", "证券经纪人", "保险顾问", "精算师", "金融产品经理"],
+    "banking": ["柜员", "大堂经理", "客户经理", "理财专员", "信用卡专员", "信贷经理", "银行会计", "外汇交易员"],
+    "insurance": ["保险代理人", "理赔专员", "核保", "保险内勤", "保险经纪人", "车险查勘", "保险客服"],
+    "hr": ["招聘专员", "培训专员", "薪酬绩效", "HRBP", "人事经理", "员工关系", "企业文化", "招聘经理"],
+    "agriculture": ["农艺师", "园艺师", "畜牧师", "兽医", "农场管理", "林业技术", "渔业技术", "植保员", "养殖技术员"],
+    "mining_energy": ["采矿工程师", "地质勘探", "石油工程师", "天然气技术", "选矿工", "能源管理", "光伏技术", "风电运维"],
+    "chemical_environment": ["化工工程师", "化验员", "环境监测", "污水处理", "固废处理", "环评工程师", "EHS专员", "化学分析"],
+    "public_service": ["社工", "公益项目专员", "基金会干事", "行政办事员", "社区工作者", "志愿者管理", "慈善专员"],
+    "transport": ["地铁司机", "火车司机", "乘务员", "站务员", "调度员", "票务员", "客运员", "航空乘务"],
+    "sports_fitness": ["健身教练", "瑜伽老师", "体育老师", "康复教练", "游泳教练", "羽毛球教练", "健身房前台"],
+    "entertainment": ["演员", "歌手", "舞蹈演员", "模特", "主持人", "DJ", "演艺经纪人", "舞台监督"],
+    "housekeeping": ["月嫂", "育婴师", "保姆", "保洁", "养老护理员", "护工", "钟点工", "收纳师"],
+    "utilities": ["电工", "电力工程师", "变电站运维", "水处理工", "抄表员", "管道维修", "电力调度"],
 }
 
 NOISE_PATTERNS = [
@@ -121,6 +144,11 @@ COMMON_SUFFIXES = [
     "运营",
 ]
 
+EXPANSION_STOP_TERMS = {
+    "客户", "电话", "平面", "数据", "仓库", "生产", "配送", "招聘", "高薪", "双休",
+    "五险", "兼职", "全职", "小白", "居家", "就近", "急聘", "诚聘",
+}
+
 
 def ask_with_default(prompt: str, default: str) -> str:
     value = input(f"{prompt}（默认：{default}）：").strip()
@@ -131,8 +159,8 @@ def now_str() -> str:
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
-def build_batch_name(city_name: str) -> str:
-    return f"{city_name}_{datetime.now().strftime('%y%m%d%H%M')}"
+def build_batch_name(city_slug: str) -> str:
+    return f"{city_slug}_{datetime.now().strftime('%y%m%d%H%M')}"
 
 
 def sanitize_filename(text: str) -> str:
@@ -163,23 +191,51 @@ def parse_salary(salary_text: str):
     return float(match.group(1)) * 1000, float(match.group(2)) * 1000
 
 
-def normalize_city(city_input: str) -> tuple[str, str]:
-    city_input = city_input.strip()
-    city_code = CITY_CODE_MAP.get(city_input)
-    if city_code:
-        if re.search(r"[\u4e00-\u9fff]", city_input):
-            return city_input, city_code
+def random_sleep(seconds_range: tuple[float, float]):
+    time.sleep(random.uniform(*seconds_range))
 
-        chinese_name = next(
-            name
-            for name, code in CITY_CODE_MAP.items()
-            if code == city_code and re.search(r"[\u4e00-\u9fff]", name)
-        )
-        return chinese_name, city_code
 
-    raise ValueError(
-        f"暂不支持城市：{city_input}。当前支持：贵阳、遵义、安顺、六盘水、毕节、铜仁、黔东南、黔南、黔西南"
-    )
+def normalize_city(city_input: str) -> tuple[str, str, str]:
+    city_input = city_input.strip().lower()
+    for city_slug, config in CITY_CONFIG_MAP.items():
+        aliases = {alias.lower() for alias in config["aliases"]}
+        if city_input in aliases:
+            return config["city_name"], config["city_code"], city_slug
+
+    supported_cities = "、".join(config["city_name"] for config in CITY_CONFIG_MAP.values())
+    raise ValueError(f"暂不支持城市：{city_input}。当前支持：{supported_cities}")
+
+
+def get_runtime_config(target_count: int) -> dict:
+    if target_count >= 10000:
+        return {
+            "max_pages_per_keyword": 5,
+            "max_rounds": 16,
+            "max_new_per_keyword_per_round": 25,
+            "expansion_limit_per_round": 24,
+            "page_sleep_seconds": (2.4, 4.6),
+            "keyword_sleep_seconds": (2.0, 4.5),
+            "round_sleep_seconds": (8.0, 14.0),
+        }
+    if target_count >= 5000:
+        return {
+            "max_pages_per_keyword": 4,
+            "max_rounds": 10,
+            "max_new_per_keyword_per_round": 18,
+            "expansion_limit_per_round": 18,
+            "page_sleep_seconds": (2.0, 3.8),
+            "keyword_sleep_seconds": (1.8, 3.8),
+            "round_sleep_seconds": (6.0, 10.0),
+        }
+    return {
+        "max_pages_per_keyword": DEFAULT_MAX_PAGES_PER_KEYWORD,
+        "max_rounds": DEFAULT_MAX_ROUNDS,
+        "max_new_per_keyword_per_round": DEFAULT_MAX_NEW_PER_KEYWORD_PER_ROUND,
+        "expansion_limit_per_round": DEFAULT_EXPANSION_LIMIT_PER_ROUND,
+        "page_sleep_seconds": DEFAULT_PAGE_SLEEP_SECONDS,
+        "keyword_sleep_seconds": DEFAULT_KEYWORD_SLEEP_SECONDS,
+        "round_sleep_seconds": DEFAULT_ROUND_SLEEP_SECONDS,
+    }
 
 
 def build_seed_keyword_plan() -> list[str]:
@@ -283,6 +339,8 @@ def is_good_keyword(term: str) -> bool:
         return False
     if re.search(r"(经验不限|学历不限|本科|大专|硕士|博士|中专|高中)", term):
         return False
+    if term in EXPANSION_STOP_TERMS:
+        return False
     if not re.search(r"[\u4e00-\u9fffA-Za-z]", term):
         return False
     return True
@@ -348,9 +406,9 @@ def rank_expansion_keywords(discovered_keywords: dict, blocked_keywords: set[str
     return [item[3] for item in ranked[:MAX_EXPANSION_KEYWORDS]]
 
 
-def interleave_keywords(seed_keywords: list[str], expansion_keywords: list[str]) -> list[str]:
+def interleave_keywords(seed_keywords: list[str], expansion_keywords: list[str], expansion_limit_per_round: int) -> list[str]:
     seed_queue = seed_keywords[:]
-    expansion_queue = expansion_keywords[:EXPANSION_LIMIT_PER_ROUND]
+    expansion_queue = expansion_keywords[:expansion_limit_per_round]
     random.shuffle(seed_queue)
 
     merged = []
@@ -362,11 +420,17 @@ def interleave_keywords(seed_keywords: list[str], expansion_keywords: list[str])
     return merged
 
 
-def fetch_job_list(dp: ChromiumPage, city_code: str, keyword: str, page_no: int) -> dict:
+def fetch_job_list(
+    dp: ChromiumPage,
+    city_code: str,
+    keyword: str,
+    page_no: int,
+    page_sleep_seconds: tuple[float, float],
+) -> dict:
     search_url = build_search_url(city_code, keyword, page_no)
     dp.listen.clear()
     dp.get(search_url)
-    time.sleep(random.uniform(*PAGE_SLEEP_SECONDS))
+    random_sleep(page_sleep_seconds)
     dp.scroll.to_bottom()
 
     for _ in range(4):
@@ -501,9 +565,10 @@ def main():
 
     city_input = ask_with_default("请输入城市", DEFAULT_CITY)
     target_count = int(ask_with_default("请输入目标岗位数量", str(DEFAULT_TARGET_COUNT)))
-    city_name, city_code = normalize_city(city_input)
+    city_name, city_code, city_slug = normalize_city(city_input)
+    runtime_config = get_runtime_config(target_count)
 
-    batch_name = build_batch_name(city_name)
+    batch_name = build_batch_name(city_slug)
     safe_batch_name = sanitize_filename(batch_name)
     out_dir = OUTPUT_DIR / safe_batch_name
     debug_dir = out_dir / "debug"
@@ -515,8 +580,8 @@ def main():
     meta_path = out_dir / "meta.json"
 
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    seen_cache_path = CACHE_DIR / f"{sanitize_filename(city_name)}_seen_hashes.txt"
-    keyword_pool_cache_path = CACHE_DIR / f"{sanitize_filename(city_name)}_keyword_pool.json"
+    seen_cache_path = CACHE_DIR / f"{city_slug}_seen_hashes.txt"
+    keyword_pool_cache_path = CACHE_DIR / f"{city_slug}_keyword_pool.json"
 
     seen_hashes = read_seen_hashes(seen_cache_path)
     new_hashes = set()
@@ -544,18 +609,22 @@ def main():
     start_time = now_str()
 
     try:
-        for round_no in range(1, MAX_ROUNDS + 1):
+        for round_no in range(1, runtime_config["max_rounds"] + 1):
             if len(csv_rows) >= target_count or stop_due_to_low_novelty:
                 break
 
             seed_keywords = build_seed_keyword_plan()
             blocked_keywords = {keyword.lower() for keyword in seed_keywords + used_keywords}
             expansion_keywords = rank_expansion_keywords(discovered_keywords, blocked_keywords)
-            keyword_plan = interleave_keywords(seed_keywords, expansion_keywords)
+            keyword_plan = interleave_keywords(
+                seed_keywords,
+                expansion_keywords,
+                runtime_config["expansion_limit_per_round"],
+            )
 
             print(
                 f"开始第 {round_no} 轮采集，"
-                f"种子词 {len(seed_keywords)} 个，扩展词 {min(len(expansion_keywords), EXPANSION_LIMIT_PER_ROUND)} 个"
+                f"种子词 {len(seed_keywords)} 个，扩展词 {min(len(expansion_keywords), runtime_config['expansion_limit_per_round'])} 个"
             )
 
             for keyword in keyword_plan:
@@ -566,14 +635,20 @@ def main():
                 keyword_new_count = 0
                 print(f"当前关键词：{keyword}")
 
-                for page_no in range(1, MAX_PAGES_PER_KEYWORD + 1):
+                for page_no in range(1, runtime_config["max_pages_per_keyword"] + 1):
                     if len(csv_rows) >= target_count or stop_due_to_low_novelty:
                         break
-                    if keyword_new_count >= MAX_NEW_PER_KEYWORD_PER_ROUND:
+                    if keyword_new_count >= runtime_config["max_new_per_keyword_per_round"]:
                         break
 
                     try:
-                        page_body = fetch_job_list(dp, city_code, keyword, page_no)
+                        page_body = fetch_job_list(
+                            dp,
+                            city_code,
+                            keyword,
+                            page_no,
+                            runtime_config["page_sleep_seconds"],
+                        )
                     except Exception as e:
                         print(f"关键词={keyword} 第 {page_no} 页采集失败：{e}")
                         break
@@ -627,7 +702,7 @@ def main():
 
                         if len(csv_rows) >= target_count:
                             break
-                        if keyword_new_count >= MAX_NEW_PER_KEYWORD_PER_ROUND:
+                        if keyword_new_count >= runtime_config["max_new_per_keyword_per_round"]:
                             break
 
                     novelty_rate = new_count_this_page / max(len(job_list), 1)
@@ -657,6 +732,16 @@ def main():
                     if new_count_this_page == 0 and page_no >= 2:
                         break
 
+                if len(csv_rows) >= target_count or stop_due_to_low_novelty:
+                    break
+
+                random_sleep(runtime_config["keyword_sleep_seconds"])
+
+            if len(csv_rows) >= target_count or stop_due_to_low_novelty:
+                break
+
+            random_sleep(runtime_config["round_sleep_seconds"])
+
     finally:
         try:
             dp.quit()
@@ -672,6 +757,7 @@ def main():
     meta = {
         "source_name": SOURCE_NAME,
         "city_name": city_name,
+        "city_slug": city_slug,
         "city_code": city_code,
         "target_count": target_count,
         "actual_count": len(csv_rows),
@@ -684,10 +770,13 @@ def main():
         "keyword_pool_cache_path": str(keyword_pool_cache_path),
         "start_time": start_time,
         "end_time": end_time,
-        "max_pages_per_keyword": MAX_PAGES_PER_KEYWORD,
-        "max_rounds": MAX_ROUNDS,
-        "max_new_per_keyword_per_round": MAX_NEW_PER_KEYWORD_PER_ROUND,
-        "expansion_limit_per_round": EXPANSION_LIMIT_PER_ROUND,
+        "max_pages_per_keyword": runtime_config["max_pages_per_keyword"],
+        "max_rounds": runtime_config["max_rounds"],
+        "max_new_per_keyword_per_round": runtime_config["max_new_per_keyword_per_round"],
+        "expansion_limit_per_round": runtime_config["expansion_limit_per_round"],
+        "page_sleep_seconds": list(runtime_config["page_sleep_seconds"]),
+        "keyword_sleep_seconds": list(runtime_config["keyword_sleep_seconds"]),
+        "round_sleep_seconds": list(runtime_config["round_sleep_seconds"]),
         "low_novelty_threshold": LOW_NOVELTY_THRESHOLD,
         "low_novelty_streak_limit": LOW_NOVELTY_STREAK_LIMIT,
         "stop_due_to_low_novelty": stop_due_to_low_novelty,

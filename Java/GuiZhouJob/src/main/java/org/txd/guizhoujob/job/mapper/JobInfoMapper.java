@@ -2,6 +2,8 @@ package org.txd.guizhoujob.job.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.txd.guizhoujob.admin.dto.AdminJobQueryDTO;
+import org.txd.guizhoujob.admin.dto.AdminJobUpdateDTO;
 import org.txd.guizhoujob.job.dto.JobQueryDTO;
 import org.txd.guizhoujob.job.vo.JobInfoVO;
 
@@ -16,4 +18,12 @@ public interface JobInfoMapper {
     JobInfoVO selectById(@Param("id") Long id);
 
     List<JobInfoVO> selectHot(@Param("limit") Integer limit);
+
+    Long countByAdminCondition(AdminJobQueryDTO dto);
+
+    List<JobInfoVO> selectAdminPageByCondition(AdminJobQueryDTO dto);
+
+    int updateByAdmin(AdminJobUpdateDTO dto);
+
+    int disableById(@Param("id") Long id);
 }

@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
         vo.setId(user.getId());
         vo.setEmail(user.getEmail());
         vo.setNickname(user.getNickname());
+        vo.setRole(user.getRole());
         return vo;
     }
 

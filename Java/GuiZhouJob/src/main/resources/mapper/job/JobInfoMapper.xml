@@ -18,12 +18,13 @@
         <result property="jobDescription" column="job_description"/>
         <result property="publishTime" column="publish_time"/>
         <result property="dataBatchNo" column="data_batch_no"/>
+        <result property="status" column="status"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id, job_title, company_name, city, work_address, education_text,
         experience_text, salary_text, salary_min, salary_max, job_description,
-        publish_time, data_batch_no
+        publish_time, data_batch_no, status
     </sql>
 
     <sql id="Query_Condition">
@@ -94,4 +95,62 @@
         order by publish_time desc, id desc
         limit #{limit}
     </select>
+
+    <sql id="Admin_Job_Condition">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (
+                    job_title like concat('%', #{keyword}, '%')
+                    or company_name like concat('%', #{keyword}, '%')
+                    or work_address like concat('%', #{keyword}, '%')
+                    or job_description like concat('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countByAdminCondition" resultType="java.lang.Long">
+        select count(1)
+        from job_info
+        <include refid="Admin_Job_Condition"/>
+    </select>
+
+    <select id="selectAdminPageByCondition" resultMap="JobInfoResultMap">
+        select <include refid="Base_Column_List"/>
+        from job_info
+        <include refid="Admin_Job_Condition"/>
+        order by publish_time desc, id desc
+        limit #{pageSize} offset #{offset}
+    </select>
+
+    <update id="updateByAdmin" parameterType="org.txd.guizhoujob.admin.dto.AdminJobUpdateDTO">
+        update job_info
+        <set>
+            <if test="jobTitle != null">job_title = #{jobTitle},</if>
+            <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="workAddress != null">work_address = #{workAddress},</if>
+            <if test="educationText != null">education_text = #{educationText},</if>
+            <if test="experienceText != null">experience_text = #{experienceText},</if>
+            <if test="salaryText != null">salary_text = #{salaryText},</if>
+            <if test="salaryMin != null">salary_min = #{salaryMin},</if>
+            <if test="salaryMax != null">salary_max = #{salaryMax},</if>
+            <if test="jobDescription != null">job_description = #{jobDescription},</if>
+            <if test="status != null">status = #{status},</if>
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="disableById">
+        update job_info
+        set status = 0, update_time = now()
+        where id = #{id}
+    </update>
 </mapper>

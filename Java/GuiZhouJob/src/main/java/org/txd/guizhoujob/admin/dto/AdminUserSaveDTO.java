@@ -1,24 +1,20 @@
-package org.txd.guizhoujob.user.entity;
+package org.txd.guizhoujob.admin.dto;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
-public class SysUser {
-    private Long id;
+public class AdminUserSaveDTO {
     private String email;
-    private String passwordHash;
+    private String password;
     private String nickname;
     private String role;
+    private Integer status;
     private String localCity;
     private String educationText;
     private String expectedPosition;
     private BigDecimal expectedSalaryMin;
     private BigDecimal expectedSalaryMax;
     private String skillInputText;
-    private Integer status;
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
 }

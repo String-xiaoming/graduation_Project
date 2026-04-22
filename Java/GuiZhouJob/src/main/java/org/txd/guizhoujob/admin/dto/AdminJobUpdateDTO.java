@@ -1,12 +1,11 @@
-package org.txd.guizhoujob.job.vo;
+package org.txd.guizhoujob.admin.dto;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
-public class JobInfoVO {
+public class AdminJobUpdateDTO {
     private Long id;
     private String jobTitle;
     private String companyName;
@@ -18,7 +17,5 @@ public class JobInfoVO {
     private BigDecimal salaryMin;
     private BigDecimal salaryMax;
     private String jobDescription;
-    private LocalDateTime publishTime;
-    private String dataBatchNo;
     private Integer status;
 }

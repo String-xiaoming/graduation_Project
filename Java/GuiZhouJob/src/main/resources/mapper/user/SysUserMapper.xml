@@ -9,6 +9,7 @@
         <result property="email" column="email"/>
         <result property="passwordHash" column="password_hash"/>
         <result property="nickname" column="nickname"/>
+        <result property="role" column="role"/>
         <result property="localCity" column="local_city"/>
         <result property="educationText" column="education_text"/>
         <result property="expectedPosition" column="expected_position"/>
@@ -21,7 +22,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, email, password_hash, nickname, local_city, education_text,
+        id, email, password_hash, nickname, role, local_city, education_text,
         expected_position, expected_salary_min, expected_salary_max,
         skill_input_text, status, create_time, update_time
     </sql>
@@ -60,6 +61,75 @@
             <if test="skillInputText != null">skill_input_text = #{skillInputText},</if>
             update_time = now()
         </set>
+        where id = #{id}
+    </update>
+
+    <sql id="Admin_User_Condition">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (
+                    email like concat('%', #{keyword}, '%')
+                    or nickname like concat('%', #{keyword}, '%')
+                    or local_city like concat('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="role != null and role != ''">
+                and role = #{role}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countByAdminCondition" resultType="java.lang.Long">
+        select count(1)
+        from sys_user
+        <include refid="Admin_User_Condition"/>
+    </select>
+
+    <select id="selectByAdminCondition" resultMap="SysUserResultMap">
+        select <include refid="Base_Column_List"/>
+        from sys_user
+        <include refid="Admin_User_Condition"/>
+        order by id desc
+        limit #{pageSize} offset #{offset}
+    </select>
+
+    <insert id="insertByAdmin" parameterType="org.txd.guizhoujob.user.entity.SysUser" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_user (
+            email, password_hash, nickname, role, local_city, education_text,
+            expected_position, expected_salary_min, expected_salary_max,
+            skill_input_text, status
+        ) values (
+            #{email}, #{passwordHash}, #{nickname}, #{role}, #{localCity}, #{educationText},
+            #{expectedPosition}, #{expectedSalaryMin}, #{expectedSalaryMax},
+            #{skillInputText}, #{status}
+        )
+    </insert>
+
+    <update id="updateByAdmin" parameterType="org.txd.guizhoujob.user.entity.SysUser">
+        update sys_user
+        <set>
+            <if test="email != null">email = #{email},</if>
+            <if test="passwordHash != null">password_hash = #{passwordHash},</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="role != null">role = #{role},</if>
+            <if test="localCity != null">local_city = #{localCity},</if>
+            <if test="educationText != null">education_text = #{educationText},</if>
+            <if test="expectedPosition != null">expected_position = #{expectedPosition},</if>
+            <if test="expectedSalaryMin != null">expected_salary_min = #{expectedSalaryMin},</if>
+            <if test="expectedSalaryMax != null">expected_salary_max = #{expectedSalaryMax},</if>
+            <if test="skillInputText != null">skill_input_text = #{skillInputText},</if>
+            <if test="status != null">status = #{status},</if>
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="disableById">
+        update sys_user
+        set status = 0, update_time = now()
         where id = #{id}
     </update>
 </mapper>

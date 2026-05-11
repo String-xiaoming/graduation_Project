@@ -1,10 +1,11 @@
 <script setup>
 import { reactive, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { loginUser } from '@/api/user'
-import { setCurrentUser } from '@/utils/auth'
+import { isAdminUser, setCurrentUser } from '@/utils/auth'
 
 const router = useRouter()
+const route = useRoute()
 const loading = ref(false)
 const errorMessage = ref('')
 
@@ -73,7 +74,8 @@ async function submit() {
       password: form.password,
     })
     setCurrentUser(user)
-    router.push('/')
+    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : ''
+    router.push(isAdminUser(user) ? redirect || '/admin' : '/')
   } catch (error) {
     errorMessage.value = error.message
   } finally {

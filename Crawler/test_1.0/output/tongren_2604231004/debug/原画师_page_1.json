@@ -1,0 +1,76 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "6p5zhPSDtTM",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "t3oQjsaORuFbr-h1F2Q6iNJArpWAq0650MHn55JEa16CED3MSP8PBRkMGal8SiOemDMbG64rjFpAG14VPE896UisuiVhBp1DPuiOLpwtaTQBgIPSxW2EPO0h29LXx9vnovLrflpgEHAnrDq2UbkSxBed1JzwibJ2-NYgNUOJDq0w0hF4l8nae5rSYQA-3nvhuROe5JdKMm2RWbjxhCp6ja0h4JScJ90WUAA0et-cPeEeWWZZEwVDnbJ1k5YtCrGf3xR8GVkIcGnQycb-mBrWf1bodq7vPPt88TOaa2DGNjFtTQ~~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20240501/607f1f3d68754fd061e7f639a3228011eb141d1a6ec7bf87d095bb0a7ab5d911ad00d533d8bb0650_s.jpg.webp",
+        "bossCert": 3,
+        "encryptBossId": "732506a14244d0490nN62dm8E1ZT",
+        "bossName": "董女士",
+        "bossTitle": "招聘主管",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "af3425615430f0df0nZ-2d26FVVZ",
+        "expectId": 1500356273,
+        "jobName": "手绘画师（全职/兼职均可）",
+        "lid": "6p5zhPSDtTM.search.1",
+        "salaryDesc": "5-10K",
+        "jobLabels": [
+          "经验不限",
+          "大专"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "oc 立绘",
+          "手绘",
+          "画师",
+          "文字设",
+          "委托"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "大专",
+        "cityName": "铜仁",
+        "areaDistrict": "",
+        "businessDistrict": "",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260400,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 108.129256,
+          "latitude": 28.241932
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "9f68114b904c9bb603Jy2N27GVc~",
+        "brandName": "云苓工作室",
+        "brandLogo": "https://img.bosszhipin.com/beijin/upload/com/logo/20260319/7b5b554d84f9729c6c5959fbdf95927f455fdcf8c1184000d095bb0a7ab5d911ad00d533d8bb0650.jpg.webp",
+        "brandStageName": "",
+        "brandIndustry": "文化艺术/娱乐",
+        "brandScaleName": "20-99人",
+        "welfareList": [],
+        "industry": 100104,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

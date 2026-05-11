@@ -276,7 +276,7 @@ def ensure_columns(df, columns):
     return df
 
 
-def clean(input_path, output_path, report_path, input_format, default_city, output_format):
+def clean(input_path, output_path, report_path, input_format, default_city, output_format, strict_city):
     spark = build_spark()
 
     clean_text_udf = udf(clean_text, StringType())
@@ -351,7 +351,15 @@ def clean(input_path, output_path, report_path, input_format, default_city, outp
 
     valid_required_count = valid_required_df.count()
     missing_required_count = raw_count - valid_required_count
-    df = valid_required_df.dropDuplicates(["job_hash"])
+    target_city = normalize_city(default_city, default_city)
+    if strict_city:
+        city_required_df = valid_required_df.filter(col("city") == lit(target_city))
+    else:
+        city_required_df = valid_required_df
+
+    city_required_count = city_required_df.count()
+    off_city_count = valid_required_count - city_required_count
+    df = city_required_df.dropDuplicates(["job_hash"])
     after_dedup_count = df.count()
 
     df = df.filter(
@@ -380,10 +388,13 @@ def clean(input_path, output_path, report_path, input_format, default_city, outp
         "input_format": input_format,
         "output_format": output_format,
         "default_city": default_city,
+        "strict_city": strict_city,
+        "target_city": target_city,
         "raw_count": raw_count,
         "valid_required_count": valid_required_count,
         "missing_required_count": missing_required_count,
-        "duplicate_count": valid_required_count - after_dedup_count,
+        "off_city_count": off_city_count,
+        "duplicate_count": city_required_count - after_dedup_count,
         "invalid_salary_count": after_dedup_count - cleaned_count,
         "cleaned_count": cleaned_count,
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -404,9 +415,10 @@ def parse_args():
     parser.add_argument("--format", choices=["jsonl", "csv"], default="jsonl")
     parser.add_argument("--output-format", choices=["parquet", "csv"], default="parquet")
     parser.add_argument("--default-city", default="贵阳")
+    parser.add_argument("--strict-city", action="store_true", help="Keep only rows whose normalized city equals --default-city.")
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
-    clean(args.input, args.output, args.report, args.format, args.default_city, args.output_format)
+    clean(args.input, args.output, args.report, args.format, args.default_city, args.output_format, args.strict_city)

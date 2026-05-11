@@ -1,0 +1,135 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 2,
+    "filterString": "",
+    "lid": "5GWMfioVlBx",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "WCpN3HkRcp37i-S1wix4rQvoCmrzDv1cplqzgphkrgo4Z0y0t19uayumbkuIUiwEtpO8LtGztfIX_fW8vm2NKO89pWz3LaPYh2nBFc3l9Hi8Yal7zioIuIsi1xWzBOX_Crn-OPNWsFklvawgfIXHfP55tuPQTfQvDeeUVZT5-rtNi8yrGrOZTllPboAFQnlmMDWAzbJ1xsbFzAMzHMUSWjTvkQDlOyAQVPY-r1EsATluYSMF7o_5WcJ-fqNFHCwCKLi9LruXaCLEavD2-YqpQLY93fedQiZTpgnJL4P8S5diZA~~",
+        "bossAvatar": "https://img.bosszhipin.com/boss/avatar/avatar_6.png",
+        "bossCert": 3,
+        "encryptBossId": "f7e218b1d42c19ac0nZ43tm7FlZQ",
+        "bossName": "种路宇",
+        "bossTitle": "人事部经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "21a3f0c41d4ee5c01nd62dy4GFNZ",
+        "expectId": 1500356273,
+        "jobName": "土地估价师",
+        "lid": "5GWMfioVlBx.search.1",
+        "salaryDesc": "5-10K",
+        "jobLabels": [
+          "经验不限",
+          "学历不限"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "房产评估",
+          "土地、资产、司法评估"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "学历不限",
+        "cityName": "黔西南布依族苗族自治州",
+        "areaDistrict": "兴义市",
+        "businessDistrict": "桔山",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260900,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 104.912174,
+          "latitude": 25.106127
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "1599119a924612f81nBy39u5EFI~",
+        "brandName": "磐基",
+        "brandLogo": "https://img.bosszhipin.com/beijin/icon/894ce6fa7e58d64d57e7f22d2f3a9d18afa7fcceaa24b8ea28f56f1bb14732c0.png",
+        "brandStageName": "",
+        "brandIndustry": "财务/审计/税务",
+        "brandScaleName": "20-99人",
+        "welfareList": [
+          "五险一金"
+        ],
+        "industry": 100605,
+        "contact": false,
+        "showTopPosition": false
+      },
+      {
+        "securityId": "H3OVAR0inVWNY--1IXuckZnFfZ3nhNnTVhP806gQ5XdikA-unWSG65UFCsZ_fmwUGW-gbAVkyNXLiWZm_0XF69i0fIm1XzdG2Emou-WBJvAcqHP3LdqiLSFTuSluBFDrbVQZkuGhNGeSEqeA2D9NeDRuCZMcM6NidYlIJcN_TGXWDkdIxdkD67WWQUKOJU0SCMkqyMahilqwy9jfUMHiOX70hl3itxIdaQ9iJ2Ir_3XzpqlIXqaemFTmeho6a8uGH4hb7xSKyY0BZJnSJc106pHjSox1zv0UW0BKBJjeLO0B2Q~~",
+        "bossAvatar": "https://img.bosszhipin.com/boss/avatar/avatar_6.png",
+        "bossCert": 3,
+        "encryptBossId": "f7e218b1d42c19ac0nZ43tm7FlZQ",
+        "bossName": "种路宇",
+        "bossTitle": "人事部经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "7625d33772d25dce1nd62d29F1BX",
+        "expectId": 1500356273,
+        "jobName": "房地产评估师",
+        "lid": "5GWMfioVlBx.search.2",
+        "salaryDesc": "7-12K",
+        "jobLabels": [
+          "经验不限",
+          "学历不限"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "房产评估"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "学历不限",
+        "cityName": "黔西南布依族苗族自治州",
+        "areaDistrict": "兴义市",
+        "businessDistrict": "桔山",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 2,
+        "city": 101260900,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 104.912174,
+          "latitude": 25.106127
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "1599119a924612f81nBy39u5EFI~",
+        "brandName": "磐基",
+        "brandLogo": "https://img.bosszhipin.com/beijin/icon/894ce6fa7e58d64d57e7f22d2f3a9d18afa7fcceaa24b8ea28f56f1bb14732c0.png",
+        "brandStageName": "",
+        "brandIndustry": "财务/审计/税务",
+        "brandScaleName": "20-99人",
+        "welfareList": [
+          "五险一金"
+        ],
+        "industry": 100605,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 2,
+    "brandCard": null
+  }
+}

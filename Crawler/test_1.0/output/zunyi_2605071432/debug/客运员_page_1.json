@@ -1,0 +1,73 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "9eAHbZ7SIus",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "sI5ggryJzrAej-K197toE6MXyUMXzrZzyZCACEX-BcG-hLe4d1sBz6jgFmI8gZBcKvDpigvpk9CynehRU8dD3eSI0JmfgXEOtzt6-z0Ana-Wk_c-L0ItGJSaVe6LXZ15ABZp3JYbw1o3FJv_--EXvJBz7RUlwTDo-0yUzr1mYNqjJHrFesmJ_Ad5Lyr6gPZrac3axhbfkgmdbzElka4RgARdRldzF0osBktHHUmrEscrpHPXmNS_yE6ploPvLRvQLXv-Th2_6oIqX0rbmORmzG3QRv19Xg24bg_m-3JPzRy3ng4~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20260422/607f1f3d68754fd08c86c967b5cf95479bb98b5c3f07039cfa5577471ece5635e7e6e94813e846c3_s.jpeg.webp",
+        "bossCert": 3,
+        "encryptBossId": "67224462ef770c890HB829S1GVJX",
+        "bossName": "王女士",
+        "bossTitle": "人事经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "3084d2be0f1b7bd70nZ53t25F1FT",
+        "expectId": 1500356273,
+        "jobName": "安检站务多岗位可选择长期稳",
+        "lid": "9eAHbZ7SIus.search.1",
+        "salaryDesc": "5-7K",
+        "jobLabels": [
+          "经验不限",
+          "中专/中技"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "中专/中技",
+        "cityName": "遵义",
+        "areaDistrict": "",
+        "businessDistrict": "",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260200,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 106.943769,
+          "latitude": 27.710058
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "c53f0ea51d1a470a03J52du6Fls~",
+        "brandName": "河北省河骏客运",
+        "brandLogo": "https://img.bosszhipin.com/beijin/upload/com/logo/20260331/7b5b554d84f9729c64596343fc8991752dd6534ac2498b4c4338380930f22f67152e6a0decc10297.png.webp",
+        "brandStageName": "未融资",
+        "brandIndustry": "客运服务",
+        "brandScaleName": "0-20人",
+        "welfareList": [
+          "包吃",
+          "五险一金"
+        ],
+        "industry": 100511,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

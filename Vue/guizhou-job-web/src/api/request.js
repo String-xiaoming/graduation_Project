@@ -1,8 +1,17 @@
 import axios from 'axios'
+import { getCurrentUser } from '@/utils/auth'
 
 const request = axios.create({
   baseURL: '/api',
   timeout: 12000,
+})
+
+request.interceptors.request.use((config) => {
+  const currentUser = getCurrentUser()
+  if (currentUser?.id) {
+    config.headers['X-User-Id'] = currentUser.id
+  }
+  return config
 })
 
 request.interceptors.response.use(

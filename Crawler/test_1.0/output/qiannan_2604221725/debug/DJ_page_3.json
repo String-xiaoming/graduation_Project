@@ -1,0 +1,87 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "67iIrf3MIof",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "sExcSlJtxQONN--1e9piicPWD1h3MtL_GIUUXBLeyuOJFVqbZnWjj45TZk2MIP6KyD7B8EZCNz11SQ_3-rf3xzcWD-cTru9x20-oK62P2zkfpdSOebtjuCfKrztnAupumqMiGHefvfXCsSC2zk8B_-pkMMDZvLOJmgmNX6clVhorP_fD8IBgIetSe16opY-i3_w4VyC1YUSFeKsPpd3UzGoOmDb13vrPLhc-qYqjjGNRGBb5azIoc4tpp6eMUQvCK1u2pkaBrUfQJuwoJrYiSI8HCzlc6n883OSYNLBAT2A~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20240929/607f1f3d68754fd0ce25511b97f00b7f82da0120c1a10affae98d13156e67799c5a95c22ab039295_s.png.webp",
+        "bossCert": 3,
+        "encryptBossId": "939419d616bc656a0nR62du4GFs~",
+        "bossName": "李晓琴",
+        "bossTitle": "策划主管",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "6f57b941c94a9dc81nF92d20FlBR",
+        "expectId": 1500356273,
+        "jobName": "灯光师",
+        "lid": "67iIrf3MIof.search.1",
+        "salaryDesc": "7-12K",
+        "jobLabels": [
+          "1年以内",
+          "大专"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "灯光设计",
+          "舞台灯光",
+          "婚礼"
+        ],
+        "jobExperience": "1年以内",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "大专",
+        "cityName": "黔南布依族苗族自治州",
+        "areaDistrict": "",
+        "businessDistrict": "",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260800,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 106.844993,
+          "latitude": 26.481686
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "42341e014889a80b1nBz3N-6FQ~~",
+        "brandName": "格乐丽雅",
+        "brandLogo": "https://img.bosszhipin.com/beijin/mcs/banner/86e9034645fc59b3c437a81a16abce0ecfcd208495d565ef66e7dff9f98764da.jpg",
+        "brandStageName": "B轮",
+        "brandIndustry": "婚庆/摄影",
+        "brandScaleName": "1000-9999人",
+        "welfareList": [
+          "股票期权",
+          "员工旅游",
+          "免费工装",
+          "带薪年假",
+          "门店晋升路径",
+          "绩效奖金",
+          "职能职业晋升",
+          "团建聚餐",
+          "节日福利",
+          "有无线网",
+          "年终奖",
+          "生日福利"
+        ],
+        "industry": 101105,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

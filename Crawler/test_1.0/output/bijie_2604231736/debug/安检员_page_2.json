@@ -1,0 +1,74 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "6Aw49sXNWv5",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "8yJwthnB2nZA_-A1N2FPNa_Zp3OSYbHaPDIufjzYhXYBpo1W1jb2lMaaD7cjaYqyaRz7YyoUZkJaUU3cS_UJ22OXZs1-m5XAGK0lE266jYBIBZMYAodxVWoPnx98JEvPse4fKpVAmJSPb97ois3jFR7jYsl1qUBM3b3Bj53n8J2qfv5kk_URuKYrhjGTdCDZRL7vC2wb3LGODcNHOWYpGiOlLZ5Fiv-Xr7-rknBbA5kH9kwvg5HBa7X8mvqu4t4s2hTMQiTeDVAEl0Tq-pJWg9a_46h3ro4YyvQb0bubjQf_Nw~~",
+        "bossAvatar": "https://img.bosszhipin.com/boss/avatar/avatar_2.png",
+        "bossCert": 3,
+        "encryptBossId": "d13c540b2bf72e390Hd92d-_GFdW",
+        "bossName": "陈秀英",
+        "bossTitle": "人事经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "e7da537bdfa9a4af0nR73NW1GFNV",
+        "expectId": 1500356273,
+        "jobName": "辽宁瑞博通交通轨...招聘安检员",
+        "lid": "6Aw49sXNWv5.search.1",
+        "salaryDesc": "5-8K",
+        "jobLabels": [
+          "经验不限",
+          "中专/中技"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "五险一金",
+          "包吃住",
+          "上一休一"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "中专/中技",
+        "cityName": "毕节",
+        "areaDistrict": "威宁彝族回族苗族自治县",
+        "businessDistrict": "建设西路",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260500,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 104.260105,
+          "latitude": 26.879452
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "0b3f68ad65c7d0dc03F409y5FlE~",
+        "brandName": "辽宁瑞博通交通轨...",
+        "brandLogo": "https://img.bosszhipin.com/beijin/icon/894ce6fa7e58d64d57e7f22d2f3a9d18afa7fcceaa24b8ea28f56f1bb14732c0.png",
+        "brandStageName": "",
+        "brandIndustry": "其他行业",
+        "brandScaleName": "20-99人",
+        "welfareList": [],
+        "industry": 101304,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

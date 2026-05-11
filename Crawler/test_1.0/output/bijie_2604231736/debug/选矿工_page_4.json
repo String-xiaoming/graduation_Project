@@ -1,0 +1,84 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "6zwgBRvlg6l",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "X6LwoFmuwB19q-31Swleu2LVyuZ_4YiWnrAyqNT3xlv4BFWrpQ6r03eHUiMZc9AGqfo1qRed6GQkL23XizdaGXOxz20K98tOq16o9KAj5iwwTesZok6z5IxNFLAwPOV_bgh0WeCbWacqmFklNwDUX_751nqJ8MIwF_CrG4ZmlRESO4Hz8Dkdq2T7y0XFg03xi6lgFDZtBIHaTskOdn8ECbXtGSCDmVcQ0aMwZTROzZof7NdMd3rM-wTKdC_LkLdG_UuyRiPJtSGpmtALDO4BjtAR0WkNz6__2aAOHNYyM21hNA~~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20241022/607f1f3d68754fd0512c7a761050613f12fc120221568451d5af1b1ef2944eef84a611573351d9d5_s.jpg.webp",
+        "bossCert": 3,
+        "encryptBossId": "e182d9094d84c22d0nV72tS7GVNV",
+        "bossName": "王安雪",
+        "bossTitle": "招聘者",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "29249f772d1efc9203Z829u4E1JY",
+        "expectId": 1500356273,
+        "jobName": "美发助理/学徒",
+        "lid": "6zwgBRvlg6l.search.1",
+        "salaryDesc": "2-4K",
+        "jobLabels": [
+          "经验不限",
+          "学历不限"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "免费培训",
+          "包吃",
+          "接受无经验",
+          "连锁店"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "学历不限",
+        "cityName": "毕节",
+        "areaDistrict": "",
+        "businessDistrict": "",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260500,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 106.041206,
+          "latitude": 27.007501
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "5b49282e53f50d981X143ti7ElU~",
+        "brandName": "黔西茂源美容美发...",
+        "brandLogo": "https://img.bosszhipin.com/beijin/upload/com/logo/20250203/7b5b554d84f9729cb30957a504eebb4490b62676e4d596d386fa8a00433bd148b1ee9eb0f9016a62.jpg.webp",
+        "brandStageName": "",
+        "brandIndustry": "美容/美发",
+        "brandScaleName": "20-99人",
+        "welfareList": [
+          "全勤奖",
+          "员工旅游",
+          "团建聚餐",
+          "节日福利",
+          "生日福利",
+          "包吃",
+          "包住",
+          "绩效奖金"
+        ],
+        "industry": 101104,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

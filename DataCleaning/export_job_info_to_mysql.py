@@ -40,6 +40,10 @@ def quote_identifier(name):
     return ".".join(f"`{part.replace('`', '``')}`" for part in name.split("."))
 
 
+def quote_literal(value):
+    return "'" + str(value).replace("\\", "\\\\").replace("'", "''") + "'"
+
+
 def build_spark(source_type):
     builder = SparkSession.builder.appName("export_job_info_to_mysql")
     if source_type == "table":
@@ -129,9 +133,19 @@ ON DUPLICATE KEY UPDATE
 """
 
     try:
+        batch_values = query_strings(
+            stmt,
+            f"SELECT DISTINCT `data_batch_no` FROM {stage} WHERE `data_batch_no` IS NOT NULL AND `data_batch_no` <> ''",
+        )
+        deleted_rows = 0
+        for batch_no in batch_values:
+            deleted_rows += stmt.executeUpdate(
+                f"DELETE FROM {target} WHERE `data_batch_no` = {quote_literal(batch_no)}"
+            )
+
         affected_rows = stmt.executeUpdate(upsert_sql)
         target_count = query_scalar(stmt, f"SELECT COUNT(*) FROM {target}")
-        return affected_rows, target_count
+        return deleted_rows, affected_rows, target_count
     finally:
         stmt.close()
         conn.close()
@@ -143,6 +157,17 @@ def query_scalar(stmt, sql):
         if rs.next():
             return rs.getLong(1)
         return 0
+    finally:
+        rs.close()
+
+
+def query_strings(stmt, sql):
+    rs = stmt.executeQuery(sql)
+    values = []
+    try:
+        while rs.next():
+            values.append(rs.getString(1))
+        return values
     finally:
         rs.close()
 
@@ -162,7 +187,7 @@ def export(args):
             args.mysql_driver,
             args.stage_table,
         )
-        affected_rows, target_count = execute_upsert(
+        deleted_rows, affected_rows, target_count = execute_upsert(
             spark,
             args.mysql_url,
             args.mysql_user,
@@ -173,6 +198,7 @@ def export(args):
         )
 
         print(f"stage_count={stage_count}")
+        print(f"deleted_rows={deleted_rows}")
         print(f"affected_rows={affected_rows}")
         print(f"target_count={target_count}")
     finally:

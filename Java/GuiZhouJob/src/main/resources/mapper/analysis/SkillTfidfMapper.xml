@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.txd.guizhoujob.analysis.mapper.SkillTfidfMapper">
+
+    <resultMap id="SkillTfidfResultMap" type="org.txd.guizhoujob.analysis.vo.SkillTfidfVO">
+        <id property="id" column="id"/>
+        <result property="statDate" column="stat_date"/>
+        <result property="city" column="city"/>
+        <result property="keyword" column="keyword"/>
+        <result property="tfidfScore" column="tfidf_score"/>
+        <result property="jobCount" column="job_count"/>
+        <result property="rankNo" column="rank_no"/>
+        <result property="dataBatchNo" column="data_batch_no"/>
+    </resultMap>
+
+    <select id="selectLatest" resultMap="SkillTfidfResultMap">
+        select id, stat_date, city, keyword, tfidf_score, job_count, rank_no, data_batch_no
+        from analysis_skill_tfidf
+        where stat_date = (
+            select max(stat_date)
+            from analysis_skill_tfidf
+        )
+        <if test="city != null and city != ''">
+            and city = #{city}
+        </if>
+        order by rank_no asc, tfidf_score desc
+        limit #{limit}
+    </select>
+
+    <select id="selectLatestCities" resultType="java.lang.String">
+        select city
+        from (
+            select city, min(rank_no) as min_rank
+            from analysis_skill_tfidf
+            where stat_date = (
+                select max(stat_date)
+                from analysis_skill_tfidf
+            )
+              and city != '全省'
+            group by city
+            order by min_rank asc, city asc
+            limit #{limit}
+        ) t
+    </select>
+</mapper>

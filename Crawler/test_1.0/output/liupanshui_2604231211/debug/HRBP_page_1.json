@@ -1,0 +1,78 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "6s5RfVdmntg",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "7ZxU-jSIjSd6T-51VzQI7wNvzAwVlXw3z3fVf3YtedIEM0aaFW7AhuLbm0mWQ3G1M_tyL0kN1HqgaBUYA9aey1Ap2sx2JolIWF-gnDo_SaCtLpu-UHzcy9ZnV3WRhGxfjxaLkOd9TfwZKWksfOgteT6dJwmb9vN56HPvE-n8r5lqq27hVT7e2FjQ2W27JpaeDCnKu59I4K94BIB_BL9vr7EHg148ozYYtN-2OtmBgX6P5Q0irW7j26u5REP99zawJR0qy0bJAVgE4U7rwIULjXTqBZLk71X-aiRM9intm8tUFQ~~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20260211/607f1f3d68754fd0b80d969f8b52fe0b9b8eb19d21adfc4c5c72169f0836162f4805925d00dd6448_s.jpeg.webp",
+        "bossCert": 3,
+        "encryptBossId": "4a3d172f32058b030nR92t-1EVtY",
+        "bossName": "吴先生",
+        "bossTitle": "HRBP",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "b21ed28b0821cdc00nd53N21F1ZS",
+        "expectId": 1500356273,
+        "jobName": "HRBP",
+        "lid": "6s5RfVdmntg.search.1",
+        "salaryDesc": "5-8K",
+        "jobLabels": [
+          "3-5年",
+          "本科"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [],
+        "jobExperience": "3-5年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "本科",
+        "cityName": "六盘水",
+        "areaDistrict": "",
+        "businessDistrict": "",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260600,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 105.41544262806454,
+          "latitude": 26.253033292729835
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "921dd57c43b9272a1nZy2dy6Flc~",
+        "brandName": "容百科技",
+        "brandLogo": "https://img.bosszhipin.com/beijin/upload/com/workfeel/20230222/7bf6f160950405e9ee4790b0086018ade0b1031ffef1124e9cd66295e0e0b2c071711cbec3804233.jpg",
+        "brandStageName": "已上市",
+        "brandIndustry": "其他新能源",
+        "brandScaleName": "1000-9999人",
+        "welfareList": [
+          "五险一金",
+          "定期体检",
+          "节日福利",
+          "年终奖",
+          "餐补",
+          "通讯补贴",
+          "带薪年假"
+        ],
+        "industry": 101212,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

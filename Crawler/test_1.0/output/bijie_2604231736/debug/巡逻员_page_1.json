@@ -1,0 +1,79 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "6zA6puvX7lU",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "tGeJzpvUhzAKi-e1SL6mxW5ka42Uskd5Fdu7q8cY2Lyu49dMSdSdb6P9YYFg37vRefrVHvTVD5FMZsMnpnhL9-EXrggavk1JzQv4EfMsHj3a0VYG8e2hApdI3L02UrSM_9LXzgn2YPOSIHn32dUooOCS7hL_0XkrWUGmjPd-FdjegsbQUJXu3oJkC6HeiJKvjtKuVxxOE2ZyADHmql7IAwBfEwGxX-FtVkbvFVK8kCUis_H5y6xWHMDAYxx_2c2IHdFviQd8dkrNaGEHL4vpvECF4C0KeFS9UMqlTcnlEDE6Rg~~",
+        "bossAvatar": "https://img.bosszhipin.com/boss/avatar/avatar_3.png",
+        "bossCert": 3,
+        "encryptBossId": "fc4f24d8d2c391c30nR50tu9EFBR",
+        "bossName": "张女士",
+        "bossTitle": "人事主管",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "bcb64f943491142d1HF93tW7GVVT",
+        "expectId": 1500356273,
+        "jobName": "碧鑫商管招聘保安",
+        "lid": "6zA6puvX7lU.search.1",
+        "salaryDesc": "2-3K",
+        "jobLabels": [
+          "1-3年",
+          "高中"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "五险一金",
+          "本地健康证"
+        ],
+        "jobExperience": "1-3年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "高中",
+        "cityName": "毕节",
+        "areaDistrict": "七星关区",
+        "businessDistrict": "滨河西路",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260500,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 105.301741,
+          "latitude": 27.280564
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "3709cc046418d1441nB729-5EVY~",
+        "brandName": "碧鑫商管",
+        "brandLogo": "https://img.bosszhipin.com/beijin/icon/894ce6fa7e58d64d57e7f22d2f3a9d18afa7fcceaa24b8ea28f56f1bb14732c0.png",
+        "brandStageName": "未融资",
+        "brandIndustry": "家具/家电/家居",
+        "brandScaleName": "20-99人",
+        "welfareList": [
+          "五险一金",
+          "全勤奖",
+          "带薪年假",
+          "餐补",
+          "节日福利"
+        ],
+        "industry": 101004,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

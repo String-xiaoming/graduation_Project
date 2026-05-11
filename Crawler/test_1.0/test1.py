@@ -24,6 +24,12 @@ DEFAULT_MAX_NEW_PER_KEYWORD_PER_ROUND = 10
 DEFAULT_PAGE_SLEEP_SECONDS = (1.6, 3.2)
 DEFAULT_KEYWORD_SLEEP_SECONDS = (1.2, 2.8)
 DEFAULT_ROUND_SLEEP_SECONDS = (5.0, 9.0)
+DEFAULT_DETAIL_SLEEP_SECONDS = (2.0, 4.0)
+DEFAULT_DETAIL_MODE = "none"
+DEFAULT_SPEED_MODE = "safe"
+DEFAULT_FLUSH_EVERY = 20
+DEFAULT_DETAIL_SAMPLE_LIMIT = 300
+DEFAULT_MANUAL_LOGIN = "n"
 
 DEFAULT_EXPANSION_LIMIT_PER_ROUND = 12
 MAX_EXPANSION_KEYWORDS = 80
@@ -54,13 +60,52 @@ CSV_FIELDS = [
     "status",
 ]
 
+DETAIL_JSONL_FIELDS = [
+    "job_hash",
+    "source_url",
+    "detail_fetch_ok",
+    "detail_error",
+    "detail_page_title",
+    "detail_page_url",
+    "detail_html_path",
+    "detail_html_length",
+    "detail_job_id",
+    "detail_user_id",
+    "detail_position",
+    "detail_job_name",
+    "detail_job_salary",
+    "detail_company",
+    "detail_brand_logo",
+    "detail_security_id",
+    "detail_lrdate_time",
+    "detail_updated_time",
+    "detail_salary_text",
+    "detail_city",
+    "detail_experience_text",
+    "detail_degree_text",
+    "detail_keywords",
+    "detail_job_description",
+    "detail_company_intro",
+    "detail_location_address",
+    "detail_boss_name",
+    "detail_boss_active_time",
+    "detail_boss_info_attr",
+    "detail_company_full_name",
+    "detail_legal_representative",
+    "detail_foundation_date",
+    "detail_company_type",
+    "detail_business_status",
+    "detail_company_fund",
+    "detail_business_info",
+]
+
 CITY_CONFIG_MAP = {
     "guiyang": {"city_name": "贵阳", "city_code": "101260100", "aliases": ["贵阳", "guiyang"]},
     "zunyi": {"city_name": "遵义", "city_code": "101260200", "aliases": ["遵义", "zunyi"]},
     "anshun": {"city_name": "安顺", "city_code": "101260300", "aliases": ["安顺", "anshun"]},
-    "liupanshui": {"city_name": "六盘水", "city_code": "101260400", "aliases": ["六盘水", "liupanshui"]},
+    "liupanshui": {"city_name": "六盘水", "city_code": "101260600", "aliases": ["六盘水", "liupanshui"]},
     "bijie": {"city_name": "毕节", "city_code": "101260500", "aliases": ["毕节", "bijie"]},
-    "tongren": {"city_name": "铜仁", "city_code": "101260600", "aliases": ["铜仁", "tongren"]},
+    "tongren": {"city_name": "铜仁", "city_code": "101260400", "aliases": ["铜仁", "tongren"]},
     "qiandongnan": {"city_name": "黔东南", "city_code": "101260700", "aliases": ["黔东南", "qiandongnan"]},
     "qiannan": {"city_name": "黔南", "city_code": "101260800", "aliases": ["黔南", "qiannan"]},
     "qianxinan": {"city_name": "黔西南", "city_code": "101260900", "aliases": ["黔西南", "qianxinan"]},
@@ -209,23 +254,23 @@ def normalize_city(city_input: str) -> tuple[str, str, str]:
 def get_runtime_config(target_count: int) -> dict:
     if target_count >= 10000:
         return {
-            "max_pages_per_keyword": 5,
-            "max_rounds": 16,
-            "max_new_per_keyword_per_round": 25,
-            "expansion_limit_per_round": 24,
-            "page_sleep_seconds": (2.4, 4.6),
-            "keyword_sleep_seconds": (2.0, 4.5),
-            "round_sleep_seconds": (8.0, 14.0),
+            "max_pages_per_keyword": 4,
+            "max_rounds": 14,
+            "max_new_per_keyword_per_round": 18,
+            "expansion_limit_per_round": 18,
+            "page_sleep_seconds": (3.2, 6.2),
+            "keyword_sleep_seconds": (3.0, 6.0),
+            "round_sleep_seconds": (12.0, 22.0),
         }
     if target_count >= 5000:
         return {
-            "max_pages_per_keyword": 4,
-            "max_rounds": 10,
-            "max_new_per_keyword_per_round": 18,
-            "expansion_limit_per_round": 18,
-            "page_sleep_seconds": (2.0, 3.8),
-            "keyword_sleep_seconds": (1.8, 3.8),
-            "round_sleep_seconds": (6.0, 10.0),
+            "max_pages_per_keyword": 3,
+            "max_rounds": 9,
+            "max_new_per_keyword_per_round": 14,
+            "expansion_limit_per_round": 14,
+            "page_sleep_seconds": (2.8, 5.5),
+            "keyword_sleep_seconds": (2.6, 5.2),
+            "round_sleep_seconds": (10.0, 18.0),
         }
     return {
         "max_pages_per_keyword": DEFAULT_MAX_PAGES_PER_KEYWORD,
@@ -236,6 +281,41 @@ def get_runtime_config(target_count: int) -> dict:
         "keyword_sleep_seconds": DEFAULT_KEYWORD_SLEEP_SECONDS,
         "round_sleep_seconds": DEFAULT_ROUND_SLEEP_SECONDS,
     }
+
+
+def apply_speed_mode(runtime_config: dict, speed_mode: str, target_count: int) -> dict:
+    config = dict(runtime_config)
+    speed_mode = (speed_mode or DEFAULT_SPEED_MODE).strip().lower()
+
+    if speed_mode == "safe":
+        return config
+
+    if speed_mode == "fast":
+        config.update(
+            {
+                "max_pages_per_keyword": max(config["max_pages_per_keyword"], 6),
+                "max_rounds": max(config["max_rounds"], 20 if target_count >= 10000 else 14),
+                "max_new_per_keyword_per_round": max(config["max_new_per_keyword_per_round"], 25),
+                "expansion_limit_per_round": max(config["expansion_limit_per_round"], 24),
+                "page_sleep_seconds": (1.8, 3.8),
+                "keyword_sleep_seconds": (1.6, 3.2),
+                "round_sleep_seconds": (6.0, 12.0),
+            }
+        )
+        return config
+
+    config.update(
+        {
+            "max_pages_per_keyword": max(config["max_pages_per_keyword"], 5),
+            "max_rounds": max(config["max_rounds"], 18 if target_count >= 10000 else 12),
+            "max_new_per_keyword_per_round": max(config["max_new_per_keyword_per_round"], 20),
+            "expansion_limit_per_round": max(config["expansion_limit_per_round"], 20),
+            "page_sleep_seconds": (2.2, 4.8),
+            "keyword_sleep_seconds": (2.0, 4.2),
+            "round_sleep_seconds": (8.0, 15.0),
+        }
+    )
+    return config
 
 
 def build_seed_keyword_plan() -> list[str]:
@@ -556,8 +636,263 @@ def save_csv(rows: list[dict], path: Path):
         writer.writerows(rows)
 
 
+def save_detail_jsonl(rows: list[dict], path: Path):
+    with path.open("w", encoding="utf-8") as f:
+        for row in rows:
+            ordered = {field: row.get(field) for field in DETAIL_JSONL_FIELDS}
+            extra = {k: v for k, v in row.items() if k not in ordered}
+            ordered.update(extra)
+            f.write(json.dumps(ordered, ensure_ascii=False) + "\n")
+
+
+def init_incremental_files(csv_path: Path, jsonl_path: Path, detail_jsonl_path: Path):
+    if not csv_path.exists() or csv_path.stat().st_size == 0:
+        with csv_path.open("w", newline="", encoding="utf-8-sig") as f:
+            writer = csv.DictWriter(f, fieldnames=CSV_FIELDS)
+            writer.writeheader()
+    if not jsonl_path.exists():
+        jsonl_path.touch()
+    if not detail_jsonl_path.exists():
+        detail_jsonl_path.touch()
+
+
+def append_csv_row(path: Path, row: dict):
+    with path.open("a", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=CSV_FIELDS)
+        writer.writerow({field: row.get(field) for field in CSV_FIELDS})
+
+
+def append_jsonl_row(path: Path, row: dict):
+    with path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def append_detail_jsonl_row(path: Path, row: dict):
+    ordered = {field: row.get(field) for field in DETAIL_JSONL_FIELDS}
+    extra = {k: v for k, v in row.items() if k not in ordered}
+    ordered.update(extra)
+    append_jsonl_row(path, ordered)
+
+
+def write_progress_meta(
+    meta_path: Path,
+    city_name: str,
+    city_slug: str,
+    city_code: str,
+    target_count: int,
+    batch_name: str,
+    out_dir: Path,
+    csv_path: Path,
+    jsonl_path: Path,
+    detail_jsonl_path: Path,
+    start_time: str,
+    runtime_config: dict,
+    stats: dict,
+    current_count: int,
+    detail_mode: str,
+    speed_mode: str,
+):
+    save_meta(
+        meta_path,
+        {
+            "source_name": SOURCE_NAME,
+            "city_name": city_name,
+            "city_slug": city_slug,
+            "city_code": city_code,
+            "target_count": target_count,
+            "actual_count": current_count,
+            "batch_name": batch_name,
+            "output_dir": str(out_dir),
+            "csv_path": str(csv_path),
+            "jsonl_path": str(jsonl_path),
+            "detail_jsonl_path": str(detail_jsonl_path),
+            "start_time": start_time,
+            "last_update_time": now_str(),
+            "finished": False,
+            "detail_mode": detail_mode,
+            "speed_mode": speed_mode,
+            "runtime_config": runtime_config,
+            "stats": dict(stats),
+        },
+    )
+
+
 def save_meta(path: Path, data: dict):
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def ensure_manual_login(dp: ChromiumPage):
+    print("即将打开 BOSS 首页。")
+    print("如果你需要拿到更完整的岗位详情，请先在浏览器里手动登录。")
+    print("登录完成后回到终端按回车继续；如果不登录，直接回车也可以继续。")
+    dp.get("https://www.zhipin.com/")
+    input("登录完成后按回车继续采集：")
+
+
+def clean_visible_text(text: str) -> str:
+    if not text:
+        return ""
+    text = text.replace("\r", "\n")
+    text = text.replace("登录查看完整内容", "").strip()
+    text = re.sub(r"\n{2,}", "\n", text)
+    return text.strip()
+
+
+def extract_meta_content(html: str, prop: str) -> str:
+    match = re.search(rf'<meta property="{re.escape(prop)}" content="([^"]*)"', html)
+    return match.group(1).strip() if match else ""
+
+
+def extract_inline_job_info(html: str) -> dict:
+    match = re.search(r"var _jobInfo = \{(.*?)\};", html, re.S)
+    if not match:
+        return {}
+
+    block = match.group(1)
+    result = {}
+    for key, value in re.findall(r"(\w+)\s*:\s*'([^']*)'", block):
+        result[key] = value.strip()
+    for key, value in re.findall(r"(\w+)\s*:\s*(\d+)", block):
+        result.setdefault(key, value.strip())
+    return result
+
+
+def fetch_job_detail(
+    dp: ChromiumPage,
+    source_url: str,
+    job_hash: str,
+    detail_html_dir: Path,
+    detail_sleep_seconds: tuple[float, float],
+) -> dict:
+    result = {
+        "source_url": source_url,
+        "detail_fetch_ok": False,
+        "detail_error": "",
+        "detail_page_title": "",
+        "detail_page_url": source_url,
+        "detail_html_path": "",
+        "detail_html_length": 0,
+        "detail_job_id": "",
+        "detail_user_id": "",
+        "detail_position": "",
+        "detail_job_name": "",
+        "detail_job_salary": "",
+        "detail_company": "",
+        "detail_brand_logo": "",
+        "detail_security_id": "",
+        "detail_lrdate_time": "",
+        "detail_updated_time": "",
+        "detail_salary_text": "",
+        "detail_city": "",
+        "detail_experience_text": "",
+        "detail_degree_text": "",
+        "detail_keywords": [],
+        "detail_job_description": "",
+        "detail_company_intro": "",
+        "detail_location_address": "",
+        "detail_boss_name": "",
+        "detail_boss_active_time": "",
+        "detail_boss_info_attr": "",
+        "detail_company_full_name": "",
+        "detail_legal_representative": "",
+        "detail_foundation_date": "",
+        "detail_company_type": "",
+        "detail_business_status": "",
+        "detail_company_fund": "",
+        "detail_business_info": {},
+    }
+
+    try:
+        dp.get(source_url)
+        random_sleep(detail_sleep_seconds)
+
+        html = dp.html or ""
+        result["detail_page_title"] = dp.title or ""
+        result["detail_page_url"] = dp.url or source_url
+        result["detail_html_length"] = len(html)
+        result["detail_lrdate_time"] = extract_meta_content(html, "bytedance:lrDate_time")
+        result["detail_updated_time"] = extract_meta_content(html, "bytedance:updated_time")
+
+        detail_html_dir.mkdir(parents=True, exist_ok=True)
+        html_path = detail_html_dir / f"{job_hash}.html"
+        html_path.write_text(html, encoding="utf-8")
+        result["detail_html_path"] = str(html_path)
+
+        inline_job_info = extract_inline_job_info(html)
+        result["detail_job_id"] = inline_job_info.get("job_id", "")
+        result["detail_user_id"] = inline_job_info.get("user_id", "")
+        result["detail_position"] = inline_job_info.get("position", "")
+        result["detail_job_name"] = inline_job_info.get("job_name", "")
+        result["detail_job_salary"] = inline_job_info.get("job_salary", "")
+        result["detail_company"] = inline_job_info.get("company", "")
+        result["detail_brand_logo"] = inline_job_info.get("brand_logo", "")
+        result["detail_security_id"] = inline_job_info.get("securityId", "")
+
+        detail_dom = dp.run_js(
+            r"""
+            return (() => {
+              const one = (sel) => document.querySelector(sel);
+              const text = (sel) => {
+                const el = one(sel);
+                return el ? el.innerText.trim() : '';
+              };
+              const texts = (sel) => Array.from(document.querySelectorAll(sel)).map(el => el.innerText.trim()).filter(Boolean);
+              const businessInfo = {};
+              document.querySelectorAll('.business-info-box .level-list li').forEach(li => {
+                const span = li.querySelector('span');
+                const key = span ? span.innerText.trim() : '';
+                let value = li.innerText.trim();
+                if (key) {
+                  value = value.replace(key, '').trim();
+                  businessInfo[key] = value;
+                }
+              });
+              const bossNameRaw = text('.job-boss-info .name');
+              const bossParts = bossNameRaw.split('\n').map(item => item.trim()).filter(Boolean);
+              return {
+                salary_text: text('.job-primary .salary'),
+                city: text('.job-primary .text-city'),
+                experience_text: text('.job-primary .text-experiece'),
+                degree_text: text('.job-primary .text-degree'),
+                keywords: texts('.job-keyword-list li'),
+                job_description: text('.job-detail .job-detail-section .job-sec-text'),
+                company_intro: text('.company-info-box .job-sec-text'),
+                location_address: text('.company-address .location-address'),
+                boss_name: bossParts.length ? bossParts[0] : '',
+                boss_active_time: text('.boss-active-time'),
+                boss_info_attr: text('.job-boss-info .boss-info-attr'),
+                business_info: businessInfo
+              };
+            })();
+            """
+        ) or {}
+
+        result["detail_salary_text"] = clean_visible_text(detail_dom.get("salary_text", ""))
+        result["detail_city"] = clean_visible_text(detail_dom.get("city", ""))
+        result["detail_experience_text"] = clean_visible_text(detail_dom.get("experience_text", ""))
+        result["detail_degree_text"] = clean_visible_text(detail_dom.get("degree_text", ""))
+        result["detail_keywords"] = detail_dom.get("keywords", [])
+        result["detail_job_description"] = clean_visible_text(detail_dom.get("job_description", ""))
+        result["detail_company_intro"] = clean_visible_text(detail_dom.get("company_intro", ""))
+        result["detail_location_address"] = clean_visible_text(detail_dom.get("location_address", ""))
+        result["detail_boss_name"] = clean_visible_text(detail_dom.get("boss_name", ""))
+        result["detail_boss_active_time"] = clean_visible_text(detail_dom.get("boss_active_time", ""))
+        result["detail_boss_info_attr"] = clean_visible_text(detail_dom.get("boss_info_attr", ""))
+        result["detail_business_info"] = detail_dom.get("business_info", {})
+
+        business_info = result["detail_business_info"]
+        result["detail_company_full_name"] = business_info.get("公司名称", "")
+        result["detail_legal_representative"] = business_info.get("法定代表人", "")
+        result["detail_foundation_date"] = business_info.get("成立日期", "")
+        result["detail_company_type"] = business_info.get("企业类型", "")
+        result["detail_business_status"] = business_info.get("经营状态", "")
+        result["detail_company_fund"] = business_info.get("注册资金", "")
+
+        result["detail_fetch_ok"] = True
+        return result
+    except Exception as exc:
+        result["detail_error"] = str(exc)
+        return result
 
 
 def main():
@@ -565,19 +900,43 @@ def main():
 
     city_input = ask_with_default("请输入城市", DEFAULT_CITY)
     target_count = int(ask_with_default("请输入目标岗位数量", str(DEFAULT_TARGET_COUNT)))
+    advanced_mode = ask_with_default("是否修改高级设置（y/n）", "n").lower()
+    speed_mode = DEFAULT_SPEED_MODE
+    detail_mode = DEFAULT_DETAIL_MODE
+    flush_every = DEFAULT_FLUSH_EVERY
+    detail_sample_limit = DEFAULT_DETAIL_SAMPLE_LIMIT
+    manual_login = DEFAULT_MANUAL_LOGIN
+    if advanced_mode in {"y", "yes", "1", "true", "是"}:
+        speed_mode = ask_with_default(
+            "请选择速度模式（safe=稳妥，balanced=普通，fast=较快）",
+            DEFAULT_SPEED_MODE,
+        ).lower()
+        detail_mode = ask_with_default(
+            "请选择详情页模式（none=不抓详情，sample=少量详情，all=全部详情）",
+            DEFAULT_DETAIL_MODE,
+        ).lower()
+        flush_every = int(ask_with_default("每采集多少条保存一次进度", str(DEFAULT_FLUSH_EVERY)))
+        detail_sample_limit = int(ask_with_default("详情页最多采集多少条", str(DEFAULT_DETAIL_SAMPLE_LIMIT)))
+        manual_login = ask_with_default("是否先手动登录（y/n）", DEFAULT_MANUAL_LOGIN).lower()
     city_name, city_code, city_slug = normalize_city(city_input)
-    runtime_config = get_runtime_config(target_count)
+    speed_mode = speed_mode if speed_mode in {"safe", "balanced", "fast"} else DEFAULT_SPEED_MODE
+    detail_mode = detail_mode if detail_mode in {"none", "sample", "all"} else DEFAULT_DETAIL_MODE
+    runtime_config = apply_speed_mode(get_runtime_config(target_count), speed_mode, target_count)
 
     batch_name = build_batch_name(city_slug)
     safe_batch_name = sanitize_filename(batch_name)
     out_dir = OUTPUT_DIR / safe_batch_name
     debug_dir = out_dir / "debug"
+    detail_html_dir = out_dir / "detail_html"
     out_dir.mkdir(parents=True, exist_ok=True)
     debug_dir.mkdir(parents=True, exist_ok=True)
+    detail_html_dir.mkdir(parents=True, exist_ok=True)
 
     csv_path = out_dir / f"{safe_batch_name}.csv"
     jsonl_path = out_dir / f"{safe_batch_name}.jsonl"
+    detail_jsonl_path = out_dir / f"{safe_batch_name}_detail_raw.jsonl"
     meta_path = out_dir / "meta.json"
+    init_incremental_files(csv_path, jsonl_path, detail_jsonl_path)
 
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     seen_cache_path = CACHE_DIR / f"{city_slug}_seen_hashes.txt"
@@ -585,6 +944,7 @@ def main():
 
     seen_hashes = read_seen_hashes(seen_cache_path)
     new_hashes = set()
+    flushed_hashes = set()
 
     cached_keywords = load_keyword_pool_cache(keyword_pool_cache_path)
     discovered_keywords = {}
@@ -598,6 +958,7 @@ def main():
 
     csv_rows = []
     json_rows = []
+    detail_rows = []
     stats = defaultdict(int)
     used_keywords = []
     recent_novelty_rates = []
@@ -605,8 +966,30 @@ def main():
     stop_due_to_low_novelty = False
 
     dp = ChromiumPage()
+    if manual_login in {"y", "yes", "1", "true"}:
+        ensure_manual_login(dp)
+    else:
+        print("不手动登录，直接开始采集。")
     dp.listen.start(LISTEN_URL)
     start_time = now_str()
+    write_progress_meta(
+        meta_path,
+        city_name,
+        city_slug,
+        city_code,
+        target_count,
+        batch_name,
+        out_dir,
+        csv_path,
+        jsonl_path,
+        detail_jsonl_path,
+        start_time,
+        runtime_config,
+        stats,
+        len(csv_rows),
+        detail_mode,
+        speed_mode,
+    )
 
     try:
         for round_no in range(1, runtime_config["max_rounds"] + 1):
@@ -692,13 +1075,105 @@ def main():
                             stats["duplicate_jobs"] += 1
                             continue
 
+                        should_fetch_detail = detail_mode == "all" or (
+                            detail_mode == "sample" and stats["detail_attempted"] < detail_sample_limit
+                        )
+                        detail_row = {}
+                        if should_fetch_detail:
+                            stats["detail_attempted"] += 1
+                            detail_row = fetch_job_detail(
+                                dp=dp,
+                                source_url=json_row["source_url"],
+                                job_hash=job_hash,
+                                detail_html_dir=detail_html_dir,
+                                detail_sleep_seconds=DEFAULT_DETAIL_SLEEP_SECONDS,
+                            )
+                            detail_row["job_hash"] = job_hash
+                            detail_rows.append(detail_row)
+                            append_detail_jsonl_row(detail_jsonl_path, detail_row)
+
+                            if detail_row.get("detail_fetch_ok"):
+                                stats["detail_success"] += 1
+                            else:
+                                stats["detail_failed"] += 1
+                        else:
+                            stats["detail_skipped"] += 1
+
+                        if detail_row.get("detail_job_description"):
+                            csv_row["job_description"] = detail_row["detail_job_description"]
+                            json_row["job_description"] = detail_row["detail_job_description"]
+                            json_row["job_description_raw"] = detail_row["detail_job_description"]
+
+                        if detail_row.get("detail_salary_text") and not csv_row["salary_text"]:
+                            csv_row["salary_text"] = detail_row["detail_salary_text"]
+                            json_row["salary_text"] = detail_row["detail_salary_text"]
+                            json_row["salary_raw"] = detail_row["detail_salary_text"]
+                            salary_min, salary_max = parse_salary(detail_row["detail_salary_text"])
+                            csv_row["salary_min"] = salary_min
+                            csv_row["salary_max"] = salary_max
+                            json_row["salary_min"] = salary_min
+                            json_row["salary_max"] = salary_max
+
+                        if detail_row.get("detail_city"):
+                            csv_row["city"] = detail_row["detail_city"]
+                            json_row["city"] = detail_row["detail_city"]
+                            json_row["city_raw"] = detail_row["detail_city"]
+
+                        if detail_row.get("detail_experience_text"):
+                            csv_row["experience_text"] = detail_row["detail_experience_text"]
+                            json_row["experience_text"] = detail_row["detail_experience_text"]
+                            json_row["experience_raw"] = detail_row["detail_experience_text"]
+
+                        if detail_row.get("detail_degree_text"):
+                            csv_row["education_text"] = detail_row["detail_degree_text"]
+                            json_row["education_text"] = detail_row["detail_degree_text"]
+                            json_row["education_raw"] = detail_row["detail_degree_text"]
+
+                        if detail_row.get("detail_updated_time"):
+                            csv_row["publish_time"] = detail_row["detail_updated_time"]
+                            json_row["publish_time"] = detail_row["detail_updated_time"]
+                            json_row["publish_time_raw"] = detail_row["detail_updated_time"]
+
+                        if detail_row.get("detail_location_address"):
+                            csv_row["work_address"] = detail_row["detail_location_address"]
+                            json_row["work_address"] = detail_row["detail_location_address"]
+                            json_row["address_raw"] = detail_row["detail_location_address"]
+
+                        json_row.update(detail_row)
+
                         csv_rows.append(csv_row)
                         json_rows.append(json_row)
                         new_hashes.add(job_hash)
+                        append_csv_row(csv_path, csv_row)
+                        append_jsonl_row(jsonl_path, json_row)
                         new_count_this_page += 1
                         keyword_new_count += 1
 
                         update_discovered_keywords(csv_row["job_title"], discovered_keywords)
+
+                        if len(csv_rows) % max(flush_every, 1) == 0:
+                            pending_hashes = new_hashes - flushed_hashes
+                            append_seen_hashes(seen_cache_path, pending_hashes)
+                            flushed_hashes.update(pending_hashes)
+                            save_keyword_pool_cache(keyword_pool_cache_path, city_name, discovered_keywords)
+                            write_progress_meta(
+                                meta_path,
+                                city_name,
+                                city_slug,
+                                city_code,
+                                target_count,
+                                batch_name,
+                                out_dir,
+                                csv_path,
+                                jsonl_path,
+                                detail_jsonl_path,
+                                start_time,
+                                runtime_config,
+                                stats,
+                                len(csv_rows),
+                                detail_mode,
+                                speed_mode,
+                            )
 
                         if len(csv_rows) >= target_count:
                             break
@@ -748,10 +1223,13 @@ def main():
         except Exception:
             pass
 
-    append_seen_hashes(seen_cache_path, new_hashes)
+    pending_hashes = new_hashes - flushed_hashes
+    append_seen_hashes(seen_cache_path, pending_hashes)
+    flushed_hashes.update(pending_hashes)
     save_keyword_pool_cache(keyword_pool_cache_path, city_name, discovered_keywords)
     save_csv(csv_rows, csv_path)
     save_jsonl(json_rows, jsonl_path)
+    save_detail_jsonl(detail_rows, detail_jsonl_path)
 
     end_time = now_str()
     meta = {
@@ -765,7 +1243,10 @@ def main():
         "output_dir": str(out_dir),
         "csv_path": str(csv_path),
         "jsonl_path": str(jsonl_path),
+        "detail_jsonl_path": str(detail_jsonl_path),
+        "finished": True,
         "debug_dir": str(debug_dir),
+        "detail_html_dir": str(detail_html_dir),
         "seen_cache_path": str(seen_cache_path),
         "keyword_pool_cache_path": str(keyword_pool_cache_path),
         "start_time": start_time,
@@ -777,6 +1258,11 @@ def main():
         "page_sleep_seconds": list(runtime_config["page_sleep_seconds"]),
         "keyword_sleep_seconds": list(runtime_config["keyword_sleep_seconds"]),
         "round_sleep_seconds": list(runtime_config["round_sleep_seconds"]),
+        "detail_mode": detail_mode,
+        "speed_mode": speed_mode,
+        "manual_login": manual_login,
+        "flush_every": flush_every,
+        "detail_sample_limit": detail_sample_limit,
         "low_novelty_threshold": LOW_NOVELTY_THRESHOLD,
         "low_novelty_streak_limit": LOW_NOVELTY_STREAK_LIMIT,
         "stop_due_to_low_novelty": stop_due_to_low_novelty,
@@ -792,6 +1278,7 @@ def main():
     print(f"目标数量：{target_count}，实际新增：{len(csv_rows)}")
     print(f"CSV  : {csv_path}")
     print(f"JSONL: {jsonl_path}")
+    print(f"DETAIL JSONL: {detail_jsonl_path}")
     print(f"META : {meta_path}")
     print(f"DEBUG: {debug_dir}")
 

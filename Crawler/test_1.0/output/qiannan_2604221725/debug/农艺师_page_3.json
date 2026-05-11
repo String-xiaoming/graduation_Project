@@ -1,0 +1,93 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "66oeGYdfrqc",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "ENV2SlVHEtSbD-T18Aa6HUdmJUBeFXsKLaLFuV5K-7jjp0b0Dj4gvUTVDFyqQCO38jKM6yTttZvnuH0QbLc1iDFbGNUePpc6wPRTQgypiA5djxczPSstByxL8z7EZaVo1qbYDHxUZm1RYaZ-uAe-OT9GpKhyFh66MqGtv3RF4zASf5TbxGSezGkg2X70LeCYd7gpPM7LIp-5tcDpGzt4hGKmkcTDOJR-mOxpNI1J9JDU8zgCc0meDYH8ULKSSmwvHpyYe3_UB5-dvTijPj_VZTjAl-XIFQI9hsBlWarGzwk~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20230228/607f1f3d68754fd0350cf8f1491a435203af49dc686e34729f6638068a1d7354e50f39feecce1940_s.jpg",
+        "bossCert": 3,
+        "encryptBossId": "2490e8df6302985e0Hxy39m6GVU~",
+        "bossName": "沈女士",
+        "bossTitle": "人事经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "f104e7244eaa484b0nV83tS1FFdT",
+        "expectId": 1500356273,
+        "jobName": "农艺师",
+        "lid": "66oeGYdfrqc.search.1",
+        "salaryDesc": "9-14K",
+        "jobLabels": [
+          "3-5年",
+          "大专"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "农业技术员",
+          "五险一金",
+          "节假日福利",
+          "包住",
+          "双休",
+          "年终奖",
+          "有农业经验/技能",
+          "3-5年农业经验",
+          "瓜果",
+          "粮食作物",
+          "大棚种植技术",
+          "无销售性质"
+        ],
+        "jobExperience": "3-5年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "大专",
+        "cityName": "黔南布依族苗族自治州",
+        "areaDistrict": "",
+        "businessDistrict": "",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260800,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 106.86186955372865,
+          "latitude": 25.718469632575342
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "44df9381ff7b278c1Xx-2ti8EA~~",
+        "brandName": "数溪科技",
+        "brandLogo": "https://img.bosszhipin.com/beijin/mcs/chatphoto/20190327/a6c623961be11dfb99a03f7017eb2c4ec9a9b11937314bd16171c312f3527e7e_s.jpg",
+        "brandStageName": "天使轮",
+        "brandIndustry": "大数据",
+        "brandScaleName": "20-99人",
+        "welfareList": [
+          "加班补助",
+          "员工旅游",
+          "全勤奖",
+          "带薪年假",
+          "定期体检",
+          "年终奖",
+          "股票期权",
+          "节日福利",
+          "五险一金"
+        ],
+        "industry": 100005,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

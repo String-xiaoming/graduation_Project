@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { getCurrentUser, isAdminUser } from '@/utils/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +28,18 @@ const router = createRouter({
       component: () => import('@/views/DashboardView.vue'),
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/ProfileView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('@/views/AdminView.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('@/views/LoginView.vue'),
@@ -37,6 +50,24 @@ const router = createRouter({
       component: () => import('@/views/RegisterView.vue'),
     },
   ],
+})
+
+router.beforeEach((to) => {
+  const currentUser = getCurrentUser()
+
+  if (to.meta.requiresAuth && !currentUser) {
+    return { path: '/login', query: { redirect: to.fullPath } }
+  }
+
+  if (to.meta.requiresAdmin && !isAdminUser(currentUser)) {
+    return { path: '/' }
+  }
+
+  if ((to.name === 'login' || to.name === 'register') && currentUser) {
+    return { path: isAdminUser(currentUser) ? '/admin' : '/profile' }
+  }
+
+  return true
 })
 
 export default router

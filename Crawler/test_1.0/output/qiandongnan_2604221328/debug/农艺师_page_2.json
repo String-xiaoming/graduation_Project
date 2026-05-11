@@ -1,0 +1,88 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "62JvEl9ZBNN",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "ghyiXR89Fy-eU-I1RXrNWbHbP8iXA1BMkgz9kxwnE6zPW2xtxXAt8bakBjgdd-U5OtlBwwe0kE1knopMul-Mp6GlPeKhcShkeP6fGFfwEVKZTXRT1V5WAmNgWFuVEzyoD8k4jigKu0tBusb5_npAQRa5-6bzDa6CmfDtz5IiNGIQfjwvKgfeF3g0bGcnd0CCGOujTBT2CLgDKXPf5MUkAhqc3nlWRJVrwFJasYqbUltl9CulxuVcGAnMThTGqtDz6mCHhTQqIolVMUDPkhpvf63KrLMfzA2Pnsqis9q4WCDT8Lx4gGPJ2SxlKGYSRcCb7kmHcnnrnptRl0MUKO9O68MyLnl8n6KJ5C4~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20251120/607f1f3d68754fd085d41f7c5c994950e91d11ba42482e2d15a84e887e7f34854466db5fcb146658_s.png.webp",
+        "bossCert": 3,
+        "encryptBossId": "a308eeaabb34ded00n143tq7FFFQ",
+        "bossName": "罗女士",
+        "bossTitle": "人事经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "ec5ad065ca5a10600nZ829S_FVdV",
+        "expectId": 1500356273,
+        "jobName": "中药材种植、育苗基地技术员",
+        "lid": "62JvEl9ZBNN.search.1",
+        "salaryDesc": "3-6K",
+        "jobLabels": [
+          "1-3年",
+          "大专"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "林业技术员",
+          "农学专业",
+          "农业技术员",
+          "无销售性质",
+          "有农业经验/技能",
+          "双休",
+          "林业专业",
+          "包吃住",
+          "1-3年农业经验",
+          "1-3年林业经验",
+          "节假日福利",
+          "中药材",
+          "有林业经验/技能",
+          "驾驶证",
+          "五险"
+        ],
+        "jobExperience": "1-3年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "大专",
+        "cityName": "黔东南苗族侗族自治州",
+        "areaDistrict": "",
+        "businessDistrict": "",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260700,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 107.88142422771028,
+          "latitude": 26.52178563427344
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "7b69dcc64a44b2971HB92NS5ElQ~",
+        "brandName": "贵州黔朵药业有限公司",
+        "brandLogo": "https://img.bosszhipin.com/beijin/app/mobile/normal-0e3f1e4441a21d4874cece3a3d81f0fe.png",
+        "brandStageName": "不需要融资",
+        "brandIndustry": "医药批发零售",
+        "brandScaleName": "100-499人",
+        "welfareList": [
+          "五险一金"
+        ],
+        "industry": 100406,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

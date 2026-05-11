@@ -1,9 +1,10 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
-import { RouterLink, RouterView, useRoute } from 'vue-router'
-import { clearCurrentUser, getCurrentUser, onAuthChange } from '@/utils/auth'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { clearCurrentUser, getCurrentUser, isAdminUser, onAuthChange } from '@/utils/auth'
 
 const route = useRoute()
+const router = useRouter()
 const currentUser = ref(getCurrentUser())
 let stopAuthListener = null
 
@@ -13,8 +14,14 @@ const navItems = [
   { path: '/dashboard', label: '数据看板' },
 ]
 
+function isActive(path) {
+  if (path === '/') return route.path === '/'
+  return route.path === path || route.path.startsWith(`${path}/`)
+}
+
 function logout() {
   clearCurrentUser()
+  router.push('/login')
 }
 
 onMounted(() => {
@@ -43,16 +50,32 @@ onUnmounted(() => {
         <RouterLink
           v-for="item in navItems"
           :key="item.path"
-          :class="{ active: route.path === item.path }"
+          :class="{ active: isActive(item.path) }"
           :to="item.path"
         >
           {{ item.label }}
+        </RouterLink>
+        <RouterLink
+          v-if="currentUser"
+          :class="{ active: isActive('/profile') }"
+          to="/profile"
+        >
+          个人中心
+        </RouterLink>
+        <RouterLink
+          v-if="isAdminUser(currentUser)"
+          :class="{ active: isActive('/admin') }"
+          to="/admin"
+        >
+          管理后台
         </RouterLink>
       </nav>
 
       <div class="auth-area">
         <template v-if="currentUser">
-          <span class="user-pill">{{ currentUser.nickname || currentUser.email }}</span>
+          <RouterLink class="user-pill" to="/profile">
+            {{ currentUser.nickname || currentUser.email }}
+          </RouterLink>
           <button class="ghost-button auth-button" type="button" @click="logout">退出</button>
         </template>
         <RouterLink v-else class="login-link" to="/login">登录</RouterLink>

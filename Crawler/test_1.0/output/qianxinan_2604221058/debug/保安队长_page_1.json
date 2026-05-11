@@ -1,0 +1,75 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "5ZNmI9uklmk",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "9Hgpj4Y2nCa7k-v1nhXCUUK5_lXy747hDWZQy0GoTjqsrLVYCxIPNyPTit6s_FlTq7-QqRa0a5f1f-UIcVpXwTmJ3nhpqo7tvM-M4ttSZ5_VKKhbq9OyZ8DLDDG9uTvyeedweNzueHkYZVyb2TFl26ngLNb_PythI_xhtER1LLjfgj94E93zBJLqjdgyaFbq0b-QA25m-8thIuw_qb0b8o2F6fTysFDnmk0g5msIM0GphgvY9ejIIB9BWReu9FYCC8JiTqciX62iozUt1NFi-5RinZyWoAd_AzOsJcQc5-vg2sM~",
+        "bossAvatar": "https://img.bosszhipin.com/boss/avatar/avatar_9.png",
+        "bossCert": 3,
+        "encryptBossId": "79dfe78fa9d10ba50n182NS4EFdQ",
+        "bossName": "朱秋燕",
+        "bossTitle": "经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "1256910264e6c86c03R529q9ElpW",
+        "expectId": 1500356273,
+        "jobName": "贵州榕树物业招聘保安主管/队长",
+        "lid": "5ZNmI9uklmk.search.1",
+        "salaryDesc": "4-5K",
+        "jobLabels": [
+          "经验不限",
+          "学历不限"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "包吃",
+          "包住",
+          "消防操作能力",
+          "保安员上岗证"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "学历不限",
+        "cityName": "黔西南布依族苗族自治州",
+        "areaDistrict": "兴义市",
+        "businessDistrict": "兴泰",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260900,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 104.906353,
+          "latitude": 25.078578
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "e1ef2a51b7c0bebe1Hd_09W8FFs~",
+        "brandName": "贵州榕树物业",
+        "brandLogo": "https://img.bosszhipin.com/beijin/icon/894ce6fa7e58d64d57e7f22d2f3a9d18afa7fcceaa24b8ea28f56f1bb14732c0.png",
+        "brandStageName": "",
+        "brandIndustry": "其他生活服务",
+        "brandScaleName": "20-99人",
+        "welfareList": [],
+        "industry": 101106,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

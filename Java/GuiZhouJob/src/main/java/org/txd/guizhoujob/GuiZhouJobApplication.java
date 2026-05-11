@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @MapperScan({
         "org.txd.guizhoujob.user.mapper",
-        "org.txd.guizhoujob.job.mapper"
+        "org.txd.guizhoujob.job.mapper",
+        "org.txd.guizhoujob.analysis.mapper"
 })
 public class GuiZhouJobApplication {
     public static void main(String[] args) {

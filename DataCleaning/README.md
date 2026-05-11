@@ -109,6 +109,64 @@ hdfs dfs -du -h /recruit/dwd/job_clean/guiyang_2604201111
   -> Spring Boot / Vue
 ```
 
+## jieba + TF-IDF 技能关键词分析
+
+该功能属于数据分析阶段，不属于基础清洗阶段。基础清洗完成后，可以使用 `analyze_skill_tfidf.py`
+读取 DWD Parquet、Hive 表或本地 MySQL `job_info` 表，对 `job_title + job_description`
+进行 jieba 分词，并使用 Spark ML 的 `CountVectorizer + IDF` 计算 TF-IDF 权重。
+
+分析结果写入 MySQL：
+
+```text
+analysis_skill_tfidf
+```
+
+本地首次使用前先建表：
+
+```bash
+mysql -uroot -p guizhou_job_platform < create_analysis_skill_tfidf.sql
+```
+
+PowerShell 不能直接使用 `<` 重定向时，可以执行：
+
+```powershell
+Get-Content -Raw -Encoding UTF8 ".\create_analysis_skill_tfidf.sql" | mysql -uroot -p guizhou_job_platform
+```
+
+本地直接读取 MySQL `job_info` 的运行示例：
+
+```bash
+spark-submit ^
+  --jars "C:\Program Files\MySQL\MySQL Server 8.0\lib\mysql-connector-j-8.0.xx.jar" ^
+  D:\graduation Project\DataCleaning\analyze_skill_tfidf.py ^
+  --source-type mysql ^
+  --source job_info ^
+  --mysql-url "jdbc:mysql://127.0.0.1:3306/guizhou_job_platform?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true" ^
+  --mysql-user root ^
+  --mysql-password "你的MySQL密码" ^
+  --stat-date 2026-04-22 ^
+  --batch-no local_job_info ^
+  --top-n 30
+```
+
+后续放到服务器后，推荐读取 HDFS DWD Parquet：
+
+```bash
+spark-submit \
+  --master yarn \
+  --deploy-mode client \
+  --jars /opt/module/hadoop/apache-hive-4.1.0-bin/lib/mysql-connector-j-9.6.0.jar \
+  /home/hadoop/spark/analyze_skill_tfidf.py \
+  --source-type parquet \
+  --source hdfs:///recruit/dwd/job_clean_parquet/guiyang_2604201111 \
+  --mysql-url 'jdbc:mysql://192.168.232.1:3306/guizhou_job_platform?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true' \
+  --mysql-user job_export \
+  --mysql-password "$MYSQL_PASSWORD" \
+  --stat-date 2026-04-22 \
+  --batch-no guiyang_2604201111 \
+  --top-n 30
+```
+
 ## DWD 同步到 MySQL
 
 当前推荐链路不是让 Hive 直接写 MySQL，而是：

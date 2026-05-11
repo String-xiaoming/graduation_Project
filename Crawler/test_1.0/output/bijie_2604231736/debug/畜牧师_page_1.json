@@ -1,0 +1,77 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "6BcsmipRVkL",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "JpgG-jtqiLh3D-_1fnu-lLZ3khmCj3_7xpxIYVQhTJz589wfn1ngPkiTxJLkhuKiByypb_7M51bIqHzRyH4PmfTV3DF_EPWuAroObaIsCj7uW0hDSGYh3ydHba6cZ3Jc4UKzVdr7HJLoMnQraXs1mxqwb3F780ceFF2yrN8_cI-xangoXoN6PsokrOSImsvKAzTBj5Ro-Yk3QToKdPbItur7a7A6pMmVU9owX9VsVYUUIFLYAlDbM5TjPwzAkfMNkWht8x_CiqigPF0F2akI_JyWLb-bheNZ4S8xi_T6bdpt",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20260311/607f1f3d68754fd040b8e14d3df84b386e7e21bd54fbd09dd6da8cb46b19cf38f2fd680b9384686d_s.png.webp",
+        "bossCert": 3,
+        "encryptBossId": "dcf5e2746003ed063n1y3d26F1Y~",
+        "bossName": "王女士",
+        "bossTitle": "人事",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "cd27fcc778e7594b03Zy2ty9GFdS",
+        "expectId": 1500356273,
+        "jobName": "畜牧师",
+        "lid": "6BcsmipRVkL.search.1",
+        "salaryDesc": "5-7K",
+        "jobLabels": [
+          "1-3年",
+          "大专"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "需要兽医经验/技能",
+          "1-3年兽医经验",
+          "猪",
+          "兽医相关专业",
+          "兽医资格证",
+          "养殖场"
+        ],
+        "jobExperience": "1-3年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "大专",
+        "cityName": "毕节",
+        "areaDistrict": "织金县",
+        "businessDistrict": "文腾",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260500,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 105.78692,
+          "latitude": 26.68624
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "f0dc3912237f05b21HF_3N61Elo~",
+        "brandName": "泰欣农牧",
+        "brandLogo": "https://img.bosszhipin.com/beijin/icon/894ce6fa7e58d64d57e7f22d2f3a9d18afa7fcceaa24b8ea28f56f1bb14732c0.png",
+        "brandStageName": "",
+        "brandIndustry": "其他行业",
+        "brandScaleName": "0-20人",
+        "welfareList": [],
+        "industry": 101304,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

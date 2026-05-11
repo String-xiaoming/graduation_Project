@@ -1,0 +1,86 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "7nGnHu6vXgc",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "bANQSDgBHleHF-016ZANuVcLAATaoBT52r8zvXUzKd-yrPYAZRKHQIiNbshNyZelci5H5etVNxVCh5pMR6_8rMQ4ShOL2NxveCaAFq7P3IMNpMGW0QP6jb7U8rgwsfa0tQxzkblyz-qLR3G4StuEVPd_e76KtPqvUpP0DG4Yz7bgpN_3rebcnSH4lizKg6gWNkYnYxYlV-GisXRxCeIfoBAW-fHH4Z1orwc_n6gH0Od8MCOZWM0o4PMKZCFiirRvXjm0AnOorev0f-2od7doE7zn5SI2IxHQIOBig2B3YMU7o6ZLxf1FdCMbTuJ-2Mvh1PjTYC3c",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20260407/607f1f3d68754fd0eadc1819f04a4435189d7157b5752f4ac51bcfff6ef9a618b1128e20de475a82_s.jpg.webp",
+        "bossCert": 3,
+        "encryptBossId": "23a07f07627774ff0XR-3Ni0FVBU",
+        "bossName": "赵兴",
+        "bossTitle": "人才经纪人",
+        "goldHunter": 0,
+        "bossOnline": true,
+        "encryptJobId": "d53c91dab51fc3710nd429-6FVFT",
+        "expectId": 1500356273,
+        "jobName": "诚聘坐车跟车巡逻员+包吃住+五险",
+        "lid": "7nGnHu6vXgc.search.1",
+        "salaryDesc": "3-4K",
+        "jobLabels": [
+          "经验不限",
+          "学历不限"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "小区",
+          "包吃住",
+          "节假日福利",
+          "就近分配",
+          "160cm以上",
+          "两班倒",
+          "可玩手机",
+          "坐岗",
+          "月休四天",
+          "巡逻岗",
+          "五险"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "学历不限",
+        "cityName": "贵阳",
+        "areaDistrict": "观山湖区",
+        "businessDistrict": "美的林城时代",
+        "jobType": 0,
+        "proxyJob": 1,
+        "proxyType": 1,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [
+          2
+        ],
+        "itemId": 1,
+        "city": 101260100,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 106.667224,
+          "latitude": 26.623259
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [
+          "https://img.bosszhipin.com/static/file/2022/pvmr2v0l8i1655206532429.png"
+        ],
+        "encryptBrandId": "99ee09e24d919e0e1Xdz3Ni9FVU~",
+        "brandName": "贵阳海信",
+        "brandLogo": "https://img.bosszhipin.com/beijin/icon/894ce6fa7e58d64d57e7f22d2f3a9d18afa7fcceaa24b8ea28f56f1bb14732c0.png",
+        "brandStageName": "",
+        "brandIndustry": "消费电子",
+        "brandScaleName": "500-999人",
+        "welfareList": [],
+        "industry": 100027,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

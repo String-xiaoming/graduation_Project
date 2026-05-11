@@ -1,0 +1,77 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "67sqNe4GTFu",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "Jqz9FP1DtK_yb-o1Hnt3xpJat6yfkEwax85A79aIYqks_gIxSKnYO6t4J78_-V49mYJVC02MfY7avfxbRbuu2NiR9Rk44Eoyse7xFNRivXpR_L8n1MuYRqMNB3v2Jb6QLw3DPG-CwffxKaH9QeJhzBE0wS1nfx-V264YC5ZBWVgdA4bHincMFZF5Jn5XtR7JKivrpTPg6Rwyrh0emA3t1QXkpq26sdV3AypuZJXama1tU2elz2a2wLNKWhiaxbr-CCwEZ3MoHKH4F8HrsfBEqqfsLuiAySS0bJi_5UFrIw~~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20191226/b20862769de06e7bf6b3909331eeb84294478e878442adee7c8791dc9401cf4d_s.png",
+        "bossCert": 3,
+        "encryptBossId": "f4b25be8a6effb771HJ409i_FlM~",
+        "bossName": "刘涛涛",
+        "bossTitle": "副总",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "0030ca02bd40173a1nx529q1FlE~",
+        "expectId": 1500356273,
+        "jobName": "柜员",
+        "lid": "67sqNe4GTFu.search.1",
+        "salaryDesc": "2-3K",
+        "jobLabels": [
+          "经验不限",
+          "高中"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "银行业务",
+          "同业金融",
+          "柜员"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "高中",
+        "cityName": "黔南布依族苗族自治州",
+        "areaDistrict": "都匀市",
+        "businessDistrict": "石板街",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260800,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 107.516972,
+          "latitude": 26.258778
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "ef742c0796b6705a1nJ-2tW7Eg~~",
+        "brandName": "聚龙股份",
+        "brandLogo": "https://img.bosszhipin.com/beijin/mcs/chatphoto/20180320/5e49c61ef1a4309ad7ab2f824c46d1b694478e878442adee7c8791dc9401cf4d.jpg",
+        "brandStageName": "已上市",
+        "brandIndustry": "银行",
+        "brandScaleName": "1000-9999人",
+        "welfareList": [
+          "五险一金",
+          "节日福利"
+        ],
+        "industry": 100201,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

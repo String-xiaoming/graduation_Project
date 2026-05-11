@@ -12,6 +12,10 @@ export function getCurrentUser() {
   }
 }
 
+export function isAdminUser(user = getCurrentUser()) {
+  return String(user?.role || '').toUpperCase() === 'ADMIN'
+}
+
 export function setCurrentUser(user) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(user))
   window.dispatchEvent(new CustomEvent(AUTH_EVENT, { detail: user }))

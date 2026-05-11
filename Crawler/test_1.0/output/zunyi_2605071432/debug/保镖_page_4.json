@@ -1,0 +1,86 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "9dcpdw5tJnL",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "BK3hESz5Y4KpA-v1pI0NWIg0pQoAEjD3mYJxULrwM3V-YxGFCnhku4YONb6mQCT7Njd3aP2PC2rHSlJjUUYxndEuEEy8uM7bq3g_xefssgMeIY5IDEjz4uNMOuOrJlmAiZfPfPc8Zi5NJq97HnKc__m0l2zy6qDF7xtZNGbdvnsfYQO3wHGi38Pf0QOPNVEX1LHSklWghUd8DvKq4oRQqQCUluxOiZdQH-bz6aTBw6rT91HUS_TjHw8jbRUvoYq1TDM6XDhG1w_deQFibkVGpooFi9R2qnaYWbbs51ftPIWSy8s~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20200914/86bd4af5f3358dc62174889d041b6302d8a0ab2b6be9eb78d2cd4b6b0f2270a5_s.png",
+        "bossCert": 3,
+        "encryptBossId": "3c0b663d8ea3b7ca0nR72N24EFFZ",
+        "bossName": "熊爽",
+        "bossTitle": "前厅经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "fab1acbbdacb31951XZy2dW_GFRU",
+        "expectId": 1500356273,
+        "jobName": "仁怀市颐嘉酒店招聘保安",
+        "lid": "9dcpdw5tJnL.search.1",
+        "salaryDesc": "3-4K",
+        "jobLabels": [
+          "经验不限",
+          "学历不限"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "巡逻岗",
+          "保镖",
+          "酒店保安",
+          "包吃包住",
+          "夜班补助"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "学历不限",
+        "cityName": "遵义",
+        "areaDistrict": "仁怀市",
+        "businessDistrict": "中枢",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260200,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 106.413993,
+          "latitude": 27.79927
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "2ac962d4b9f139a41nN63t-8FlQ~",
+        "brandName": "仁怀市颐嘉酒店",
+        "brandLogo": "https://img.bosszhipin.com/beijin/app/mobile/normal-0e3f1e4441a21d4874cece3a3d81f0fe.png",
+        "brandStageName": "",
+        "brandIndustry": "酒店/民宿",
+        "brandScaleName": "0-20人",
+        "welfareList": [
+          "免费工装",
+          "节日福利",
+          "有无线网",
+          "包吃",
+          "夜班补助",
+          "底薪加提成",
+          "绩效奖金",
+          "全勤奖",
+          "包住"
+        ],
+        "industry": 101102,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

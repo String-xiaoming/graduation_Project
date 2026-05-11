@@ -1,0 +1,78 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "67LGp9URnKB",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "xzzW7EUBCUwmd-L1QzUPF52aI10NuYfhOJTvrn5ply_O4QsXhF76HbIUlpoJDld6RAnp4vYEQgOxetB5Dg5jpDmuCDvlbJZralN6AiyKKAYaNqXsuqqkGtqjfOC22A0C7k7UWFTJ7ikxvYeodOPfPbhUcgrUY9YIbfvFF11xFd2xeD77Yh_z2ytQ_N_zob81MKt3WUKSUDsk6lD4FXv8rdywqo3LNm2WbVJlcemv5SCtsmJsxx6iX6xmx0Tjd0kORIow-sskqi1r7meJTB1xlpd1WD6mdLFM4Lej-nsO_3zJJA~~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20210312/c9d185285590167800a2db75a5222ce25372402cbff01ab5fe22a1ca040cf2eb_s.png",
+        "bossCert": 3,
+        "encryptBossId": "409cb409244806bf0nVz0t24F1tX",
+        "bossName": "王娜丽",
+        "bossTitle": "经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "c688672e218955e30nV92N67FFdZ",
+        "expectId": 1500356273,
+        "jobName": "汽车三膜顶级金属膜能贴的师傅",
+        "lid": "67LGp9URnKB.search.1",
+        "salaryDesc": "7-12K",
+        "jobLabels": [
+          "5-10年",
+          "学历不限"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "年终奖",
+          "销售经验",
+          "包吃住",
+          "接受无汽车美容经验",
+          "连锁店",
+          "无销售性质",
+          "系统培训"
+        ],
+        "jobExperience": "5-10年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "学历不限",
+        "cityName": "黔南布依族苗族自治州",
+        "areaDistrict": "都匀市",
+        "businessDistrict": "沙坝",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260800,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 107.513192,
+          "latitude": 26.306755
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "685491b1fd4c4ffb1nZy3Nq9FVM~",
+        "brandName": "都匀德信",
+        "brandLogo": "https://img.bosszhipin.com/beijin/icon/894ce6fa7e58d64d57e7f22d2f3a9d18afa7fcceaa24b8ea28f56f1bb14732c0.png",
+        "brandStageName": "",
+        "brandIndustry": "4S店/后市场",
+        "brandScaleName": "0-20人",
+        "welfareList": [],
+        "industry": 100803,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

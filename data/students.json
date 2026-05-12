@@ -1,0 +1,68 @@
+[
+  {
+    "id": "1",
+    "name": "张伟",
+    "studentId": "2021001",
+    "gender": "男",
+    "major": "计算机科学与技术",
+    "grade": "2021",
+    "email": "zhangwei@example.com",
+    "phone": "13800000001",
+    "createdAt": "2021-09-01T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "name": "李娜",
+    "studentId": "2021002",
+    "gender": "女",
+    "major": "软件工程",
+    "grade": "2021",
+    "email": "lina@example.com",
+    "phone": "13800000002",
+    "createdAt": "2021-09-01T00:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "name": "王芳",
+    "studentId": "2021003",
+    "gender": "女",
+    "major": "信息管理与信息系统",
+    "grade": "2021",
+    "email": "wangfang@example.com",
+    "phone": "13800000003",
+    "createdAt": "2021-09-01T00:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "name": "刘洋",
+    "studentId": "2022001",
+    "gender": "男",
+    "major": "计算机科学与技术",
+    "grade": "2022",
+    "email": "liuyang@example.com",
+    "phone": "13800000004",
+    "createdAt": "2022-09-01T00:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "name": "陈静",
+    "studentId": "2022002",
+    "gender": "女",
+    "major": "网络工程",
+    "grade": "2022",
+    "email": "chenjing@example.com",
+    "phone": "13800000005",
+    "createdAt": "2022-09-01T00:00:00.000Z"
+  },
+  {
+    "id": "6",
+    "name": "赵明",
+    "studentId": "2023001",
+    "gender": "男",
+    "major": "人工智能",
+    "grade": "2023",
+    "email": "zhaoming@example.com",
+    "phone": "13800000006",
+    "createdAt": "2023-09-01T00:00:00.000Z"
+  }
+]

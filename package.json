@@ -1,0 +1,16 @@
+{
+  "name": "student-management-system",
+  "version": "1.0.0",
+  "description": "学生信息管理系统 - Student Information Management System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"No tests defined yet\" && exit 0"
+  },
+  "keywords": ["student", "management", "nodejs", "express"],
+  "author": "String-xiaoming",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

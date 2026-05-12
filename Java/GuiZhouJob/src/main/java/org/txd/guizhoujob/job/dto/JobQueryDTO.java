@@ -15,6 +15,7 @@ public class JobQueryDTO {
     private BigDecimal salaryMin;
     private BigDecimal salaryMax;
     private Boolean onlyWithSalary;
+    private String tableName;
 
     public Integer getOffset() {
         int safePageNum = pageNum == null || pageNum < 1 ? 1 : pageNum;

@@ -1,10 +1,9 @@
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { fetchHotJobs, fetchJobPage } from '@/api/job'
+import { fetchHotJobs } from '@/api/job'
 import JobCard from '@/components/JobCard.vue'
 import LoadingBlock from '@/components/LoadingBlock.vue'
-import MetricCard from '@/components/MetricCard.vue'
 
 const router = useRouter()
 
@@ -12,20 +11,18 @@ const loading = ref(true)
 const errorMessage = ref('')
 const searchKeyword = ref('')
 const hotJobs = ref([])
-const pageInfo = reactive({
-  total: 0,
-})
 
 const featuredCities = [
-  { name: '贵阳', tone: '省会机会集中，岗位类型更丰富' },
-  { name: '安顺', tone: '文旅、制造与本地服务岗位活跃' },
-  { name: '遵义', tone: '销售、教育、制造岗位选择多' },
-  { name: '黔西南', tone: '能源、工程与基层服务机会突出' },
+  { name: '贵阳', tone: '省会岗位集中，互联网、销售、财务与服务岗位丰富' },
+  { name: '遵义', tone: '制造、教育、医疗、销售与本地服务机会较多' },
+  { name: '安顺', tone: '文旅服务、装备制造、行政与基层岗位活跃' },
+  { name: '六盘水', tone: '能源、工程、物流、生产制造岗位更突出' },
+  { name: '毕节', tone: '教育、销售、运营、生产与服务岗位覆盖广' },
+  { name: '铜仁', tone: '文旅、零售、医疗、教育与县域服务机会稳定' },
+  { name: '黔东南', tone: '旅游服务、教育培训、销售与行政岗位选择多' },
+  { name: '黔南', tone: '制造、工程、医药、职能与本地服务岗位均衡' },
+  { name: '黔西南', tone: '能源、工程、销售、餐饮与基层服务机会突出' },
 ]
-
-const salaryReadyCount = computed(
-  () => hotJobs.value.filter((job) => job.salaryMin != null && job.salaryMax != null).length,
-)
 
 function goSearch(city = '') {
   router.push({
@@ -41,11 +38,7 @@ async function loadHome() {
   loading.value = true
   errorMessage.value = ''
   try {
-    const [page, hot] = await Promise.all([
-      fetchJobPage({ pageNum: 1, pageSize: 1 }),
-      fetchHotJobs(6),
-    ])
-    pageInfo.total = page?.total || 0
+    const hot = await fetchHotJobs(6)
     hotJobs.value = Array.isArray(hot) ? hot : []
   } catch (error) {
     errorMessage.value = error.message
@@ -58,15 +51,15 @@ onMounted(loadHome)
 </script>
 
 <template>
-  <section class="hero page-section">
-    <div class="hero__content">
+  <section class="hero hero--home page-section">
+    <div class="hero__content home-hero__content">
       <p class="eyebrow">贵州就业助手</p>
       <h1>更快找到适合你的贵州本地岗位。</h1>
       <p class="hero__lead">
-        汇总贵州多地区招聘信息，支持岗位搜索、城市筛选、薪资分析和个人求职偏好记录。
+        聚合贵州九个城市的招聘信息，按岗位、公司、技能和城市快速筛选，让求职入口更直接。
       </p>
 
-      <div class="hero-search">
+      <div class="hero-search home-search">
         <input
           v-model.trim="searchKeyword"
           type="search"
@@ -75,39 +68,29 @@ onMounted(loadHome)
         />
         <button type="button" @click="goSearch()">搜索岗位</button>
       </div>
-    </div>
 
-    <aside class="hero-panel">
-      <span>SMART MATCH</span>
-      <strong>岗位洞察、城市选择、薪资参考一次看清</strong>
-      <p>先浏览岗位趋势，再根据城市、学历、经验和薪资范围筛选更合适的机会。</p>
-    </aside>
-  </section>
-
-  <LoadingBlock v-if="loading" text="正在读取岗位概览" />
-
-  <section v-else class="page-section">
-    <div v-if="errorMessage" class="notice-card">
-      {{ errorMessage }}
-    </div>
-
-    <div class="metric-grid">
-      <MetricCard label="在库岗位" :value="pageInfo.total" note="持续更新的本地招聘信息" />
-      <MetricCard label="近期机会" :value="hotJobs.length" note="优先展示最新岗位" />
-      <MetricCard label="薪资参考" :value="salaryReadyCount" note="可用于薪资区间比较" />
+      <div class="home-hero__quick">
+        <button class="ghost-button" type="button" @click="router.push('/jobs')">浏览全部岗位</button>
+        <button class="ghost-button" type="button" @click="router.push('/dashboard')">查看数据看板</button>
+      </div>
     </div>
   </section>
 
-  <section class="page-section split-section">
+  <section class="page-section city-entry-section">
+    <div class="section-head city-entry-head">
       <div>
         <p class="eyebrow">CITY PICKS</p>
         <h2>按城市快速进入岗位库</h2>
+        <p>覆盖贵州 9 个城市，选择城市后直接进入对应岗位列表。</p>
       </div>
-    <div class="city-grid">
+      <button class="ghost-button" type="button" @click="router.push('/jobs')">全部城市</button>
+    </div>
+
+    <div class="city-grid city-grid--home">
       <button
         v-for="city in featuredCities"
         :key="city.name"
-        class="city-card"
+        class="city-card city-card--home"
         type="button"
         @click="goSearch(city.name)"
       >
@@ -126,7 +109,13 @@ onMounted(loadHome)
       <button class="ghost-button" type="button" @click="router.push('/jobs')">查看全部</button>
     </div>
 
-    <div class="job-grid">
+    <LoadingBlock v-if="loading" text="正在读取近期岗位" />
+
+    <div v-else-if="errorMessage" class="notice-card">
+      {{ errorMessage }}
+    </div>
+
+    <div v-else class="job-grid">
       <JobCard v-for="job in hotJobs" :key="job.id" :job="job" />
     </div>
   </section>

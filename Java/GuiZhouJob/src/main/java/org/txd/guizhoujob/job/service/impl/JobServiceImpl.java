@@ -6,6 +6,7 @@ import org.txd.guizhoujob.common.PageResult;
 import org.txd.guizhoujob.job.dto.JobQueryDTO;
 import org.txd.guizhoujob.job.mapper.JobInfoMapper;
 import org.txd.guizhoujob.job.service.JobService;
+import org.txd.guizhoujob.job.support.JobTableResolver;
 import org.txd.guizhoujob.job.vo.JobInfoVO;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class JobServiceImpl implements JobService {
         if (dto.getPageSize() > 50) {
             dto.setPageSize(50);
         }
+        dto.setTableName(JobTableResolver.tableForQueryCity(dto.getCity()));
 
         Long total = jobInfoMapper.countByCondition(dto);
         List<JobInfoVO> list = jobInfoMapper.selectPageByCondition(dto);

@@ -12,6 +12,7 @@ import org.txd.guizhoujob.admin.service.AdminService;
 import org.txd.guizhoujob.common.BusinessException;
 import org.txd.guizhoujob.common.PageResult;
 import org.txd.guizhoujob.job.mapper.JobInfoMapper;
+import org.txd.guizhoujob.job.support.JobTableResolver;
 import org.txd.guizhoujob.job.vo.JobInfoVO;
 import org.txd.guizhoujob.user.entity.SysUser;
 import org.txd.guizhoujob.user.mapper.SysUserMapper;
@@ -110,6 +111,7 @@ public class AdminServiceImpl implements AdminService {
     public PageResult<JobInfoVO> listJobs(Long adminUserId, AdminJobQueryDTO dto) {
         checkAdmin(adminUserId);
         normalizeJobQuery(dto);
+        dto.setTableName(JobTableResolver.tableForQueryCity(dto.getCity()));
 
         Long total = jobInfoMapper.countByAdminCondition(dto);
         List<JobInfoVO> list = jobInfoMapper.selectAdminPageByCondition(dto);
@@ -120,22 +122,58 @@ public class AdminServiceImpl implements AdminService {
     @Transactional(rollbackFor = Exception.class)
     public void updateJob(Long adminUserId, Long id, AdminJobUpdateDTO dto) {
         checkAdmin(adminUserId);
+        JobInfoVO existed = jobInfoMapper.selectAdminById(id);
+        if (existed == null) {
+            throw new BusinessException("岗位不存在");
+        }
+
         dto.setId(id);
+        dto.setTableName(JobTableResolver.MASTER_TABLE);
 
         int rows = jobInfoMapper.updateByAdmin(dto);
         if (rows <= 0) {
             throw new BusinessException("更新岗位失败");
         }
+        syncCityJobTable(id, existed.getCity());
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteJob(Long adminUserId, Long id) {
         checkAdmin(adminUserId);
+        JobInfoVO existed = jobInfoMapper.selectAdminById(id);
+        if (existed == null) {
+            throw new BusinessException("岗位不存在");
+        }
 
-        int rows = jobInfoMapper.disableById(id);
+        int rows = jobInfoMapper.disableById(JobTableResolver.MASTER_TABLE, id);
         if (rows <= 0) {
             throw new BusinessException("删除岗位失败");
+        }
+
+        String cityTable = JobTableResolver.tableForExactCity(existed.getCity());
+        if (cityTable != null) {
+            jobInfoMapper.disableById(cityTable, id);
+        }
+    }
+
+    private void syncCityJobTable(Long id, String oldCity) {
+        JobInfoVO updated = jobInfoMapper.selectAdminById(id);
+        if (updated == null) {
+            return;
+        }
+
+        String oldTable = JobTableResolver.tableForExactCity(oldCity);
+        String newTable = JobTableResolver.tableForExactCity(updated.getCity());
+
+        if (oldTable != null) {
+            jobInfoMapper.deleteByIdFromTable(oldTable, id);
+        }
+        if (newTable != null && !newTable.equals(oldTable)) {
+            jobInfoMapper.deleteByIdFromTable(newTable, id);
+        }
+        if (newTable != null) {
+            jobInfoMapper.insertCopyFromMaster(newTable, id);
         }
     }
 

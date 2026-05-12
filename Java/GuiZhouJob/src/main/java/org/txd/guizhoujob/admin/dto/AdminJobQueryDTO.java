@@ -9,6 +9,7 @@ public class AdminJobQueryDTO {
     private String keyword;
     private String city;
     private Integer status;
+    private String tableName;
 
     public Integer getOffset() {
         int currentPage = pageNum == null || pageNum < 1 ? 1 : pageNum;

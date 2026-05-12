@@ -18,4 +18,5 @@ public class AdminJobUpdateDTO {
     private BigDecimal salaryMax;
     private String jobDescription;
     private Integer status;
+    private String tableName;
 }

@@ -17,6 +17,8 @@ public interface JobInfoMapper {
 
     JobInfoVO selectById(@Param("id") Long id);
 
+    JobInfoVO selectAdminById(@Param("id") Long id);
+
     List<JobInfoVO> selectHot(@Param("limit") Integer limit);
 
     Long countByAdminCondition(AdminJobQueryDTO dto);
@@ -25,5 +27,9 @@ public interface JobInfoMapper {
 
     int updateByAdmin(AdminJobUpdateDTO dto);
 
-    int disableById(@Param("id") Long id);
+    int disableById(@Param("tableName") String tableName, @Param("id") Long id);
+
+    int deleteByIdFromTable(@Param("tableName") String tableName, @Param("id") Long id);
+
+    int insertCopyFromMaster(@Param("tableName") String tableName, @Param("id") Long id);
 }

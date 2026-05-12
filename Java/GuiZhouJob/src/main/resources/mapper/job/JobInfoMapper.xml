@@ -64,13 +64,13 @@
 
     <select id="countByCondition" resultType="java.lang.Long">
         select count(1)
-        from job_info
+        from ${tableName}
         <include refid="Query_Condition"/>
     </select>
 
     <select id="selectPageByCondition" resultMap="JobInfoResultMap">
         select <include refid="Base_Column_List"/>
-        from job_info
+        from ${tableName}
         <include refid="Query_Condition"/>
         order by publish_time desc, id desc
         limit #{pageSize} offset #{offset}
@@ -83,6 +83,13 @@
           and status = 1
           and job_description is not null
           and trim(job_description) != ''
+        limit 1
+    </select>
+
+    <select id="selectAdminById" resultMap="JobInfoResultMap">
+        select <include refid="Base_Column_List"/>
+        from job_info
+        where id = #{id}
         limit 1
     </select>
 
@@ -117,20 +124,20 @@
 
     <select id="countByAdminCondition" resultType="java.lang.Long">
         select count(1)
-        from job_info
+        from ${tableName}
         <include refid="Admin_Job_Condition"/>
     </select>
 
     <select id="selectAdminPageByCondition" resultMap="JobInfoResultMap">
         select <include refid="Base_Column_List"/>
-        from job_info
+        from ${tableName}
         <include refid="Admin_Job_Condition"/>
         order by publish_time desc, id desc
         limit #{pageSize} offset #{offset}
     </select>
 
     <update id="updateByAdmin" parameterType="org.txd.guizhoujob.admin.dto.AdminJobUpdateDTO">
-        update job_info
+        update ${tableName}
         <set>
             <if test="jobTitle != null">job_title = #{jobTitle},</if>
             <if test="companyName != null">company_name = #{companyName},</if>
@@ -149,8 +156,20 @@
     </update>
 
     <update id="disableById">
-        update job_info
+        update ${tableName}
         set status = 0, update_time = now()
         where id = #{id}
     </update>
+
+    <delete id="deleteByIdFromTable">
+        delete from ${tableName}
+        where id = #{id}
+    </delete>
+
+    <insert id="insertCopyFromMaster">
+        insert into ${tableName}
+        select *
+        from job_info
+        where id = #{id}
+    </insert>
 </mapper>

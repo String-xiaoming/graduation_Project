@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.txd.guizhoujob.job.mapper.JobInfoMapper">
+
+    <resultMap id="JobInfoResultMap" type="org.txd.guizhoujob.job.vo.JobInfoVO">
+        <id property="id" column="id"/>
+        <result property="jobTitle" column="job_title"/>
+        <result property="companyName" column="company_name"/>
+        <result property="city" column="city"/>
+        <result property="workAddress" column="work_address"/>
+        <result property="educationText" column="education_text"/>
+        <result property="experienceText" column="experience_text"/>
+        <result property="salaryText" column="salary_text"/>
+        <result property="salaryMin" column="salary_min"/>
+        <result property="salaryMax" column="salary_max"/>
+        <result property="jobDescription" column="job_description"/>
+        <result property="publishTime" column="publish_time"/>
+        <result property="dataBatchNo" column="data_batch_no"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, job_title, company_name, city, work_address, education_text,
+        experience_text, salary_text, salary_min, salary_max, job_description,
+        publish_time, data_batch_no, status
+    </sql>
+
+    <sql id="Query_Condition">
+        where status = 1
+          and job_description is not null
+          and trim(job_description) != ''
+        <if test="keyword != null and keyword != ''">
+            and (
+                job_title like concat('%', #{keyword}, '%')
+                or company_name like concat('%', #{keyword}, '%')
+                or work_address like concat('%', #{keyword}, '%')
+                or job_description like concat('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="city != null and city != ''">
+            and city = #{city}
+        </if>
+        <if test="educationText != null and educationText != ''">
+            and education_text = #{educationText}
+        </if>
+        <if test="experienceText != null and experienceText != ''">
+            and experience_text = #{experienceText}
+        </if>
+        <if test="salaryMin != null">
+            and salary_max is not null
+            and salary_max &gt;= #{salaryMin}
+        </if>
+        <if test="salaryMax != null">
+            and salary_min is not null
+            and salary_min &lt;= #{salaryMax}
+        </if>
+        <if test="onlyWithSalary != null and onlyWithSalary">
+            and salary_min is not null
+            and salary_max is not null
+        </if>
+    </sql>
+
+    <select id="countByCondition" resultType="java.lang.Long">
+        select count(1)
+        from ${tableName}
+        <include refid="Query_Condition"/>
+    </select>
+
+    <select id="selectPageByCondition" resultMap="JobInfoResultMap">
+        select <include refid="Base_Column_List"/>
+        from ${tableName}
+        <include refid="Query_Condition"/>
+        order by publish_time desc, id desc
+        limit #{pageSize} offset #{offset}
+    </select>
+
+    <select id="selectById" resultMap="JobInfoResultMap">
+        select <include refid="Base_Column_List"/>
+        from job_info
+        where id = #{id}
+          and status = 1
+          and job_description is not null
+          and trim(job_description) != ''
+        limit 1
+    </select>
+
+    <select id="selectAdminById" resultMap="JobInfoResultMap">
+        select <include refid="Base_Column_List"/>
+        from job_info
+        where id = #{id}
+        limit 1
+    </select>
+
+    <select id="selectHot" resultMap="JobInfoResultMap">
+        select <include refid="Base_Column_List"/>
+        from job_info
+        where status = 1
+          and job_description is not null
+          and trim(job_description) != ''
+        order by publish_time desc, id desc
+        limit #{limit}
+    </select>
+
+    <sql id="Admin_Job_Condition">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (
+                    job_title like concat('%', #{keyword}, '%')
+                    or company_name like concat('%', #{keyword}, '%')
+                    or work_address like concat('%', #{keyword}, '%')
+                    or job_description like concat('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countByAdminCondition" resultType="java.lang.Long">
+        select count(1)
+        from ${tableName}
+        <include refid="Admin_Job_Condition"/>
+    </select>
+
+    <select id="selectAdminPageByCondition" resultMap="JobInfoResultMap">
+        select <include refid="Base_Column_List"/>
+        from ${tableName}
+        <include refid="Admin_Job_Condition"/>
+        order by publish_time desc, id desc
+        limit #{pageSize} offset #{offset}
+    </select>
+
+    <update id="updateByAdmin" parameterType="org.txd.guizhoujob.admin.dto.AdminJobUpdateDTO">
+        update ${tableName}
+        <set>
+            <if test="jobTitle != null">job_title = #{jobTitle},</if>
+            <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="workAddress != null">work_address = #{workAddress},</if>
+            <if test="educationText != null">education_text = #{educationText},</if>
+            <if test="experienceText != null">experience_text = #{experienceText},</if>
+            <if test="salaryText != null">salary_text = #{salaryText},</if>
+            <if test="salaryMin != null">salary_min = #{salaryMin},</if>
+            <if test="salaryMax != null">salary_max = #{salaryMax},</if>
+            <if test="jobDescription != null">job_description = #{jobDescription},</if>
+            <if test="status != null">status = #{status},</if>
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="disableById">
+        update ${tableName}
+        set status = 0, update_time = now()
+        where id = #{id}
+    </update>
+
+    <delete id="deleteByIdFromTable">
+        delete from ${tableName}
+        where id = #{id}
+    </delete>
+
+    <insert id="insertCopyFromMaster">
+        insert into ${tableName}
+        select *
+        from job_info
+        where id = #{id}
+    </insert>
+</mapper>

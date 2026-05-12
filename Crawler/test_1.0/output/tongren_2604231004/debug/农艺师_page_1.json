@@ -1,0 +1,84 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "6pd9dOrmiMg",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "aA8hSnsjmz6p--U1VnzCd8qoFXp-1mZV2AqDiAzfetEdhNqUCBanQC4mCW64hFrhn9KHdPd5uKrx_x3LzHUBw14tlw1BUuf3lo1kf_oCQCanxL6DJ86RwzUn4KR_Ep6JSwX7c9y4iYK8vpJOPjHQnIBOo1QNPKxevu-fh1nAJOko5PEGQpPXK8Scm19eMIHuzpflGjGTAU2quU04THjb76fuQUXQ5WoiZa87btFCdGGLAkFCK8p8YwfziOrbuxyQY8ca7l-wKbpQubLUa7j7mbbaPAegSxeOBLZU4-Uvc2hpsQ~~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20201028/726d0bc40b052dd473f82cba76df2b4ea7dad1084be5277d57b55f1a4684cb64_s.png",
+        "bossCert": 3,
+        "encryptBossId": "d0e74df3cd981af60nR_3N61ElFW",
+        "bossName": "刘号",
+        "bossTitle": "培训部总监",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "5174d7db131745171XV62Ni6EVFW",
+        "expectId": 1500356273,
+        "jobName": "农业/林业技术员",
+        "lid": "6pd9dOrmiMg.search.1",
+        "salaryDesc": "5-9K",
+        "jobLabels": [
+          "3-5年",
+          "大专"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "农业技术员",
+          "农艺师",
+          "林业工程师",
+          "包吃包住",
+          "个人绩效",
+          "有机种植",
+          "传统土壤种植"
+        ],
+        "jobExperience": "3-5年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "大专",
+        "cityName": "铜仁",
+        "areaDistrict": "",
+        "businessDistrict": "",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260400,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 108.365538,
+          "latitude": 27.976292
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "252bbb7385f1a1691nZ_09m9FFo~",
+        "brandName": "云上营",
+        "brandLogo": "https://img.bosszhipin.com/beijin/upload/com/logo/20260310/7b5b554d84f9729c6255b933ff02b71c53e606bbea8a301020876c4f135a1d48b85dc765732b2ec7.jpg.webp",
+        "brandStageName": "不需要融资",
+        "brandIndustry": "培训/辅导机构",
+        "brandScaleName": "20-99人",
+        "welfareList": [
+          "宿舍有空调",
+          "包住",
+          "团建聚餐",
+          "包吃",
+          "包吃住"
+        ],
+        "industry": 100303,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

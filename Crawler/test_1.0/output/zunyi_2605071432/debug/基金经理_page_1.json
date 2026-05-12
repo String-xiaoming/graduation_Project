@@ -1,0 +1,78 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "9eIUWQqsNEL",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "E261ovwSnDep3-K1vMko2P3Bk0ASV63fAzP_i71dX86rJadxVazWk25v6lu28C0CKrErrphld8txdKHQprYxXCszI1G_E1jXQktxPlq5dYI-xT9vcJS5RnWAyXSXVt0ueo1BEHBnqGPNpa7E9lfMqqqeOobd3ASujEOVz8-pGHhpzw4vryD8suVpA_I04d0c1KEqS_1appq6a9YUv9pgLR3gFCu0NKXBlCnzTk5QeZ9ZtgRCu4PWDMGRZttmxRb4m3EWk7lgF1OXLjzHXOaSvrZGcxFTeKI2AYmR0ZnBPd37",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20230430/607f1f3d68754fd074f8daa3b6edddf6985d57126c14c51f735510f5c4c4dd2505b5c643a1ad45d4_s.jpg",
+        "bossCert": 3,
+        "encryptBossId": "71b573ec1282a0671nZ_3Ni4FVs~",
+        "bossName": "吴萸",
+        "bossTitle": "行政总监",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "a9fb2f8d016ba3b41XR-2NW5F1ZZ",
+        "expectId": 1500356273,
+        "jobName": "理财经理",
+        "lid": "9eIUWQqsNEL.search.1",
+        "salaryDesc": "12-13K",
+        "jobLabels": [
+          "1-3年",
+          "学历不限"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "理财产品销售",
+          "基金经理"
+        ],
+        "jobExperience": "1-3年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "学历不限",
+        "cityName": "遵义",
+        "areaDistrict": "仁怀市",
+        "businessDistrict": "五转盘",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260200,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 106.400258,
+          "latitude": 27.786107
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "3dcb26f3cb26af2f33d53tm0EA~~",
+        "brandName": "融乙富",
+        "brandLogo": "https://img.bosszhipin.com/beijin/icon/894ce6fa7e58d64d57e7f22d2f3a9d18afa7fcceaa24b8ea28f56f1bb14732c0.png",
+        "brandStageName": "不需要融资",
+        "brandIndustry": "银行",
+        "brandScaleName": "20-99人",
+        "welfareList": [
+          "通讯补贴",
+          "员工旅游",
+          "带薪年假",
+          "五险一金"
+        ],
+        "industry": 100201,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

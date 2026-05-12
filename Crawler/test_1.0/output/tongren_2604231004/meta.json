@@ -1,0 +1,42 @@
+{
+  "source_name": "boss_zhipin",
+  "city_name": "铜仁",
+  "city_slug": "tongren",
+  "city_code": "101260400",
+  "target_count": 7500,
+  "actual_count": 6280,
+  "batch_name": "tongren_2604231004",
+  "output_dir": "D:\\graduation Project\\Crawler\\test_1.0\\output\\tongren_2604231004",
+  "csv_path": "D:\\graduation Project\\Crawler\\test_1.0\\output\\tongren_2604231004\\tongren_2604231004.csv",
+  "jsonl_path": "D:\\graduation Project\\Crawler\\test_1.0\\output\\tongren_2604231004\\tongren_2604231004.jsonl",
+  "detail_jsonl_path": "D:\\graduation Project\\Crawler\\test_1.0\\output\\tongren_2604231004\\tongren_2604231004_detail_raw.jsonl",
+  "start_time": "2026-04-23 10:04:10",
+  "last_update_time": "2026-04-23 11:16:56",
+  "finished": false,
+  "detail_mode": "none",
+  "speed_mode": "safe",
+  "runtime_config": {
+    "max_pages_per_keyword": 3,
+    "max_rounds": 9,
+    "max_new_per_keyword_per_round": 14,
+    "expansion_limit_per_round": 14,
+    "page_sleep_seconds": [
+      2.8,
+      5.5
+    ],
+    "keyword_sleep_seconds": [
+      2.6,
+      5.2
+    ],
+    "round_sleep_seconds": [
+      10.0,
+      18.0
+    ]
+  },
+  "stats": {
+    "pages_fetched": 547,
+    "jobs_seen": 7113,
+    "detail_skipped": 6280,
+    "filtered_jobs": 169
+  }
+}

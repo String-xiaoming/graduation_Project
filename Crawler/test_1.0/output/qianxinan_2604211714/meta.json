@@ -1,0 +1,43 @@
+{
+  "source_name": "boss_zhipin",
+  "city_name": "黔西南",
+  "city_slug": "qianxinan",
+  "city_code": "101260900",
+  "target_count": 6500,
+  "actual_count": 2240,
+  "batch_name": "qianxinan_2604211714",
+  "output_dir": "D:\\graduation Project\\Crawler\\test_1.0\\output\\qianxinan_2604211714",
+  "csv_path": "D:\\graduation Project\\Crawler\\test_1.0\\output\\qianxinan_2604211714\\qianxinan_2604211714.csv",
+  "jsonl_path": "D:\\graduation Project\\Crawler\\test_1.0\\output\\qianxinan_2604211714\\qianxinan_2604211714.jsonl",
+  "detail_jsonl_path": "D:\\graduation Project\\Crawler\\test_1.0\\output\\qianxinan_2604211714\\qianxinan_2604211714_detail_raw.jsonl",
+  "start_time": "2026-04-21 17:14:23",
+  "last_update_time": "2026-04-21 19:43:06",
+  "finished": false,
+  "detail_mode": "all",
+  "speed_mode": "fast",
+  "runtime_config": {
+    "max_pages_per_keyword": 8,
+    "max_rounds": 12,
+    "max_new_per_keyword_per_round": 45,
+    "expansion_limit_per_round": 36,
+    "page_sleep_seconds": [
+      0.9,
+      1.9
+    ],
+    "keyword_sleep_seconds": [
+      0.6,
+      1.5
+    ],
+    "round_sleep_seconds": [
+      3.5,
+      7.0
+    ]
+  },
+  "stats": {
+    "pages_fetched": 186,
+    "jobs_seen": 2300,
+    "filtered_jobs": 15,
+    "detail_attempted": 2240,
+    "detail_success": 2240
+  }
+}

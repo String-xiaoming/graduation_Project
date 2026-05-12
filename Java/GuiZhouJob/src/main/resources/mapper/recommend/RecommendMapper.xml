@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.txd.guizhoujob.recommend.mapper.RecommendMapper">
+
+    <resultMap id="CandidateJobResultMap" type="org.txd.guizhoujob.job.vo.JobInfoVO">
+        <id property="id" column="id"/>
+        <result property="jobTitle" column="job_title"/>
+        <result property="companyName" column="company_name"/>
+        <result property="city" column="city"/>
+        <result property="workAddress" column="work_address"/>
+        <result property="educationText" column="education_text"/>
+        <result property="experienceText" column="experience_text"/>
+        <result property="salaryText" column="salary_text"/>
+        <result property="salaryMin" column="salary_min"/>
+        <result property="salaryMax" column="salary_max"/>
+        <result property="jobDescription" column="job_description"/>
+        <result property="publishTime" column="publish_time"/>
+        <result property="dataBatchNo" column="data_batch_no"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <resultMap id="RecommendJobResultMap" type="org.txd.guizhoujob.recommend.vo.RecommendJobVO">
+        <id property="id" column="recommend_id"/>
+        <result property="jobId" column="job_id"/>
+        <result property="jobTitle" column="job_title"/>
+        <result property="companyName" column="company_name"/>
+        <result property="city" column="city"/>
+        <result property="workAddress" column="work_address"/>
+        <result property="educationText" column="education_text"/>
+        <result property="experienceText" column="experience_text"/>
+        <result property="salaryText" column="salary_text"/>
+        <result property="salaryMin" column="salary_min"/>
+        <result property="salaryMax" column="salary_max"/>
+        <result property="jobDescription" column="job_description"/>
+        <result property="publishTime" column="publish_time"/>
+        <result property="dataBatchNo" column="data_batch_no"/>
+        <result property="recommendScore" column="recommend_score"/>
+        <result property="contentScore" column="content_score"/>
+        <result property="cityScore" column="city_score"/>
+        <result property="salaryScore" column="salary_score"/>
+        <result property="educationScore" column="education_score"/>
+        <result property="experienceScore" column="experience_score"/>
+        <result property="reasonText" column="reason_text"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Job_Column_List">
+        id, job_title, company_name, city, work_address, education_text,
+        experience_text, salary_text, salary_min, salary_max, job_description,
+        publish_time, data_batch_no, status
+    </sql>
+
+    <select id="selectCandidateJobs" resultMap="CandidateJobResultMap">
+        select <include refid="Job_Column_List"/>
+        from job_info
+        where status = 1
+          and job_description is not null
+          and trim(job_description) != ''
+        order by
+        <if test="city != null and city != ''">
+            case when city = #{city} then 0 else 1 end,
+        </if>
+        publish_time desc, id desc
+        limit #{limit}
+    </select>
+
+    <delete id="deleteByUserId">
+        delete from recommend_result
+        where user_id = #{userId}
+          and recommend_scene = 'recommend'
+    </delete>
+
+    <insert id="batchInsert">
+        insert into recommend_result (
+            user_id, job_id, recommend_scene, recommend_type,
+            location_score, position_score, skill_score, behavior_score,
+            salary_score, final_score, rank_no, recommend_reason, batch_no
+        ) values
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.userId}, #{item.jobId}, 'recommend', 'content',
+                #{item.cityScore}, #{item.contentScore}, #{item.contentScore},
+                (#{item.educationScore} + #{item.experienceScore}) / 2,
+                #{item.salaryScore}, #{item.recommendScore}, #{item.rankNo},
+                #{item.reasonText}, #{item.batchNo}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByUserId" resultMap="RecommendJobResultMap">
+        select
+            rr.id as recommend_id,
+            rr.job_id,
+            j.job_title,
+            j.company_name,
+            j.city,
+            j.work_address,
+            j.education_text,
+            j.experience_text,
+            j.salary_text,
+            j.salary_min,
+            j.salary_max,
+            j.job_description,
+            j.publish_time,
+            j.data_batch_no,
+            rr.final_score as recommend_score,
+            rr.skill_score as content_score,
+            rr.location_score as city_score,
+            rr.salary_score,
+            rr.behavior_score as education_score,
+            rr.behavior_score as experience_score,
+            rr.recommend_reason as reason_text,
+            rr.create_time
+        from recommend_result rr
+        inner join job_info j on rr.job_id = j.id
+        where rr.user_id = #{userId}
+          and rr.recommend_scene = 'recommend'
+          and j.status = 1
+        order by rr.final_score desc, rr.rank_no asc, rr.id asc
+        limit #{limit}
+    </select>
+</mapper>

@@ -8,12 +8,12 @@ This is a web-based Student Information Management System built with Node.js and
 
 ## 功能特性 / Features
 
-- 📋 学生信息列表展示 / Student list with pagination
-- ➕ 新增学生信息 / Add new student
-- ✏️ 编辑学生信息 / Edit student information
-- 🗑️ 删除学生记录 / Delete student record
-- 🔍 按姓名/学号搜索 / Search by name or student ID
-- 📊 统计信息展示 / Statistics dashboard
+- 学生信息列表展示 / Student list with pagination
+- 新增学生信息 / Add new student
+- 编辑学生信息 / Edit student information
+- 删除学生记录 / Delete student record
+- 按姓名/学号搜索 / Search by name or student ID
+- 统计信息展示 / Statistics dashboard
 
 ## 技术栈 / Tech Stack
 
@@ -42,7 +42,7 @@ npm start
 
 ## 项目结构 / Project Structure
 
-```
+```text
 graduation_Project/
 ├── server.js          # Express 后端服务
 ├── package.json       # 项目配置

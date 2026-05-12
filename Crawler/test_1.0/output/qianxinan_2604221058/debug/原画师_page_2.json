@@ -1,0 +1,142 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 2,
+    "filterString": "",
+    "lid": "5YOKav1Ovdo",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "zKwkC7Ept3My--d1qxg-pT2XfHoMqsgj2aiq3dDpZoA7dxCNkf4BtUabRqiBrdr8E_Q2WSwidVynQgMg_VRCpcivtn0nPx8AtADjLXj9xlM6Ifso7oitKbrxWxQge-eqRYXoIoiMFqcBUOBLt_fXSL6nLSQaSN_gzntxkFIpc1fPhWYKRISrDh6yc2eXEl_CUJmkLzbL_YoyPEVKRlUChLYDbAJrYoAP5KjbXhPPOxv4s9JxSEaMOl8wodBDbpbgydRdCYBDEXc4_N-LG54v69_n9ZBkzARD-fIy5YtyOe2lmA~~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20240605/607f1f3d68754fd0f385349660f48bba8e522256bd5f69107a99a985540a287b89b6f190575fa1f1_s.png.webp",
+        "bossCert": 3,
+        "encryptBossId": "ee3b53ce6410a6f51XR63t67F1U~",
+        "bossName": "杨先生",
+        "bossTitle": "人事HRM",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "6d9c503cd085d1de1HJ839u8EVRX",
+        "expectId": 1500356273,
+        "jobName": "游戏美术",
+        "lid": "5YOKav1Ovdo.search.1",
+        "salaryDesc": "5-10K",
+        "jobLabels": [
+          "1-3年",
+          "学历不限"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "3ds MAX",
+          "Spine"
+        ],
+        "jobExperience": "1-3年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "学历不限",
+        "cityName": "黔西南布依族苗族自治州",
+        "areaDistrict": "兴义市",
+        "businessDistrict": "神奇东路",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260900,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 104.915511,
+          "latitude": 25.11384
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "83eef552899102791HF52tu8ElY~",
+        "brandName": "贵州淘乐网络",
+        "brandLogo": "https://img.bosszhipin.com/beijin/upload/com/logo/20240605/7b5b554d84f9729cd21d6b58f14c78bc82437211f08aae527a99a985540a287b89b6f190575fa1f1.png.webp",
+        "brandStageName": "天使轮",
+        "brandIndustry": "计算机软件",
+        "brandScaleName": "0-20人",
+        "welfareList": [
+          "绩效奖金",
+          "员工旅游",
+          "年终奖",
+          "零食下午茶"
+        ],
+        "industry": 100021,
+        "contact": false,
+        "showTopPosition": false
+      },
+      {
+        "securityId": "6FartLiJPI2oY-41ZuP61pwa1ULSV8wp-C3RsAMdTuzECmp0fQkD90dEijdHMU-Ohk12TsU-Nv60paoo928GMwQDRfRgS07RB5HN4Tv_75AZ0wuc-bpR6O__tjjtaQNm1bp_zT4V8Z95ZgjhV2qv6-32i1NzwcAczZMMyUN1XfyichuKApZdRVTTIPkoLsm10nUpOZXskUavR-g6WCOqGbxAvJ9C5phO0EHzX_T6tdqpH7ZnIaxA6pvDelzKfW8tWEXC8PnvyrJBb6SFmweo0fPhhVlL5cnF5Gzh7pPfDS6rRmM~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20231024/607f1f3d68754fd01abbff5d86f338ead2541075d7d7ca0f8bb11161e738495c785147f7464aa16d_s.png.webp",
+        "bossCert": 3,
+        "encryptBossId": "99fc0fa70d7cff200nd_3tq9FFZW",
+        "bossName": "张永贵",
+        "bossTitle": "经营者",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "cd992147e8239ee81nJ73t24EFpV",
+        "expectId": 1500356273,
+        "jobName": "3D设计师",
+        "lid": "5YOKav1Ovdo.search.2",
+        "salaryDesc": "5-7K",
+        "jobLabels": [
+          "3-5年",
+          "本科"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "设计师"
+        ],
+        "jobExperience": "3-5年",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "本科",
+        "cityName": "黔西南布依族苗族自治州",
+        "areaDistrict": "兴义市",
+        "businessDistrict": "桔山",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 2,
+        "city": 101260900,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 104.911484,
+          "latitude": 25.103357
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "367aa5ac52fa2b681nN83tW4FVs~",
+        "brandName": "兴义市伊仕利家居店",
+        "brandLogo": "https://img.bosszhipin.com/beijin/upload/com/logo/20220218/7b5b554d84f9729cfd0f27b49bb89e2dca5ae78240608c888bb11161e738495c785147f7464aa16d.png",
+        "brandStageName": "",
+        "brandIndustry": "家具/家电/家居",
+        "brandScaleName": "0-20人",
+        "welfareList": [
+          "餐补",
+          "全勤奖",
+          "员工旅游",
+          "年终奖",
+          "定期体检"
+        ],
+        "industry": 101004,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 2,
+    "brandCard": null
+  }
+}

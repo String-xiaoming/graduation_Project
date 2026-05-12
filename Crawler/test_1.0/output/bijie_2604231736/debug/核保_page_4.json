@@ -1,0 +1,90 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "6B6nOOxdLRN",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "rdcRZAVGBVhAE-G1A4GTtVbERpNGm6KhWc8pZB0_uZz23oMRIyBWDOutH7uai1T1hNlyV0EY-R4hSmU5oEe9WnSruoJhKuE7DSQJ4NTDpeGK64b3kDky8-6EEb_Ro2Bw3oVIIJ5i3ixuOPDB77dEjVdkWjvJq6cjLbwGO5CfYwMrHBDJp0FvS09ogSOj2MeQIR1L1wW4tGQR6x92t4a4NI1xzhhaVIzCM0uAm14Wgfibev-uQGXMf6scUJPw_QHc-wisUFpuB5ZEl0KIJX7Tx_-ZadqRIOtjWQTbFHThDFeN",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20230417/607f1f3d68754fd0570f498640f57c6ff78174766e2acdbac6b7f13c7de3224ae195175be057e435_s.png",
+        "bossCert": 3,
+        "encryptBossId": "5828d45cd4d5297a0nx_3t-6FlZY",
+        "bossName": "廖洪忠",
+        "bossTitle": "经理",
+        "goldHunter": 0,
+        "bossOnline": false,
+        "encryptJobId": "7cadd487f8fd450003d63Ni7GFdQ",
+        "expectId": 1500356273,
+        "jobName": "储备主管",
+        "lid": "6B6nOOxdLRN.search.1",
+        "salaryDesc": "6-8K",
+        "jobLabels": [
+          "经验不限",
+          "大专"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "绩效管理",
+          "大中型企业从业",
+          "制度制定及落地优化",
+          "企业文化建设",
+          "人力资源/管理类专业",
+          "薪酬福利"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "大专",
+        "cityName": "毕节",
+        "areaDistrict": "七星关区",
+        "businessDistrict": "市西",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [],
+        "itemId": 1,
+        "city": 101260500,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": {
+          "longitude": 105.284586,
+          "latitude": 27.301765
+        },
+        "afterNameIcons": [],
+        "beforeNameIcons": [],
+        "encryptBrandId": "5811e4e46125fdeb1HB50t-4GA~~",
+        "brandName": "中国人寿七星关支公司",
+        "brandLogo": "https://img.bosszhipin.com/beijin/upload/com/logo/20230403/7b5b554d84f9729c407e230ea929e31f6530012147d62472475b0ed6d5671576ec56e391aaeca643.jpg",
+        "brandStageName": "已上市",
+        "brandIndustry": "保险",
+        "brandScaleName": "500-999人",
+        "welfareList": [
+          "绩效奖金",
+          "带薪年假",
+          "免费培训",
+          "全勤奖",
+          "生日福利",
+          "年终奖",
+          "补充医疗保险",
+          "节日福利",
+          "意外险",
+          "员工旅游",
+          "团建聚餐",
+          "五险一金"
+        ],
+        "industry": 100202,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

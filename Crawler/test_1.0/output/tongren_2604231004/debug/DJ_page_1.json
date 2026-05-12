@@ -1,0 +1,90 @@
+{
+  "code": 0,
+  "message": "Success",
+  "zpData": {
+    "resCount": 1,
+    "filterString": "",
+    "lid": "6q90j447RG5",
+    "hasMore": false,
+    "jobList": [
+      {
+        "securityId": "jJgOfQm8mZdQY-W1XcvBABqYG7tNHwoHB3NhPbOW6mwiM1yI2Wnv6GJgVaAqY-eFv2E6aqH6KUG7lq7CAc3LNPcw1Jmn9cvtVSmqf0FliCdZ0qN4jFQPTIy_hvJoDA1D6ctHdB-aL5oUZFoiKgQ7febg8Nti-ee5YsdJD6xz5tXsxR2COr2UsKESgz5R7GpnBHTKdI2LxgnLlFmxWHHaoUzlwCpYwVhvjj4CEOLty2JauWyCtmv6Qd2EsU4K0X2sb65Ofy_iIW92sU-HCcopXfLFF8pNDr7_obP4rFVMDTm1daj9ozcl5Q1Z1xqISHIaKZB6uNE~",
+        "bossAvatar": "https://img.bosszhipin.com/beijin/upload/avatar/20260306/607f1f3d68754fd073f6c2ee5acaea3d919b97d4031949e68884f6f4f21e9261a343a1e63f1c0cdd_s.png.webp",
+        "bossCert": 3,
+        "encryptBossId": "e3a10f22b7e94f5e0Hd729y-EFVV",
+        "bossName": "王维维",
+        "bossTitle": "招聘主管",
+        "goldHunter": 0,
+        "bossOnline": true,
+        "encryptJobId": "8d4abe03a1ccc28e0nd72Ni0EFVW",
+        "expectId": 1500356273,
+        "jobName": "每天200元电台读文小故事聊天主播",
+        "lid": "6q90j447RG5.search.1",
+        "salaryDesc": "5-15K",
+        "jobLabels": [
+          "经验不限",
+          "学历不限"
+        ],
+        "jobValidStatus": 1,
+        "iconWord": "",
+        "skills": [
+          "主播",
+          "直播",
+          "音频",
+          "视频主播",
+          "兼职",
+          "全职",
+          "抖音",
+          "B站"
+        ],
+        "jobExperience": "经验不限",
+        "daysPerWeekDesc": "",
+        "leastMonthDesc": "",
+        "jobDegree": "学历不限",
+        "cityName": "在家办公",
+        "areaDistrict": "",
+        "businessDistrict": "",
+        "jobType": 0,
+        "proxyJob": 0,
+        "proxyType": 0,
+        "anonymous": 0,
+        "outland": 0,
+        "optimal": 0,
+        "iconFlagList": [
+          45
+        ],
+        "itemId": 1,
+        "city": 0,
+        "isShield": 0,
+        "atsDirectPost": false,
+        "gps": null,
+        "afterNameIcons": [],
+        "beforeNameIcons": [
+          "https://img.bosszhipin.com/beijin/icon/20250423/b0d69dde1b861aef463ecf48f5a7e440bb318d2e15996cc86ae85c26c6152257eee51409538a8c77.png"
+        ],
+        "encryptBrandId": "b764742f3be08e601XR42NS_EVM~",
+        "brandName": "飞鑫传媒",
+        "brandLogo": "https://img.bosszhipin.com/beijin/upload/com/workfeel/20240221/7bf6f160950405e997e18ebbc03620bf7f4bc4bd21e75618507d11f3886255a7677cd30d53cd879b.png.webp",
+        "brandStageName": "不需要融资",
+        "brandIndustry": "文化艺术/娱乐",
+        "brandScaleName": "1000-9999人",
+        "welfareList": [
+          "补充医疗保险",
+          "免费班车",
+          "加班补助",
+          "定期体检",
+          "带薪年假",
+          "年终奖",
+          "员工旅游",
+          "全勤奖",
+          "餐补"
+        ],
+        "industry": 100104,
+        "contact": false,
+        "showTopPosition": false
+      }
+    ],
+    "totalCount": 1,
+    "brandCard": null
+  }
+}

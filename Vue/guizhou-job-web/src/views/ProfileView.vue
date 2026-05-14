@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchJobPage } from '@/api/job'
 import { changeUserPassword, fetchUserProfile, sendEmailCode, updateUserProfile } from '@/api/user'
@@ -19,11 +19,12 @@ const successMessage = ref('')
 const toastMessage = ref('')
 const profile = ref(null)
 const matchedJobs = ref([])
+const activeProfileTab = ref('profile')
 let passwordTimer = null
 let toastTimer = null
 
 const cityOptions = ['贵阳', '遵义', '安顺', '六盘水', '毕节', '铜仁', '黔东南', '黔南', '黔西南']
-const educationOptions = ['不限', '初中及以上', '高中', '中专/中技', '大专', '本科', '硕士', '博士']
+const educationOptions = ['不限', '初中及以下', '高中', '中专/中技', '大专', '本科', '硕士', '博士']
 
 const form = reactive({
   id: null,
@@ -42,14 +43,6 @@ const passwordForm = reactive({
   confirmPassword: '',
   emailCode: '',
 })
-
-function showToast(message) {
-  toastMessage.value = message
-  window.clearTimeout(toastTimer)
-  toastTimer = window.setTimeout(() => {
-    toastMessage.value = ''
-  }, 5000)
-}
 
 const skillDictionary = [
   'Java',
@@ -124,6 +117,14 @@ const salaryLabel = computed(() => {
   if (form.expectedSalaryMax) return `${form.expectedSalaryMax} 元/月以内`
   return '暂未填写'
 })
+
+function showToast(message) {
+  toastMessage.value = message
+  window.clearTimeout(toastTimer)
+  toastTimer = window.setTimeout(() => {
+    toastMessage.value = ''
+  }, 5000)
+}
 
 function fillForm(user) {
   profile.value = user
@@ -224,7 +225,7 @@ async function saveProfile() {
     }
     await updateUserProfile(payload)
     const currentUser = getCurrentUser()
-    setCurrentUser({ ...currentUser, ...payload, email: currentUser.email, role: currentUser.role })
+    setCurrentUser({ ...currentUser, ...payload, email: currentUser.email, role: currentUser.role, token: currentUser.token })
     successMessage.value = '个人资料已保存'
     await loadProfile()
   } catch (error) {
@@ -313,36 +314,44 @@ function goMatchedJobs() {
 }
 
 onMounted(loadProfile)
+
+onUnmounted(() => {
+  window.clearTimeout(toastTimer)
+  window.clearInterval(passwordTimer)
+})
 </script>
 
 <template>
   <section class="profile-page page-section">
     <div v-if="toastMessage" class="toast-notice" aria-live="polite">{{ toastMessage }}</div>
 
-    <div class="profile-hero">
-      <div>
-        <p class="eyebrow">PROFILE CENTER</p>
-        <h1>个人中心</h1>
-        <p>
-          完善所在城市、期望岗位、学历、薪资和技能描述后，系统后续可以把这些信息用于岗位推荐和行为画像分析。
-        </p>
-      </div>
-      <div class="profile-score">
-        <span>资料完整度</span>
-        <strong>{{ completionRate }}%</strong>
-        <div class="profile-score__bar">
-          <i :style="{ width: `${completionRate}%` }"></i>
-        </div>
-      </div>
-    </div>
-
     <LoadingBlock v-if="loading" text="正在读取个人资料" />
 
     <template v-else>
+      <div class="profile-hero profile-hero--compact">
+        <div class="profile-hero__identity">
+          <div class="profile-avatar profile-avatar--hero">
+            {{ (form.nickname || profile?.email || 'U').slice(0, 1).toUpperCase() }}
+          </div>
+          <div>
+            <p class="eyebrow">PROFILE CENTER</p>
+            <h1>{{ form.nickname || '个人中心' }}</h1>
+            <p>{{ profile?.email }}</p>
+          </div>
+        </div>
+        <div class="profile-score">
+          <span>资料完整度</span>
+          <strong>{{ completionRate }}%</strong>
+          <div class="profile-score__bar">
+            <i :style="{ width: `${completionRate}%` }"></i>
+          </div>
+        </div>
+      </div>
+
       <div v-if="errorMessage" class="form-error">{{ errorMessage }}</div>
       <div v-if="successMessage" class="form-success">{{ successMessage }}</div>
 
-      <div class="profile-layout">
+      <div class="profile-workspace">
         <aside class="profile-summary-card">
           <div class="profile-avatar">
             {{ (form.nickname || profile?.email || 'U').slice(0, 1).toUpperCase() }}
@@ -365,7 +374,7 @@ onMounted(loadProfile)
               <dd>{{ salaryLabel }}</dd>
             </div>
             <div>
-              <dt>技能关键词预览</dt>
+              <dt>技能关键词</dt>
               <dd>{{ extractedSkills.length ? extractedSkills.slice(0, 5).join('、') : '暂未提取' }}</dd>
             </div>
           </dl>
@@ -373,133 +382,147 @@ onMounted(loadProfile)
           <button type="button" @click="goMatchedJobs">按我的偏好找岗位</button>
         </aside>
 
-        <form class="profile-form-card" @submit.prevent="saveProfile">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">BASIC INFO</p>
-              <h2>求职信息</h2>
+        <main class="profile-main-panel">
+          <div class="profile-tabs" role="tablist" aria-label="个人中心模块">
+            <button type="button" :class="{ active: activeProfileTab === 'profile' }" @click="activeProfileTab = 'profile'">
+              求职资料
+            </button>
+            <button type="button" :class="{ active: activeProfileTab === 'security' }" @click="activeProfileTab = 'security'">
+              账号安全
+            </button>
+            <button type="button" :class="{ active: activeProfileTab === 'matches' }" @click="activeProfileTab = 'matches'">
+              岗位推荐
+            </button>
+          </div>
+
+          <form v-if="activeProfileTab === 'profile'" class="profile-form-card profile-form-card--flush" @submit.prevent="saveProfile">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">BASIC INFO</p>
+                <h2>求职信息</h2>
+              </div>
+              <button type="submit" :disabled="saving">{{ saving ? '保存中...' : '保存资料' }}</button>
             </div>
-            <button type="submit" :disabled="saving">{{ saving ? '保存中...' : '保存资料' }}</button>
-          </div>
 
-          <div class="profile-form-grid">
-            <label>
-              昵称
-              <input v-model.trim="form.nickname" placeholder="请输入昵称" />
-            </label>
+            <div class="profile-form-grid">
+              <label>
+                昵称
+                <input v-model.trim="form.nickname" placeholder="请输入昵称" />
+              </label>
 
-            <label>
-              所在城市
-              <select v-model="form.localCity">
-                <option value="">请选择城市</option>
-                <option v-for="city in cityOptions" :key="city" :value="city">{{ city }}</option>
-              </select>
-            </label>
+              <label>
+                所在城市
+                <select v-model="form.localCity">
+                  <option value="">请选择城市</option>
+                  <option v-for="city in cityOptions" :key="city" :value="city">{{ city }}</option>
+                </select>
+              </label>
 
-            <label>
-              学历
-              <select v-model="form.educationText">
-                <option value="">请选择学历</option>
-                <option v-for="item in educationOptions" :key="item" :value="item">{{ item }}</option>
-              </select>
-            </label>
+              <label>
+                学历
+                <select v-model="form.educationText">
+                  <option value="">请选择学历</option>
+                  <option v-for="item in educationOptions" :key="item" :value="item">{{ item }}</option>
+                </select>
+              </label>
 
-            <label>
-              期望岗位
-              <input v-model.trim="form.expectedPosition" placeholder="例如：Java开发、会计、销售" />
-            </label>
+              <label>
+                期望岗位
+                <input v-model.trim="form.expectedPosition" placeholder="例如：Java开发、会计、销售" />
+              </label>
 
-            <label>
-              最低期望薪资
-              <input v-model="form.expectedSalaryMin" type="number" min="0" step="500" placeholder="例如：5000" />
-            </label>
+              <label>
+                最低期望薪资
+                <input v-model="form.expectedSalaryMin" type="number" min="0" step="500" placeholder="例如：5000" />
+              </label>
 
-            <label>
-              最高期望薪资
-              <input v-model="form.expectedSalaryMax" type="number" min="0" step="500" placeholder="例如：9000" />
-            </label>
-          </div>
-
-          <label class="profile-skill-field">
-            技能与个人描述
-            <textarea
-              v-model.trim="form.skillInputText"
-              rows="6"
-              placeholder="可以自然语言填写，例如：会使用 Java、Python，做过 Vue 项目，了解 MySQL 和 Linux。"
-            ></textarea>
-          </label>
-
-          <div class="skill-preview-panel">
-            <div>
-              <p class="eyebrow">SKILL PREVIEW</p>
-              <h3>前端预览提取结果</h3>
-              <p>这里先做页面预览；正式推荐时可以继续接入后端分词或 Spark 分析结果。</p>
+              <label>
+                最高期望薪资
+                <input v-model="form.expectedSalaryMax" type="number" min="0" step="500" placeholder="例如：9000" />
+              </label>
             </div>
-            <div class="skill-chip-list">
-              <span v-for="skill in extractedSkills" :key="skill">{{ skill }}</span>
-              <em v-if="!extractedSkills.length">填写技能后会在这里展示关键词</em>
+
+            <label class="profile-skill-field">
+              技能与个人描述
+              <textarea
+                v-model.trim="form.skillInputText"
+                rows="6"
+                placeholder="可以自然语言填写，例如：会使用 Java、Python，做过 Vue 项目，了解 MySQL 和 Linux。"
+              ></textarea>
+            </label>
+
+            <div class="skill-preview-panel">
+              <div>
+                <p class="eyebrow">SKILL PREVIEW</p>
+                <h3>关键词预览</h3>
+                <p>这里先做页面预览，正式推荐时可以继续接入后端分词或 Spark 分析结果。</p>
+              </div>
+              <div class="skill-chip-list">
+                <span v-for="skill in extractedSkills" :key="skill">{{ skill }}</span>
+                <em v-if="!extractedSkills.length">填写技能后会在这里展示关键词</em>
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
 
-      <form class="profile-form-card" @submit.prevent="changePassword">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">SECURITY</p>
-            <h2>修改密码</h2>
-          </div>
-          <button type="submit" :disabled="passwordSaving">
-            {{ passwordSaving ? '修改中...' : '保存新密码' }}
-          </button>
-        </div>
-
-        <div class="profile-form-grid">
-          <label>
-            旧密码
-            <input v-model="passwordForm.oldPassword" type="password" placeholder="请输入旧密码" autocomplete="current-password" />
-          </label>
-          <label>
-            新密码
-            <input v-model="passwordForm.newPassword" type="password" placeholder="6到20位新密码" autocomplete="new-password" />
-          </label>
-          <label>
-            确认新密码
-            <input v-model="passwordForm.confirmPassword" type="password" placeholder="请再次输入新密码" autocomplete="new-password" />
-          </label>
-          <label>
-            邮箱验证码
-            <span class="code-input-row">
-              <input v-model.trim="passwordForm.emailCode" placeholder="请输入验证码" autocomplete="one-time-code" />
-              <button class="ghost-button" type="button" :disabled="passwordSending || passwordCountdown > 0" @click="sendChangePasswordCode">
-                {{ passwordCountdown > 0 ? `${passwordCountdown}s` : passwordSending ? '发送中' : '发送' }}
+          <form v-else-if="activeProfileTab === 'security'" class="profile-form-card profile-form-card--flush" @submit.prevent="changePassword">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">SECURITY</p>
+                <h2>修改密码</h2>
+              </div>
+              <button type="submit" :disabled="passwordSaving">
+                {{ passwordSaving ? '修改中...' : '保存新密码' }}
               </button>
-            </span>
-          </label>
-        </div>
-      </form>
+            </div>
 
-      <section class="profile-match-section">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">MATCH PREVIEW</p>
-            <h2>按当前资料筛选的岗位</h2>
-          </div>
-          <button class="ghost-button" type="button" @click="loadMatchedJobs">刷新预览</button>
-        </div>
+            <div class="profile-form-grid">
+              <label>
+                旧密码
+                <input v-model="passwordForm.oldPassword" type="password" placeholder="请输入旧密码" autocomplete="current-password" />
+              </label>
+              <label>
+                新密码
+                <input v-model="passwordForm.newPassword" type="password" placeholder="6到20位新密码" autocomplete="new-password" />
+              </label>
+              <label>
+                确认新密码
+                <input v-model="passwordForm.confirmPassword" type="password" placeholder="请再次输入新密码" autocomplete="new-password" />
+              </label>
+              <label>
+                邮箱验证码
+                <span class="code-input-row">
+                  <input v-model.trim="passwordForm.emailCode" placeholder="请输入验证码" autocomplete="one-time-code" />
+                  <button class="ghost-button" type="button" :disabled="passwordSending || passwordCountdown > 0" @click="sendChangePasswordCode">
+                    {{ passwordCountdown > 0 ? `${passwordCountdown}s` : passwordSending ? '发送中' : '发送' }}
+                  </button>
+                </span>
+              </label>
+            </div>
+          </form>
 
-        <LoadingBlock v-if="matching" text="正在匹配岗位" />
-        <div v-else-if="matchedJobs.length" class="job-grid">
-          <JobCard v-for="job in matchedJobs" :key="job.id" :job="job" />
-        </div>
-        <div v-else class="empty-state">
-          <div>
-            <span class="empty-state__mark">?</span>
-            <h3>暂无匹配预览</h3>
-            <p>完善城市、期望岗位或技能描述后，可以在这里看到初步筛选结果。</p>
-          </div>
-        </div>
-      </section>
+          <section v-else class="profile-match-section profile-match-section--flush">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">MATCH PREVIEW</p>
+                <h2>按当前资料筛选的岗位</h2>
+              </div>
+              <button class="ghost-button" type="button" @click="loadMatchedJobs">刷新预览</button>
+            </div>
+
+            <LoadingBlock v-if="matching" text="正在匹配岗位" />
+            <div v-else-if="matchedJobs.length" class="job-grid">
+              <JobCard v-for="job in matchedJobs" :key="job.id" :job="job" />
+            </div>
+            <div v-else class="empty-state profile-empty-state">
+              <div>
+                <span class="empty-state__mark">?</span>
+                <h3>暂无匹配预览</h3>
+                <p>完善城市、期望岗位或技能描述后，可以在这里看到初步筛选结果。</p>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
     </template>
   </section>
 </template>

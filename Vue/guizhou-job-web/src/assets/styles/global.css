@@ -2308,6 +2308,92 @@ button:active:not(:disabled) {
   padding: 26px;
 }
 
+.app-shell:has(.profile-page) {
+  width: min(1320px, calc(100% - 36px));
+}
+
+.profile-hero--compact {
+  align-items: center;
+  padding: 22px 26px;
+  border-radius: 8px;
+}
+
+.profile-hero--compact h1 {
+  margin-bottom: 6px;
+  font-size: clamp(30px, 3vw, 42px);
+}
+
+.profile-hero__identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 18px;
+}
+
+.profile-avatar--hero {
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  font-size: 30px;
+  flex: 0 0 auto;
+}
+
+.profile-workspace {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.profile-main-panel {
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 8px;
+  background: rgba(255, 253, 247, 0.94);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.profile-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(31, 138, 112, 0.05);
+}
+
+.profile-tabs button {
+  min-height: 42px;
+  border-radius: 8px;
+  color: var(--muted);
+  background: transparent;
+  box-shadow: none;
+}
+
+.profile-tabs button:hover {
+  color: var(--green-deep);
+  background: rgba(31, 138, 112, 0.08);
+}
+
+.profile-tabs button.active {
+  color: #fffdf7;
+  background: var(--green);
+}
+
+.profile-form-card--flush,
+.profile-match-section--flush {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.profile-empty-state {
+  min-height: 300px;
+  border: 1px dashed rgba(31, 138, 112, 0.22);
+  background: rgba(255, 253, 247, 0.78);
+}
+
 .app-shell:has(.admin-page) {
   width: min(1180px, calc(100% - 36px));
 }
@@ -2795,6 +2881,7 @@ textarea:focus {
   .selected-city-grid--charts,
   .auth-page,
   .profile-layout,
+  .profile-workspace,
   .skill-preview-panel,
   .admin-layout,
   .dashboard-overview,
@@ -2846,6 +2933,10 @@ textarea:focus {
 
   .profile-summary-card {
     position: static;
+  }
+
+  .profile-tabs {
+    overflow-x: auto;
   }
 
   .admin-filter {
@@ -2923,6 +3014,16 @@ textarea:focus {
   .admin-form-row,
   .admin-actions {
     grid-template-columns: 1fr;
+  }
+
+  .profile-hero__identity,
+  .profile-tabs {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .profile-tabs button {
+    width: 100%;
   }
 
   .dashboard-overview__copy,

@@ -28,6 +28,11 @@ const router = createRouter({
       component: () => import('@/views/DashboardView.vue'),
     },
     {
+      path: '/recommend',
+      name: 'recommend',
+      component: () => import('@/views/RecommendView.vue'),
+    },
+    {
       path: '/analysis/screen',
       name: 'analysis-screen',
       component: () => import('@/views/AnalysisScreenView.vue'),

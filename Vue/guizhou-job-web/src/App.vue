@@ -12,6 +12,7 @@ const navItems = [
   { path: '/', label: '首页' },
   { path: '/jobs', label: '岗位库' },
   { path: '/dashboard', label: '数据看板' },
+  { path: '/recommend', label: '岗位推荐' },
 ]
 
 function isActive(path) {

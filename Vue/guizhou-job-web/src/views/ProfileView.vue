@@ -1,9 +1,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { fetchJobPage } from '@/api/job'
 import { changeUserPassword, fetchUserProfile, sendEmailCode, updateUserProfile } from '@/api/user'
-import JobCard from '@/components/JobCard.vue'
 import LoadingBlock from '@/components/LoadingBlock.vue'
 import { getCurrentUser, setCurrentUser } from '@/utils/auth'
 
@@ -13,12 +11,10 @@ const saving = ref(false)
 const passwordSaving = ref(false)
 const passwordSending = ref(false)
 const passwordCountdown = ref(0)
-const matching = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
 const toastMessage = ref('')
 const profile = ref(null)
-const matchedJobs = ref([])
 const activeProfileTab = ref('profile')
 let passwordTimer = null
 let toastTimer = null
@@ -153,24 +149,6 @@ function buildJobParams() {
   }
 }
 
-async function loadMatchedJobs() {
-  const params = buildJobParams()
-  if (!params.keyword && !params.city && !params.educationText && !params.salaryMin && !params.salaryMax) {
-    matchedJobs.value = []
-    return
-  }
-
-  matching.value = true
-  try {
-    const data = await fetchJobPage(params)
-    matchedJobs.value = data?.list || []
-  } catch {
-    matchedJobs.value = []
-  } finally {
-    matching.value = false
-  }
-}
-
 async function loadProfile() {
   const currentUser = getCurrentUser()
   if (!currentUser?.id) {
@@ -183,7 +161,6 @@ async function loadProfile() {
   try {
     const user = await fetchUserProfile(currentUser.id)
     fillForm(user)
-    await loadMatchedJobs()
   } catch (error) {
     errorMessage.value = error.message
   } finally {
@@ -313,6 +290,10 @@ function goMatchedJobs() {
   })
 }
 
+function goRecommend() {
+  router.push('/recommend')
+}
+
 onMounted(loadProfile)
 
 onUnmounted(() => {
@@ -351,20 +332,24 @@ onUnmounted(() => {
       <div v-if="errorMessage" class="form-error">{{ errorMessage }}</div>
       <div v-if="successMessage" class="form-success">{{ successMessage }}</div>
 
-      <div class="profile-workspace">
-        <aside class="profile-summary-card">
-          <div class="profile-avatar">
-            {{ (form.nickname || profile?.email || 'U').slice(0, 1).toUpperCase() }}
-          </div>
-          <h2>{{ form.nickname || '未命名用户' }}</h2>
-          <p>{{ profile?.email }}</p>
-          <div class="profile-tags">
-            <span>{{ form.localCity || '未设置城市' }}</span>
-            <span>{{ form.educationText || '未设置学历' }}</span>
-            <span>{{ profile?.role === 'ADMIN' ? '管理员' : '普通用户' }}</span>
+      <div class="profile-dashboard">
+        <section class="profile-summary-card profile-summary-card--compact">
+          <div class="profile-summary-card__identity">
+            <div class="profile-avatar">
+              {{ (form.nickname || profile?.email || 'U').slice(0, 1).toUpperCase() }}
+            </div>
+            <div>
+              <h2>{{ form.nickname || '未命名用户' }}</h2>
+              <p>{{ profile?.email }}</p>
+              <div class="profile-tags">
+                <span>{{ form.localCity || '未设置城市' }}</span>
+                <span>{{ form.educationText || '未设置学历' }}</span>
+                <span>{{ profile?.role === 'ADMIN' ? '管理员' : '普通用户' }}</span>
+              </div>
+            </div>
           </div>
 
-          <dl class="profile-summary-list">
+          <dl class="profile-summary-list profile-summary-list--tiles">
             <div>
               <dt>期望岗位</dt>
               <dd>{{ form.expectedPosition || '暂未填写' }}</dd>
@@ -379,8 +364,11 @@ onUnmounted(() => {
             </div>
           </dl>
 
-          <button type="button" @click="goMatchedJobs">按我的偏好找岗位</button>
-        </aside>
+          <div class="profile-summary-actions">
+            <button type="button" @click="goRecommend">查看岗位推荐</button>
+            <button class="ghost-button" type="button" @click="goMatchedJobs">按偏好查岗位库</button>
+          </div>
+        </section>
 
         <main class="profile-main-panel">
           <div class="profile-tabs" role="tablist" aria-label="个人中心模块">
@@ -389,9 +377,6 @@ onUnmounted(() => {
             </button>
             <button type="button" :class="{ active: activeProfileTab === 'security' }" @click="activeProfileTab = 'security'">
               账号安全
-            </button>
-            <button type="button" :class="{ active: activeProfileTab === 'matches' }" @click="activeProfileTab = 'matches'">
-              岗位推荐
             </button>
           </div>
 
@@ -464,7 +449,7 @@ onUnmounted(() => {
             </div>
           </form>
 
-          <form v-else-if="activeProfileTab === 'security'" class="profile-form-card profile-form-card--flush" @submit.prevent="changePassword">
+          <form v-else class="profile-form-card profile-form-card--flush" @submit.prevent="changePassword">
             <div class="section-head">
               <div>
                 <p class="eyebrow">SECURITY</p>
@@ -499,28 +484,6 @@ onUnmounted(() => {
               </label>
             </div>
           </form>
-
-          <section v-else class="profile-match-section profile-match-section--flush">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">MATCH PREVIEW</p>
-                <h2>按当前资料筛选的岗位</h2>
-              </div>
-              <button class="ghost-button" type="button" @click="loadMatchedJobs">刷新预览</button>
-            </div>
-
-            <LoadingBlock v-if="matching" text="正在匹配岗位" />
-            <div v-else-if="matchedJobs.length" class="job-grid">
-              <JobCard v-for="job in matchedJobs" :key="job.id" :job="job" />
-            </div>
-            <div v-else class="empty-state profile-empty-state">
-              <div>
-                <span class="empty-state__mark">?</span>
-                <h3>暂无匹配预览</h3>
-                <p>完善城市、期望岗位或技能描述后，可以在这里看到初步筛选结果。</p>
-              </div>
-            </div>
-          </section>
         </main>
       </div>
     </template>

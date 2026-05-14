@@ -9,7 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "org.txd.guizhoujob.user.mapper",
         "org.txd.guizhoujob.job.mapper",
         "org.txd.guizhoujob.analysis.mapper",
-        "org.txd.guizhoujob.recommend.mapper"
+        "org.txd.guizhoujob.recommend.mapper",
+        "org.txd.guizhoujob.email.mapper"
 })
 public class GuiZhouJobApplication {
     public static void main(String[] args) {

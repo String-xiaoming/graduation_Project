@@ -8,4 +8,6 @@ public class UserLoginVO {
     private String email;
     private String nickname;
     private String role;
+    private String token;
+    private Long expiresAt;
 }

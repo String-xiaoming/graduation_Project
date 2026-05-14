@@ -5,11 +5,20 @@ export function getCurrentUser() {
   const raw = localStorage.getItem(STORAGE_KEY)
   if (!raw) return null
   try {
-    return JSON.parse(raw)
+    const user = JSON.parse(raw)
+    if (user && !user.token) {
+      localStorage.removeItem(STORAGE_KEY)
+      return null
+    }
+    return user
   } catch {
     localStorage.removeItem(STORAGE_KEY)
     return null
   }
+}
+
+export function getAuthToken() {
+  return getCurrentUser()?.token || ''
 }
 
 export function isAdminUser(user = getCurrentUser()) {

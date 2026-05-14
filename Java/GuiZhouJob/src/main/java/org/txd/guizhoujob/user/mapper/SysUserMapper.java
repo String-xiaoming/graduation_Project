@@ -26,4 +26,6 @@ public interface SysUserMapper {
     int updateByAdmin(SysUser user);
 
     int disableById(@Param("id") Long id);
+
+    int updatePasswordHash(@Param("id") Long id, @Param("passwordHash") String passwordHash);
 }

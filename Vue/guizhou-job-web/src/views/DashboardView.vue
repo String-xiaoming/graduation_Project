@@ -1,407 +1,292 @@
 <script setup>
-import { BarChart, LineChart, PieChart } from 'echarts/charts'
-import { GridComponent, LegendComponent, TooltipComponent } from 'echarts/components'
+import { BarChart, BoxplotChart, HeatmapChart, PieChart, ScatterChart } from 'echarts/charts'
+import { GridComponent, LegendComponent, TooltipComponent, VisualMapComponent } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import { fetchSkillTfidf } from '@/api/analysis'
-import { fetchJobPage } from '@/api/job'
+import { RouterLink } from 'vue-router'
+import { fetchAnalysisDashboard } from '@/api/analysis'
 import EmptyState from '@/components/EmptyState.vue'
-import JobCard from '@/components/JobCard.vue'
 import LoadingBlock from '@/components/LoadingBlock.vue'
 import MetricCard from '@/components/MetricCard.vue'
 
-echarts.use([BarChart, LineChart, PieChart, GridComponent, LegendComponent, TooltipComponent, CanvasRenderer])
-
-const cities = ['贵阳', '安顺', '遵义', '六盘水', '毕节', '铜仁', '黔东南', '黔南', '黔西南']
-const salaryOrder = ['3K以下', '3K-5K', '5K-8K', '8K-12K', '12K-15K', '15K以上', '未知']
+echarts.use([
+  BarChart,
+  BoxplotChart,
+  HeatmapChart,
+  PieChart,
+  ScatterChart,
+  GridComponent,
+  LegendComponent,
+  TooltipComponent,
+  VisualMapComponent,
+  CanvasRenderer,
+])
 
 const loading = ref(true)
 const errorMessage = ref('')
-const total = ref(0)
-const cityStats = ref([])
-const jobs = ref([])
-const selectedCity = ref('')
-const provinceSkills = ref([])
-const skillKeywordsByCity = ref({})
+const dashboard = ref(null)
 
-const cityChartRef = ref(null)
-const citySalaryChartRef = ref(null)
-const salaryChartRef = ref(null)
-const eduChartRef = ref(null)
-const expChartRef = ref(null)
-const skillChartRef = ref(null)
-const selectedSalaryChartRef = ref(null)
-const selectedEduChartRef = ref(null)
-const selectedExpChartRef = ref(null)
-const selectedSkillChartRef = ref(null)
+const cityJobRef = ref(null)
+const salaryBucketRef = ref(null)
+const salaryBoxRef = ref(null)
+const heatmapRef = ref(null)
+const categoryPieRef = ref(null)
+const categorySalaryRef = ref(null)
+const skillBubbleRef = ref(null)
 
-let cityChart
-let citySalaryChart
-let salaryChart
-let eduChart
-let expChart
-let skillChart
-let selectedSalaryChart
-let selectedEduChart
-let selectedExpChart
-let selectedSkillChart
+let cityJobChart
+let salaryBucketChart
+let salaryBoxChart
+let heatmapChart
+let categoryPieChart
+let categorySalaryChart
+let skillBubbleChart
 
-const activeCities = computed(() => cityStats.value.filter((item) => item.total > 0))
-const selectedCityStat = computed(
-  () => cityStats.value.find((item) => item.city === selectedCity.value) || cityStats.value[0],
-)
-const selectedJobs = computed(() => selectedCityStat.value?.jobs || [])
-const selectedSkills = computed(() => skillKeywordsByCity.value[selectedCity.value] || [])
+const overview = computed(() => dashboard.value?.overview || {})
+const cityJobs = computed(() => dashboard.value?.cityJobDistribution || [])
+const salaryBuckets = computed(() => dashboard.value?.salaryBuckets || [])
+const salaryBoxes = computed(() => dashboard.value?.citySalaryBoxes || [])
+const heatmap = computed(() => dashboard.value?.educationExperienceHeatmap || [])
+const categories = computed(() => dashboard.value?.categoryDistribution || [])
+const skills = computed(() => dashboard.value?.skillKeywords || [])
 
-const validSalaryCount = computed(
-  () => jobs.value.filter((job) => job.salaryMin != null && job.salaryMax != null).length,
-)
+const topSalaryBucket = computed(() => {
+  return salaryBuckets.value.reduce((top, item) => (!top || item.value > top.value ? item : top), null)
+})
 
-const avgSalary = computed(() => calculateAvgSalary(jobs.value))
+const topCities = computed(() => cityJobs.value.slice(0, 3))
 
-function calculateAvgSalary(list) {
-  const salaryJobs = list.filter((job) => job.salaryMin != null && job.salaryMax != null)
-  if (!salaryJobs.length) return 0
-  const sum = salaryJobs.reduce((acc, job) => acc + (Number(job.salaryMin) + Number(job.salaryMax)) / 2, 0)
-  return Math.round(sum / salaryJobs.length)
-}
-
-function countBy(list, field) {
-  return list.reduce((acc, job) => {
-    const key = job[field] || '未知'
-    acc[key] = (acc[key] || 0) + 1
-    return acc
-  }, {})
-}
-
-function topLabel(list, field) {
-  const top = topEntries(countBy(list, field), 1)[0]
-  return top ? top[0] : '暂无'
-}
-
-function salaryBucket(job) {
-  if (job.salaryMin == null || job.salaryMax == null) return '未知'
-  const avg = (Number(job.salaryMin) + Number(job.salaryMax)) / 2
-  if (avg < 3000) return '3K以下'
-  if (avg < 5000) return '3K-5K'
-  if (avg < 8000) return '5K-8K'
-  if (avg < 12000) return '8K-12K'
-  if (avg < 15000) return '12K-15K'
-  return '15K以上'
-}
-
-function salaryBucketMap(list) {
-  const map = Object.fromEntries(salaryOrder.map((name) => [name, 0]))
-  list.forEach((job) => {
-    const key = salaryBucket(job)
-    map[key] = (map[key] || 0) + 1
-  })
-  return map
-}
-
-function topEntries(map, limit = 8) {
-  return Object.entries(map)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, limit)
-}
-
-function normalizeSkillList(list = []) {
-  return list.map((item) => ({
-    keyword: item.keyword,
-    score: Number(item.tfidfScore || 0),
-    jobCount: Number(item.jobCount || 0),
-    rankNo: Number(item.rankNo || 0),
-  }))
-}
-
-function buildCityStat(city, pageData) {
-  const list = pageData?.list || []
-  return {
-    city,
-    total: pageData?.total || 0,
-    jobs: list,
-    sampleCount: list.length,
-    salaryReady: list.filter((job) => job.salaryMin != null && job.salaryMax != null).length,
-    avgSalary: calculateAvgSalary(list),
-    topEducation: topLabel(list, 'educationText'),
-    topExperience: topLabel(list, 'experienceText'),
+const analysisInsights = computed(() => {
+  const items = []
+  if (overview.value.topCity) {
+    items.push(`${overview.value.topCity}岗位供给最集中，是当前贵州招聘市场的主要机会城市。`)
   }
+  if (topSalaryBucket.value?.name) {
+    items.push(`${topSalaryBucket.value.name}是当前样本中覆盖最多的薪资区间，市场薪资主要聚集在中位区间。`)
+  }
+  if (overview.value.topCategory) {
+    items.push(`${overview.value.topCategory}岗位占比最高，说明该类岗位需求更旺盛。`)
+  }
+  if (skills.value[0]?.keyword) {
+    items.push(`技能关键词中“${skills.value[0].keyword}”权重最高，可作为岗位能力需求的重点观察项。`)
+  }
+  return items
+})
+
+function formatNumber(value) {
+  return Number(value || 0).toLocaleString('zh-CN')
+}
+
+function formatMoney(value) {
+  return `¥${formatNumber(value)}/月`
 }
 
 function chartTextColor() {
   return '#66766f'
 }
 
+function chartLineColor() {
+  return '#e8dfcf'
+}
+
 function renderCharts() {
-  if (!jobs.value.length) return
+  if (!dashboard.value) return
 
-  const cityNames = cityStats.value.map((item) => item.city)
-  const cityTotals = cityStats.value.map((item) => item.total)
-  const cityAvgSalary = cityStats.value.map((item) => item.avgSalary || 0)
-  const salaryEntries = Object.entries(salaryBucketMap(jobs.value)).filter(([, value]) => value > 0)
-  const educationEntries = topEntries(countBy(jobs.value, 'educationText'), 8)
-  const experienceEntries = topEntries(countBy(jobs.value, 'experienceText'), 8)
-  const provinceSkillEntries = provinceSkills.value.slice(0, 12)
-  const selectedSalaryEntries = Object.entries(salaryBucketMap(selectedJobs.value)).filter(([, value]) => value > 0)
-  const selectedEducationEntries = topEntries(countBy(selectedJobs.value, 'educationText'), 8)
-  const selectedExperienceEntries = topEntries(countBy(selectedJobs.value, 'experienceText'), 8)
-  const selectedSkillEntries = selectedSkills.value.slice(0, 10)
+  cityJobChart = cityJobChart || echarts.init(cityJobRef.value)
+  salaryBucketChart = salaryBucketChart || echarts.init(salaryBucketRef.value)
+  salaryBoxChart = salaryBoxChart || echarts.init(salaryBoxRef.value)
+  heatmapChart = heatmapChart || echarts.init(heatmapRef.value)
+  categoryPieChart = categoryPieChart || echarts.init(categoryPieRef.value)
+  categorySalaryChart = categorySalaryChart || echarts.init(categorySalaryRef.value)
+  skillBubbleChart = skillBubbleChart || echarts.init(skillBubbleRef.value)
 
-  cityChart = cityChart || echarts.init(cityChartRef.value)
-  citySalaryChart = citySalaryChart || echarts.init(citySalaryChartRef.value)
-  salaryChart = salaryChart || echarts.init(salaryChartRef.value)
-  eduChart = eduChart || echarts.init(eduChartRef.value)
-  expChart = expChart || echarts.init(expChartRef.value)
-  skillChart = skillChart || echarts.init(skillChartRef.value)
-  selectedSalaryChart = selectedSalaryChart || echarts.init(selectedSalaryChartRef.value)
-  selectedEduChart = selectedEduChart || echarts.init(selectedEduChartRef.value)
-  selectedExpChart = selectedExpChart || echarts.init(selectedExpChartRef.value)
-  selectedSkillChart = selectedSkillChart || echarts.init(selectedSkillChartRef.value)
-
-  cityChart.setOption({
-    tooltip: {},
-    grid: { left: 42, right: 18, top: 22, bottom: 42 },
-    xAxis: { type: 'category', data: cityNames, axisLabel: { color: chartTextColor() }, axisTick: { show: false } },
-    yAxis: { type: 'value', axisLabel: { color: chartTextColor() }, splitLine: { lineStyle: { color: '#e8dfcf' } } },
+  cityJobChart.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: 56, right: 18, top: 20, bottom: 34 },
+    xAxis: {
+      type: 'category',
+      data: cityJobs.value.map((item) => item.name),
+      axisLabel: { color: chartTextColor() },
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: { color: chartTextColor() },
+      splitLine: { lineStyle: { color: chartLineColor() } },
+    },
     series: [
       {
         name: '岗位数量',
         type: 'bar',
-        data: cityTotals,
-        itemStyle: { color: '#1f8a70', borderRadius: [10, 10, 0, 0] },
+        data: cityJobs.value.map((item) => item.value),
+        itemStyle: { color: '#145f52', borderRadius: [8, 8, 0, 0] },
       },
     ],
   })
 
-  citySalaryChart.setOption({
+  salaryBucketChart.setOption({
     tooltip: {},
-    grid: { left: 48, right: 18, top: 28, bottom: 42 },
-    xAxis: { type: 'category', data: cityNames, axisLabel: { color: chartTextColor() }, axisTick: { show: false } },
-    yAxis: { type: 'value', axisLabel: { color: chartTextColor() }, splitLine: { lineStyle: { color: '#e8dfcf' } } },
+    grid: { left: 54, right: 18, top: 20, bottom: 40 },
+    xAxis: {
+      type: 'category',
+      data: salaryBuckets.value.map((item) => item.name),
+      axisLabel: { color: chartTextColor(), rotate: 12 },
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: { color: chartTextColor() },
+      splitLine: { lineStyle: { color: chartLineColor() } },
+    },
     series: [
       {
-        name: '参考均薪',
-        type: 'line',
-        smooth: true,
-        areaStyle: { color: 'rgba(31, 138, 112, 0.12)' },
-        lineStyle: { width: 4, color: '#d88c48' },
-        symbolSize: 9,
-        data: cityAvgSalary,
+        name: '岗位数量',
+        type: 'bar',
+        data: salaryBuckets.value.map((item) => item.value),
+        itemStyle: { color: '#d88c48', borderRadius: [8, 8, 0, 0] },
       },
     ],
   })
 
-  salaryChart.setOption({
+  salaryBoxChart.setOption({
+    tooltip: { trigger: 'item' },
+    grid: { left: 58, right: 22, top: 20, bottom: 40 },
+    xAxis: {
+      type: 'category',
+      data: salaryBoxes.value.map((item) => item.city),
+      axisLabel: { color: chartTextColor() },
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: { color: chartTextColor() },
+      splitLine: { lineStyle: { color: chartLineColor() } },
+    },
+    series: [
+      {
+        name: '城市薪资分布',
+        type: 'boxplot',
+        data: salaryBoxes.value.map((item) => [item.min, item.q1, item.median, item.q3, item.max]),
+        itemStyle: { color: '#fffdf7', borderColor: '#1f8a70' },
+      },
+    ],
+  })
+
+  const xLabels = Array.from(new Set(heatmap.value.map((item) => item.x)))
+  const yLabels = Array.from(new Set(heatmap.value.map((item) => item.y)))
+  const maxHeat = Math.max(...heatmap.value.map((item) => item.value), 1)
+  heatmapChart.setOption({
+    tooltip: {
+      formatter(params) {
+        return `${xLabels[params.data[0]]} / ${yLabels[params.data[1]]}<br/>岗位数量：${params.data[2]}`
+      },
+    },
+    grid: { left: 88, right: 24, top: 24, bottom: 48 },
+    xAxis: { type: 'category', data: xLabels, axisLabel: { color: chartTextColor(), rotate: 16 } },
+    yAxis: { type: 'category', data: yLabels, axisLabel: { color: chartTextColor() } },
+    visualMap: {
+      min: 0,
+      max: maxHeat,
+      orient: 'horizontal',
+      left: 'center',
+      bottom: 0,
+      inRange: { color: ['#f6ead7', '#1f8a70'] },
+    },
+    series: [
+      {
+        type: 'heatmap',
+        data: heatmap.value.map((item) => [xLabels.indexOf(item.x), yLabels.indexOf(item.y), item.value]),
+        emphasis: { itemStyle: { borderColor: '#145f52', borderWidth: 1 } },
+      },
+    ],
+  })
+
+  categoryPieChart.setOption({
     tooltip: { trigger: 'item' },
     legend: { bottom: 0, textStyle: { color: chartTextColor() } },
     series: [
       {
-        name: '薪资区间',
         type: 'pie',
-        radius: ['42%', '70%'],
-        center: ['50%', '44%'],
-        data: salaryEntries.map(([name, value]) => ({ name, value })),
-        color: ['#1f8a70', '#9fb84d', '#f2a65a', '#d66b4d', '#476a6f', '#e0c46c', '#9aa6a0'],
+        radius: ['46%', '70%'],
+        center: ['50%', '42%'],
+        label: { show: false },
+        data: categories.value.map((item) => ({ name: item.name, value: item.value })),
+        color: ['#145f52', '#1f8a70', '#9fb84d', '#d88c48', '#d66b4d', '#476a6f', '#e0c46c', '#7ca982', '#b7835f', '#9aa6a0'],
       },
     ],
   })
 
-  eduChart.setOption({
+  categorySalaryChart.setOption({
     tooltip: {},
-    grid: { left: 82, right: 18, top: 18, bottom: 34 },
-    xAxis: { type: 'value', axisLabel: { color: chartTextColor() }, splitLine: { lineStyle: { color: '#e8dfcf' } } },
-    yAxis: {
-      type: 'category',
-      data: educationEntries.map(([name]) => name),
-      axisLabel: { color: chartTextColor() },
-      axisTick: { show: false },
-    },
-    series: [
-      {
-        name: '学历要求',
-        type: 'bar',
-        data: educationEntries.map(([, value]) => value),
-        itemStyle: { color: '#d88c48', borderRadius: [0, 10, 10, 0] },
-      },
-    ],
-  })
-
-  expChart.setOption({
-    tooltip: {},
-    grid: { left: 42, right: 18, top: 22, bottom: 42 },
+    grid: { left: 88, right: 18, top: 18, bottom: 30 },
     xAxis: {
-      type: 'category',
-      data: experienceEntries.map(([name]) => name),
-      axisLabel: { color: chartTextColor(), rotate: 18 },
-      axisTick: { show: false },
+      type: 'value',
+      axisLabel: { color: chartTextColor() },
+      splitLine: { lineStyle: { color: chartLineColor() } },
     },
-    yAxis: { type: 'value', axisLabel: { color: chartTextColor() }, splitLine: { lineStyle: { color: '#e8dfcf' } } },
+    yAxis: {
+      type: 'category',
+      data: categories.value.map((item) => item.name).reverse(),
+      axisLabel: { color: chartTextColor() },
+    },
     series: [
       {
-        name: '经验要求',
         type: 'bar',
-        data: experienceEntries.map(([, value]) => value),
-        itemStyle: { color: '#9fb84d', borderRadius: [10, 10, 0, 0] },
+        data: categories.value.map((item) => item.avgSalary || 0).reverse(),
+        itemStyle: { color: '#1f8a70', borderRadius: [0, 8, 8, 0] },
       },
     ],
   })
 
-  skillChart.setOption({
+  skillBubbleChart.setOption({
     tooltip: {
-      trigger: 'axis',
       formatter(params) {
-        const item = provinceSkillEntries.slice().reverse()[params[0]?.dataIndex]
-        if (!item) return ''
-        return `${item.keyword}<br/>TF-IDF：${item.score.toFixed(4)}<br/>关联岗位：${item.jobCount}`
+        return `${params.data[2]}<br/>TF-IDF：${params.data[0]}<br/>关联岗位：${params.data[1]}`
       },
     },
-    grid: { left: 92, right: 22, top: 18, bottom: 34 },
-    xAxis: { type: 'value', axisLabel: { color: chartTextColor() }, splitLine: { lineStyle: { color: '#e8dfcf' } } },
-    yAxis: {
-      type: 'category',
-      data: provinceSkillEntries.map((item) => item.keyword).reverse(),
-      axisLabel: { color: chartTextColor() },
-      axisTick: { show: false },
-    },
-    series: [
-      {
-        name: 'TF-IDF权重',
-        type: 'bar',
-        data: provinceSkillEntries.map((item) => Number(item.score.toFixed(4))).reverse(),
-        itemStyle: { color: '#476a6f', borderRadius: [0, 10, 10, 0] },
-      },
-    ],
-  })
-
-  selectedSalaryChart.setOption({
-    tooltip: { trigger: 'item' },
-    legend: { bottom: 0, textStyle: { color: chartTextColor() } },
-    series: [
-      {
-        name: `${selectedCity.value}薪资`,
-        type: 'pie',
-        radius: ['0%', '68%'],
-        center: ['50%', '43%'],
-        data: selectedSalaryEntries.map(([name, value]) => ({ name, value })),
-        color: ['#145f52', '#1f8a70', '#9fb84d', '#f2a65a', '#d66b4d', '#476a6f', '#9aa6a0'],
-      },
-    ],
-  })
-
-  selectedEduChart.setOption({
-    tooltip: {},
-    grid: { left: 82, right: 18, top: 18, bottom: 34 },
-    xAxis: { type: 'value', axisLabel: { color: chartTextColor() }, splitLine: { lineStyle: { color: '#e8dfcf' } } },
-    yAxis: {
-      type: 'category',
-      data: selectedEducationEntries.map(([name]) => name),
-      axisLabel: { color: chartTextColor() },
-      axisTick: { show: false },
-    },
-    series: [
-      {
-        name: `${selectedCity.value}学历`,
-        type: 'bar',
-        data: selectedEducationEntries.map(([, value]) => value),
-        itemStyle: { color: '#d88c48', borderRadius: [0, 10, 10, 0] },
-      },
-    ],
-  })
-
-  selectedExpChart.setOption({
-    tooltip: {},
-    grid: { left: 42, right: 18, top: 22, bottom: 42 },
+    grid: { left: 62, right: 24, top: 24, bottom: 42 },
     xAxis: {
-      type: 'category',
-      data: selectedExperienceEntries.map(([name]) => name),
-      axisLabel: { color: chartTextColor(), rotate: 18 },
-      axisTick: { show: false },
-    },
-    yAxis: { type: 'value', axisLabel: { color: chartTextColor() }, splitLine: { lineStyle: { color: '#e8dfcf' } } },
-    series: [
-      {
-        name: `${selectedCity.value}经验`,
-        type: 'bar',
-        data: selectedExperienceEntries.map(([, value]) => value),
-        itemStyle: { color: '#9fb84d', borderRadius: [10, 10, 0, 0] },
-      },
-    ],
-  })
-
-  selectedSkillChart.setOption({
-    tooltip: {
-      trigger: 'axis',
-      formatter(params) {
-        const item = selectedSkillEntries.slice().reverse()[params[0]?.dataIndex]
-        if (!item) return ''
-        return `${item.keyword}<br/>TF-IDF：${item.score.toFixed(4)}<br/>关联岗位：${item.jobCount}`
-      },
-    },
-    grid: { left: 92, right: 20, top: 18, bottom: 34 },
-    xAxis: { type: 'value', axisLabel: { color: chartTextColor() }, splitLine: { lineStyle: { color: '#e8dfcf' } } },
-    yAxis: {
-      type: 'category',
-      data: selectedSkillEntries.map((item) => item.keyword).reverse(),
+      name: 'TF-IDF',
+      type: 'value',
       axisLabel: { color: chartTextColor() },
-      axisTick: { show: false },
+      splitLine: { lineStyle: { color: chartLineColor() } },
+    },
+    yAxis: {
+      name: '岗位数',
+      type: 'value',
+      axisLabel: { color: chartTextColor() },
+      splitLine: { lineStyle: { color: chartLineColor() } },
     },
     series: [
       {
-        name: `${selectedCity.value}技能关键词`,
-        type: 'bar',
-        data: selectedSkillEntries.map((item) => Number(item.score.toFixed(4))).reverse(),
-        itemStyle: { color: '#145f52', borderRadius: [0, 10, 10, 0] },
+        type: 'scatter',
+        data: skills.value.map((item) => [
+          Number(item.tfidfScore || 0),
+          Number(item.jobCount || 0),
+          item.keyword,
+        ]),
+        symbolSize(data) {
+          return Math.max(12, Math.min(44, Math.sqrt(data[1]) * 2.35))
+        },
+        itemStyle: { color: '#1f8a70', opacity: 0.78 },
       },
     ],
   })
-}
-
-function chooseCity(city) {
-  selectedCity.value = city
-  nextTick(renderCharts)
 }
 
 function resizeCharts() {
-  cityChart?.resize()
-  citySalaryChart?.resize()
-  salaryChart?.resize()
-  eduChart?.resize()
-  expChart?.resize()
-  selectedSalaryChart?.resize()
-  selectedEduChart?.resize()
-  selectedExpChart?.resize()
-  skillChart?.resize()
-  selectedSkillChart?.resize()
+  cityJobChart?.resize()
+  salaryBucketChart?.resize()
+  salaryBoxChart?.resize()
+  heatmapChart?.resize()
+  categoryPieChart?.resize()
+  categorySalaryChart?.resize()
+  skillBubbleChart?.resize()
 }
 
 async function loadDashboard() {
   loading.value = true
   errorMessage.value = ''
   try {
-    const [overview, overviewSample, cityResults, provinceSkillResult, citySkillResults] = await Promise.all([
-      fetchJobPage({ pageNum: 1, pageSize: 1 }),
-      fetchJobPage({ pageNum: 1, pageSize: 50 }),
-      Promise.all(
-        cities.map((city) =>
-          fetchJobPage({ pageNum: 1, pageSize: 50, city }).catch(() => ({ total: 0, list: [] })),
-        ),
-      ),
-      fetchSkillTfidf({ city: '全省', limit: 20 }).catch(() => []),
-      Promise.all(cities.map((city) => fetchSkillTfidf({ city, limit: 12 }).catch(() => []))),
-    ])
-
-    total.value = overview?.total || 0
-    cityStats.value = cities.map((city, index) => buildCityStat(city, cityResults[index]))
-    provinceSkills.value = normalizeSkillList(provinceSkillResult)
-    skillKeywordsByCity.value = Object.fromEntries(
-      cities.map((city, index) => [city, normalizeSkillList(citySkillResults[index])]),
-    )
-    jobs.value = cityStats.value.flatMap((item) => item.jobs)
-    if (!jobs.value.length && overviewSample?.list?.length) {
-      jobs.value = overviewSample.list
-    }
-    selectedCity.value = activeCities.value[0]?.city || cityStats.value[0]?.city || ''
+    dashboard.value = await fetchAnalysisDashboard()
     loading.value = false
     await nextTick()
     renderCharts()
@@ -418,136 +303,125 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', resizeCharts)
-  cityChart?.dispose()
-  citySalaryChart?.dispose()
-  salaryChart?.dispose()
-  eduChart?.dispose()
-  expChart?.dispose()
-  skillChart?.dispose()
-  selectedSalaryChart?.dispose()
-  selectedEduChart?.dispose()
-  selectedExpChart?.dispose()
-  selectedSkillChart?.dispose()
+  cityJobChart?.dispose()
+  salaryBucketChart?.dispose()
+  salaryBoxChart?.dispose()
+  heatmapChart?.dispose()
+  categoryPieChart?.dispose()
+  categorySalaryChart?.dispose()
+  skillBubbleChart?.dispose()
 })
 </script>
 
 <template>
-  <section class="page-title page-section">
+  <section class="page-title page-section dashboard-title">
     <p class="eyebrow">ANALYTICS</p>
     <h1>数据看板</h1>
-    <p>从城市、薪资、学历和经验多个角度观察贵州岗位趋势，为求职方向提供参考。</p>
+    <p>从城市机会、薪资结构、岗位类型、学历经验门槛与技能关键词观察贵州招聘市场。</p>
   </section>
 
-  <LoadingBlock v-if="loading" text="正在生成岗位看板" />
+  <LoadingBlock v-if="loading" text="正在生成分析看板" />
 
-  <section v-else class="page-section dashboard-page">
+  <section v-else class="page-section dashboard-page dashboard-page--analysis">
     <div v-if="errorMessage" class="notice-card">{{ errorMessage }}</div>
-    <EmptyState v-else-if="jobs.length === 0" title="暂无看板数据" description="当前还没有可用于展示的岗位信息。" />
+    <EmptyState v-else-if="!dashboard" title="暂无看板数据" description="当前还没有可用于展示的分析数据。" />
 
     <template v-else>
-      <div class="metric-grid">
-        <MetricCard label="岗位总量" :value="total" note="当前可浏览岗位" />
-        <MetricCard label="覆盖城市" :value="activeCities.length" note="存在岗位数据的城市" />
-        <MetricCard label="分析岗位" :value="jobs.length" note="参与趋势计算的岗位" />
-        <MetricCard label="参考均薪" :value="avgSalary ? `${avgSalary}元/月` : '未知'" note="按薪资区间均值估算" />
-        <MetricCard label="技能关键词" :value="provinceSkills.length" note="jieba + TF-IDF 提取" />
-      </div>
-
-      <div class="chart-grid dashboard-chart-grid">
-        <article class="chart-card chart-card--wide">
-          <h2>各城市岗位总量</h2>
-          <div ref="cityChartRef" class="chart-box"></div>
-        </article>
-        <article class="chart-card">
-          <h2>各城市参考均薪</h2>
-          <div ref="citySalaryChartRef" class="chart-box"></div>
-        </article>
-        <article class="chart-card">
-          <h2>全省薪资区间</h2>
-          <div ref="salaryChartRef" class="chart-box"></div>
-        </article>
-        <article class="chart-card">
-          <h2>学历要求</h2>
-          <div ref="eduChartRef" class="chart-box"></div>
-        </article>
-        <article class="chart-card">
-          <h2>经验要求</h2>
-          <div ref="expChartRef" class="chart-box"></div>
-        </article>
-        <article class="chart-card chart-card--wide">
-          <h2>全省技能关键词 TF-IDF</h2>
-          <div ref="skillChartRef" class="chart-box"></div>
-        </article>
-      </div>
-
-      <section class="city-data-section">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">CITY DATA</p>
-            <h2>各城市独立数据</h2>
+      <section class="dashboard-overview">
+        <div class="dashboard-overview__copy">
+          <p class="eyebrow">MARKET SNAPSHOT</p>
+          <h2>贵州岗位市场分析</h2>
+          <p>当前样本显示，{{ overview.topCity }}是岗位供给最集中的城市，{{ topSalaryBucket?.name || '主流薪资区间' }}覆盖岗位最多。</p>
+          <div class="dashboard-top-cities">
+            <span v-for="item in topCities" :key="item.name">{{ item.name }} {{ formatNumber(item.value) }}</span>
           </div>
-          <span>点击城市卡片切换下方图表</span>
         </div>
+        <RouterLink class="dashboard-screen-entry" to="/analysis/screen" aria-label="打开贵州就业分析大屏">
+          <span class="screen-entry__kicker">贵州就业分析大屏</span>
+          <strong>进入大屏</strong>
+          <small>地图联动城市、薪资、岗位类型与技能热点</small>
+          <b class="screen-entry__action">查看地图联动 <i aria-hidden="true">→</i></b>
+        </RouterLink>
+      </section>
 
-        <div class="city-stat-grid">
-          <button
-            v-for="item in cityStats"
-            :key="item.city"
-            class="city-stat-card"
-            :class="{ active: selectedCity === item.city }"
-            type="button"
-            @click="chooseCity(item.city)"
-          >
-            <strong>{{ item.city }}</strong>
-            <span>{{ item.total }} 个岗位</span>
-            <small>参考均薪：{{ item.avgSalary ? `${item.avgSalary}元/月` : '未知' }}</small>
-            <small>学历集中：{{ item.topEducation }}</small>
-            <small>经验集中：{{ item.topExperience }}</small>
-          </button>
-        </div>
+      <div class="metric-grid dashboard-metric-grid">
+        <MetricCard label="平均薪资" :value="formatMoney(overview.avgSalary)" note="基于可解析薪资岗位" />
+        <MetricCard label="薪资中位数" :value="formatMoney(overview.medianSalary)" note="更能反映主流薪资水平" />
+        <MetricCard label="岗位集中城市" :value="overview.topCity || '-'" note="按岗位供给数量排序" />
+        <MetricCard label="热门岗位类型" :value="overview.topCategory || '-'" note="按岗位分类规则统计" />
+      </div>
 
-        <div class="selected-city-grid selected-city-grid--charts">
-          <article class="chart-card">
-            <h2>{{ selectedCity }}薪资结构</h2>
-            <div ref="selectedSalaryChartRef" class="chart-box"></div>
-          </article>
-          <article class="chart-card">
-            <h2>{{ selectedCity }}学历分布</h2>
-            <div ref="selectedEduChartRef" class="chart-box"></div>
-          </article>
-          <article class="chart-card">
-            <h2>{{ selectedCity }}经验分布</h2>
-            <div ref="selectedExpChartRef" class="chart-box"></div>
-          </article>
-          <article class="chart-card">
-            <h2>{{ selectedCity }}技能关键词</h2>
-            <div ref="selectedSkillChartRef" class="chart-box"></div>
-          </article>
-          <article class="city-summary-panel">
-            <p class="eyebrow">SELECTED CITY</p>
-            <h2>{{ selectedCity }}</h2>
-            <div class="summary-lines">
-              <span>岗位总量：{{ selectedCityStat?.total || 0 }}</span>
-              <span>参考岗位：{{ selectedCityStat?.sampleCount || 0 }}</span>
-              <span>可算薪资：{{ selectedCityStat?.salaryReady || 0 }}</span>
-              <span>参考均薪：{{ selectedCityStat?.avgSalary ? `${selectedCityStat.avgSalary}元/月` : '未知' }}</span>
-              <span>技能关键词：{{ selectedSkills.length ? selectedSkills.slice(0, 4).map((item) => item.keyword).join('、') : '暂无' }}</span>
+      <div class="dashboard-bento">
+        <article class="chart-card dashboard-chart-card dashboard-chart-card--large">
+          <div class="chart-card__head">
+            <span>CITY OPPORTUNITY</span>
+            <h2>各城市岗位供给分布</h2>
+          </div>
+          <div ref="cityJobRef" class="chart-box chart-box--compact"></div>
+        </article>
+
+        <article class="chart-card dashboard-chart-card">
+          <div class="chart-card__head">
+            <span>JOB TYPE</span>
+            <h2>岗位类型占比</h2>
+          </div>
+          <div ref="categoryPieRef" class="chart-box chart-box--compact"></div>
+        </article>
+
+        <article class="chart-card dashboard-chart-card">
+          <div class="chart-card__head">
+            <span>SALARY</span>
+            <h2>薪资区间分布</h2>
+          </div>
+          <div ref="salaryBucketRef" class="chart-box chart-box--compact"></div>
+        </article>
+
+        <article class="chart-card dashboard-chart-card">
+          <div class="chart-card__head">
+            <span>CATEGORY SALARY</span>
+            <h2>岗位类型平均薪资</h2>
+          </div>
+          <div ref="categorySalaryRef" class="chart-box chart-box--compact"></div>
+        </article>
+
+        <article class="chart-card dashboard-chart-card dashboard-chart-card--wide">
+          <div class="chart-card__head">
+            <span>CITY SALARY</span>
+            <h2>城市薪资箱线图</h2>
+          </div>
+          <div ref="salaryBoxRef" class="chart-box chart-box--middle"></div>
+        </article>
+
+        <article class="chart-card dashboard-chart-card dashboard-chart-card--wide">
+          <div class="chart-card__head">
+            <span>EDUCATION × EXPERIENCE</span>
+            <h2>学历经验门槛分析</h2>
+          </div>
+          <div ref="heatmapRef" class="chart-box chart-box--middle"></div>
+        </article>
+
+        <article class="chart-card dashboard-chart-card dashboard-chart-card--wide">
+          <div class="chart-card__head">
+            <span>SKILL DEMAND</span>
+            <h2>岗位技能需求热点分析</h2>
+          </div>
+          <div ref="skillBubbleRef" class="chart-box chart-box--middle"></div>
+        </article>
+
+        <section class="dashboard-insights">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">INSIGHTS</p>
+              <h2>综合分析结论</h2>
             </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="page-section">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">CITY JOBS</p>
-            <h2>{{ selectedCity }}近期岗位</h2>
           </div>
-        </div>
-        <div class="job-grid">
-          <JobCard v-for="job in selectedJobs.slice(0, 6)" :key="job.id" :job="job" />
-        </div>
-      </section>
+          <div class="insight-grid">
+            <article v-for="item in analysisInsights" :key="item" class="insight-card">
+              {{ item }}
+            </article>
+          </div>
+        </section>
+      </div>
     </template>
   </section>
 </template>

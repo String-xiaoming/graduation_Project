@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.txd.guizhoujob.analysis.mapper.AnalysisDashboardMapper">
+
+    <resultMap id="OverviewResultMap" type="org.txd.guizhoujob.analysis.vo.AnalysisDashboardVO$Overview">
+        <result property="totalJobs" column="total_jobs"/>
+        <result property="activeJobs" column="active_jobs"/>
+        <result property="salaryReadyJobs" column="salary_ready_jobs"/>
+        <result property="descriptionReadyJobs" column="description_ready_jobs"/>
+        <result property="cityReadyJobs" column="city_ready_jobs"/>
+        <result property="companyCount" column="company_count"/>
+        <result property="cityCount" column="city_count"/>
+        <result property="batchCount" column="batch_count"/>
+        <result property="minPublishTime" column="min_publish_time"/>
+        <result property="maxPublishTime" column="max_publish_time"/>
+        <result property="avgSalary" column="avg_salary"/>
+        <result property="medianSalary" column="median_salary"/>
+    </resultMap>
+
+    <resultMap id="NameValueResultMap" type="org.txd.guizhoujob.analysis.vo.AnalysisDashboardVO$NameValue">
+        <result property="name" column="name"/>
+        <result property="value" column="value"/>
+    </resultMap>
+
+    <resultMap id="HeatmapItemResultMap" type="org.txd.guizhoujob.analysis.vo.AnalysisDashboardVO$HeatmapItem">
+        <result property="x" column="x"/>
+        <result property="y" column="y"/>
+        <result property="value" column="value"/>
+    </resultMap>
+
+    <resultMap id="CategoryItemResultMap" type="org.txd.guizhoujob.analysis.vo.AnalysisDashboardVO$CategoryItem">
+        <result property="name" column="name"/>
+        <result property="value" column="value"/>
+        <result property="avgSalary" column="avg_salary"/>
+    </resultMap>
+
+    <resultMap id="SalaryBoxResultMap" type="org.txd.guizhoujob.analysis.vo.AnalysisDashboardVO$SalaryBox">
+        <result property="city" column="city"/>
+        <result property="min" column="min_salary"/>
+        <result property="q1" column="q1"/>
+        <result property="median" column="median"/>
+        <result property="q3" column="q3"/>
+        <result property="max" column="max_salary"/>
+    </resultMap>
+
+    <select id="selectOverview" resultMap="OverviewResultMap">
+        select
+            count(1) as total_jobs,
+            sum(case when status = 1 then 1 else 0 end) as active_jobs,
+            sum(case when status = 1 and salary_min is not null and salary_max is not null then 1 else 0 end) as salary_ready_jobs,
+            sum(case when status = 1 and job_description is not null and trim(job_description) != '' then 1 else 0 end) as description_ready_jobs,
+            sum(case when status = 1 and city is not null and trim(city) != '' then 1 else 0 end) as city_ready_jobs,
+            count(distinct case when status = 1 then company_name end) as company_count,
+            count(distinct case when status = 1 then city end) as city_count,
+            count(distinct data_batch_no) as batch_count,
+            date_format(min(publish_time), '%Y-%m-%d') as min_publish_time,
+            date_format(max(publish_time), '%Y-%m-%d') as max_publish_time,
+            round(avg(case when status = 1 and salary_min is not null and salary_max is not null then (salary_min + salary_max) / 2 else null end), 0) as avg_salary
+        from job_info
+    </select>
+
+    <select id="selectCityJobDistribution" resultMap="NameValueResultMap">
+        select city as name, count(1) as value
+        from job_info
+        where status = 1
+          and city is not null
+          and trim(city) != ''
+        group by city
+        order by value desc
+    </select>
+
+    <select id="selectMedianSalary" resultType="java.lang.Integer">
+        select round(avg(salary), 0)
+        from (
+            select
+                salary,
+                row_number() over (order by salary) as rn,
+                count(1) over () as cnt
+            from (
+                select (salary_min + salary_max) / 2 as salary
+                from job_info
+                where status = 1
+                  and salary_min is not null
+                  and salary_max is not null
+            ) salary_source
+        ) ranked
+        where rn in (floor((cnt + 1) / 2), floor((cnt + 2) / 2))
+    </select>
+
+    <select id="selectSalaryBuckets" resultMap="NameValueResultMap">
+        select name, count(1) as value
+        from (
+            select
+                case
+                    when salary_min is null or salary_max is null then '未知'
+                    when (salary_min + salary_max) / 2 &lt; 3000 then '3K以下'
+                    when (salary_min + salary_max) / 2 &lt; 5000 then '3K-5K'
+                    when (salary_min + salary_max) / 2 &lt; 8000 then '5K-8K'
+                    when (salary_min + salary_max) / 2 &lt; 12000 then '8K-12K'
+                    when (salary_min + salary_max) / 2 &lt; 15000 then '12K-15K'
+                    else '15K以上'
+                end as name
+            from job_info
+            where status = 1
+        ) t
+        group by name
+        order by field(name, '3K以下', '3K-5K', '5K-8K', '8K-12K', '12K-15K', '15K以上', '未知')
+    </select>
+
+    <select id="selectCitySalaryBoxes" resultMap="SalaryBoxResultMap">
+        select
+            city,
+            round(min(salary), 0) as min_salary,
+            round(max(case when rn = greatest(1, ceil(cnt * 0.25)) then salary end), 0) as q1,
+            round(max(case when rn = greatest(1, ceil(cnt * 0.50)) then salary end), 0) as median,
+            round(max(case when rn = greatest(1, ceil(cnt * 0.75)) then salary end), 0) as q3,
+            round(max(salary), 0) as max_salary
+        from (
+            select
+                city,
+                salary,
+                row_number() over (partition by city order by salary) as rn,
+                count(1) over (partition by city) as cnt
+            from (
+                select city, (salary_min + salary_max) / 2 as salary
+                from job_info
+                where status = 1
+                  and city is not null
+                  and trim(city) != ''
+                  and salary_min is not null
+                  and salary_max is not null
+            ) salary_source
+        ) ranked
+        group by city
+        order by median desc
+    </select>
+
+    <select id="selectEducationExperienceHeatmap" resultMap="HeatmapItemResultMap">
+        select
+            coalesce(nullif(education_text, ''), '未知') as x,
+            coalesce(nullif(experience_text, ''), '未知') as y,
+            count(1) as value
+        from job_info
+        where status = 1
+        group by coalesce(nullif(education_text, ''), '未知'), coalesce(nullif(experience_text, ''), '未知')
+    </select>
+
+    <select id="selectCategoryDistribution" resultMap="CategoryItemResultMap">
+        select name, count(1) as value, round(avg(avg_salary), 0) as avg_salary
+        from (
+            select
+                case
+                    when concat(job_title, ' ', job_description) regexp 'Java|前端|后端|开发|程序|软件|Python|测试|运维|算法|数据|IT|Web|Vue|PHP|Android|安卓' then '技术开发'
+                    when concat(job_title, ' ', job_description) regexp '销售|客服|客户|电销|业务|导购|顾问' then '销售客服'
+                    when concat(job_title, ' ', job_description) regexp '行政|人事|招聘|文员|助理|前台' then '行政人事'
+                    when concat(job_title, ' ', job_description) regexp '财务|会计|出纳|审计|税务' then '财务会计'
+                    when concat(job_title, ' ', job_description) regexp '教师|老师|培训|课程|教务|教育' then '教育培训'
+                    when concat(job_title, ' ', job_description) regexp '护士|护理|医生|药|康复|医疗|口腔' then '医疗护理'
+                    when concat(job_title, ' ', job_description) regexp '普工|操作工|生产|质检|维修|电工|焊工|技工|工厂' then '生产制造'
+                    when concat(job_title, ' ', job_description) regexp '司机|配送|仓库|物流|快递|搬运' then '物流配送'
+                    when concat(job_title, ' ', job_description) regexp '设计|运营|主播|剪辑|新媒体|美工|策划' then '设计运营'
+                    else '其他'
+                end as name,
+                case
+                    when salary_min is not null and salary_max is not null then (salary_min + salary_max) / 2
+                    else null
+                end as avg_salary
+            from job_info
+            where status = 1
+        ) t
+        group by name
+        order by value desc
+    </select>
+</mapper>

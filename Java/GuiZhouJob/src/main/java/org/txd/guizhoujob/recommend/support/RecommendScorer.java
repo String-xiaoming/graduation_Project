@@ -6,17 +6,53 @@ import org.txd.guizhoujob.user.entity.SysUser;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class RecommendScorer {
 
-    public RecommendScore score(SysUser user, JobInfoVO job) {
-        List<String> matchedSkills = new ArrayList<>();
-        double contentScore = contentScore(user, job, matchedSkills);
+    private static final Pattern TOKEN_PATTERN = Pattern.compile("[a-z0-9+#.]+|[\\u4e00-\\u9fa5]+");
+
+    public Map<Long, ContentMatch> contentMatches(SysUser user, List<JobInfoVO> jobs) {
+        Map<String, Integer> userTf = termFrequency(userProfileText(user));
+        Map<Long, Map<String, Integer>> jobTfMap = new LinkedHashMap<>();
+        Map<String, Integer> documentFrequency = new HashMap<>();
+
+        for (JobInfoVO job : jobs) {
+            Map<String, Integer> jobTf = termFrequency(jobProfileText(job));
+            jobTfMap.put(job.getId(), jobTf);
+            for (String term : jobTf.keySet()) {
+                documentFrequency.merge(term, 1, Integer::sum);
+            }
+        }
+
+        int documentCount = Math.max(jobs.size(), 1);
+        Map<String, Double> userVector = tfidfVector(userTf, documentFrequency, documentCount);
+        double userNorm = norm(userVector);
+
+        Map<Long, ContentMatch> matches = new HashMap<>();
+        for (JobInfoVO job : jobs) {
+            Map<String, Integer> jobTf = jobTfMap.getOrDefault(job.getId(), Map.of());
+            Map<String, Double> jobVector = tfidfVector(jobTf, documentFrequency, documentCount);
+            double similarity = cosine(userVector, userNorm, jobVector);
+            List<String> matchedTerms = matchedTerms(userVector, jobTf);
+            matches.put(job.getId(), new ContentMatch(round(similarity * 100), matchedTerms));
+        }
+        return matches;
+    }
+
+    public RecommendScore score(SysUser user, JobInfoVO job, ContentMatch contentMatch) {
+        double contentScore = contentMatch != null ? contentMatch.getScore() : 0;
+        List<String> matchedTerms = contentMatch != null ? contentMatch.getMatchedTerms() : List.of();
         double cityScore = cityScore(user, job);
         double salaryScore = salaryScore(user, job);
         double educationScore = educationScore(user, job);
@@ -35,63 +71,135 @@ public class RecommendScorer {
         score.setEducationScore(round(educationScore));
         score.setExperienceScore(round(experienceScore));
         score.setRecommendScore(round(total));
-        score.setReasons(reasons(user, job, score, matchedSkills));
+        score.setReasons(reasons(score, matchedTerms));
         return score;
     }
 
-    private double contentScore(SysUser user, JobInfoVO job, List<String> matchedSkills) {
-        Set<String> tokens = userTokens(user);
-        String expectedPosition = normalize(user.getExpectedPosition());
-        String title = normalize(job.getJobTitle());
-        String description = normalize(job.getJobDescription());
-        String jobText = title + " " + description;
-
-        double score = 0;
-        if (hasText(expectedPosition)) {
-            if (title.contains(expectedPosition)) {
-                score += 42;
-            } else if (jobText.contains(expectedPosition)) {
-                score += 26;
-            }
-        }
-
-        for (String token : tokens) {
-            if (title.contains(token)) {
-                score += 16;
-                matchedSkills.add(token);
-            } else if (description.contains(token)) {
-                score += 9;
-                matchedSkills.add(token);
-            }
-            if (score >= 100) {
-                break;
-            }
-        }
-
-        if (score == 0 && tokens.isEmpty() && !hasText(expectedPosition)) {
-            return 45;
-        }
-        return Math.min(100, score);
+    private String userProfileText(SysUser user) {
+        return joinText(
+                user.getExpectedPosition(),
+                user.getExpectedPosition(),
+                user.getSkillInputText(),
+                user.getSkillInputText(),
+                user.getEducationText(),
+                user.getLocalCity()
+        );
     }
 
-    private Set<String> userTokens(SysUser user) {
-        Set<String> tokens = new LinkedHashSet<>();
-        addTokens(tokens, user.getExpectedPosition());
-        addTokens(tokens, user.getSkillInputText());
+    private String jobProfileText(JobInfoVO job) {
+        return joinText(
+                job.getJobTitle(),
+                job.getJobTitle(),
+                job.getJobDescription(),
+                job.getEducationText(),
+                job.getExperienceText(),
+                job.getCity()
+        );
+    }
+
+    private String joinText(String... parts) {
+        StringBuilder builder = new StringBuilder();
+        for (String part : parts) {
+            if (hasText(part)) {
+                builder.append(part).append(' ');
+            }
+        }
+        return builder.toString();
+    }
+
+    private Map<String, Integer> termFrequency(String text) {
+        Map<String, Integer> frequency = new HashMap<>();
+        for (String token : tokenize(text)) {
+            frequency.merge(token, 1, Integer::sum);
+        }
+        return frequency;
+    }
+
+    private List<String> tokenize(String text) {
+        List<String> tokens = new ArrayList<>();
+        Matcher matcher = TOKEN_PATTERN.matcher(normalize(text));
+        while (matcher.find()) {
+            String token = matcher.group();
+            if (isAsciiToken(token)) {
+                addAsciiToken(tokens, token);
+            } else {
+                addChineseTokens(tokens, token);
+            }
+        }
         return tokens;
     }
 
-    private void addTokens(Set<String> tokens, String text) {
-        if (!hasText(text)) {
+    private void addAsciiToken(List<String> tokens, String token) {
+        if (token.length() >= 2 && !isStopWord(token)) {
+            tokens.add(token);
+        }
+    }
+
+    private void addChineseTokens(List<String> tokens, String text) {
+        if (text.length() < 2) {
             return;
         }
-        String[] parts = text.split("[,，、;；/|\\s]+");
-        for (String part : parts) {
-            String token = normalize(part);
-            if (token.length() >= 2) {
-                tokens.add(token);
+        if (text.length() <= 6 && !isStopWord(text)) {
+            tokens.add(text);
+        }
+        for (int size = 2; size <= 4; size++) {
+            if (text.length() < size) {
+                continue;
+            }
+            for (int i = 0; i <= text.length() - size; i++) {
+                String token = text.substring(i, i + size);
+                if (!isStopWord(token)) {
+                    tokens.add(token);
+                }
             }
         }
+    }
+
+    private Map<String, Double> tfidfVector(
+            Map<String, Integer> termFrequency,
+            Map<String, Integer> documentFrequency,
+            int documentCount
+    ) {
+        Map<String, Double> vector = new HashMap<>();
+        int maxFrequency = termFrequency.values().stream().mapToInt(Integer::intValue).max().orElse(1);
+        for (Map.Entry<String, Integer> entry : termFrequency.entrySet()) {
+            String term = entry.getKey();
+            double tf = entry.getValue() / (double) maxFrequency;
+            int df = documentFrequency.getOrDefault(term, 0);
+            double idf = Math.log((documentCount + 1.0) / (df + 1.0)) + 1.0;
+            vector.put(term, tf * idf);
+        }
+        return vector;
+    }
+
+    private double cosine(Map<String, Double> userVector, double userNorm, Map<String, Double> jobVector) {
+        double jobNorm = norm(jobVector);
+        if (userVector.isEmpty() || jobVector.isEmpty() || userNorm == 0 || jobNorm == 0) {
+            return 0;
+        }
+        double dot = 0;
+        for (Map.Entry<String, Double> entry : userVector.entrySet()) {
+            dot += entry.getValue() * jobVector.getOrDefault(entry.getKey(), 0.0);
+        }
+        return dot / (userNorm * jobNorm);
+    }
+
+    private double norm(Map<String, Double> vector) {
+        double sum = 0;
+        for (double value : vector.values()) {
+            sum += value * value;
+        }
+        return Math.sqrt(sum);
+    }
+
+    private List<String> matchedTerms(Map<String, Double> userVector, Map<String, Integer> jobTf) {
+        Set<String> jobTerms = new HashSet<>(jobTf.keySet());
+        return userVector.entrySet().stream()
+                .filter(entry -> jobTerms.contains(entry.getKey()))
+                .sorted(Map.Entry.<String, Double>comparingByValue(Comparator.reverseOrder()))
+                .map(Map.Entry::getKey)
+                .limit(4)
+                .toList();
     }
 
     private double cityScore(SysUser user, JobInfoVO job) {
@@ -187,13 +295,13 @@ public class RecommendScorer {
         return -1;
     }
 
-    private List<String> reasons(SysUser user, JobInfoVO job, RecommendScore score, List<String> matchedSkills) {
+    private List<String> reasons(RecommendScore score, List<String> matchedTerms) {
         List<String> reasons = new ArrayList<>();
         if (score.getCityScore() >= 90) {
             reasons.add("同城岗位");
         }
-        if (!matchedSkills.isEmpty()) {
-            reasons.add("匹配技能：" + String.join("、", matchedSkills.stream().distinct().limit(4).toList()));
+        if (!matchedTerms.isEmpty()) {
+            reasons.add("TF-IDF匹配词：" + String.join("、", matchedTerms));
         }
         if (score.getSalaryScore() >= 90) {
             reasons.add("薪资符合期望");
@@ -201,13 +309,41 @@ public class RecommendScorer {
         if (score.getEducationScore() >= 90) {
             reasons.add("学历要求符合");
         }
-        if (score.getContentScore() >= 70) {
-            reasons.add("岗位方向接近期望");
+        if (score.getContentScore() >= 20) {
+            reasons.add("岗位内容与求职画像相似");
         }
         if (reasons.isEmpty()) {
             reasons.add("岗位信息与当前求职画像有一定相关性");
         }
         return reasons;
+    }
+
+    private boolean isAsciiToken(String token) {
+        for (int i = 0; i < token.length(); i++) {
+            if (token.charAt(i) > 127) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isStopWord(String token) {
+        return token.length() < 2
+                || "岗位".equals(token)
+                || "职位".equals(token)
+                || "工作".equals(token)
+                || "要求".equals(token)
+                || "负责".equals(token)
+                || "经验".equals(token)
+                || "学历".equals(token)
+                || "公司".equals(token)
+                || "使用".equals(token)
+                || "了解".equals(token)
+                || "熟悉".equals(token)
+                || "优先".equals(token)
+                || "the".equals(token)
+                || "and".equals(token)
+                || "with".equals(token);
     }
 
     private String normalize(String text) {

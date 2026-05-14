@@ -334,6 +334,24 @@ onMounted(() => {
       </div>
     </div>
 
+    <div class="admin-summary-grid">
+      <article>
+        <span>当前模块</span>
+        <strong>{{ activeTab === 'users' ? '用户管理' : '岗位管理' }}</strong>
+        <small>集中维护账号、权限与岗位状态</small>
+      </article>
+      <article>
+        <span>{{ activeTab === 'users' ? '用户总数' : '岗位总数' }}</span>
+        <strong>{{ activeTab === 'users' ? userPage.total : jobPage.total }}</strong>
+        <small>跟随当前筛选条件实时变化</small>
+      </article>
+      <article>
+        <span>当前页</span>
+        <strong>{{ activeTab === 'users' ? userPage.pageNum : jobPage.pageNum }}</strong>
+        <small>{{ activeTab === 'users' ? userPage.pageSize : jobPage.pageSize }} 条 / 页</small>
+      </article>
+    </div>
+
     <div class="admin-tabs">
       <button type="button" :class="{ active: activeTab === 'users' }" @click="switchTab('users')">
         用户管理
@@ -399,6 +417,12 @@ onMounted(() => {
                 <td>
                   <button class="text-button" type="button" @click="fillUserForm(user)">编辑</button>
                   <button class="text-button danger-link" type="button" @click="removeUser(user)">删除</button>
+                </td>
+              </tr>
+              <tr v-if="!loading && !userPage.list.length" class="admin-empty-row">
+                <td colspan="7">
+                  <strong>暂无用户数据</strong>
+                  <span>调整筛选条件后重新查询，或在右侧新增用户。</span>
                 </td>
               </tr>
             </tbody>
@@ -505,6 +529,12 @@ onMounted(() => {
                 <td>
                   <button class="text-button" type="button" @click="fillJobForm(job)">编辑</button>
                   <button class="text-button danger-link" type="button" @click="removeJob(job)">删除</button>
+                </td>
+              </tr>
+              <tr v-if="!loading && !jobPage.list.length" class="admin-empty-row">
+                <td colspan="7">
+                  <strong>暂无岗位数据</strong>
+                  <span>调整岗位、公司、城市或状态条件后重新查询。</span>
                 </td>
               </tr>
             </tbody>

@@ -2,7 +2,7 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchJobPage } from '@/api/job'
-import { fetchUserProfile, updateUserProfile } from '@/api/user'
+import { changeUserPassword, fetchUserProfile, sendEmailCode, updateUserProfile } from '@/api/user'
 import JobCard from '@/components/JobCard.vue'
 import LoadingBlock from '@/components/LoadingBlock.vue'
 import { getCurrentUser, setCurrentUser } from '@/utils/auth'
@@ -10,11 +10,17 @@ import { getCurrentUser, setCurrentUser } from '@/utils/auth'
 const router = useRouter()
 const loading = ref(true)
 const saving = ref(false)
+const passwordSaving = ref(false)
+const passwordSending = ref(false)
+const passwordCountdown = ref(0)
 const matching = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
+const toastMessage = ref('')
 const profile = ref(null)
 const matchedJobs = ref([])
+let passwordTimer = null
+let toastTimer = null
 
 const cityOptions = ['贵阳', '遵义', '安顺', '六盘水', '毕节', '铜仁', '黔东南', '黔南', '黔西南']
 const educationOptions = ['不限', '初中及以上', '高中', '中专/中技', '大专', '本科', '硕士', '博士']
@@ -29,6 +35,21 @@ const form = reactive({
   expectedSalaryMax: '',
   skillInputText: '',
 })
+
+const passwordForm = reactive({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+  emailCode: '',
+})
+
+function showToast(message) {
+  toastMessage.value = message
+  window.clearTimeout(toastTimer)
+  toastTimer = window.setTimeout(() => {
+    toastMessage.value = ''
+  }, 5000)
+}
 
 const skillDictionary = [
   'Java',
@@ -213,6 +234,70 @@ async function saveProfile() {
   }
 }
 
+function startPasswordCountdown() {
+  passwordCountdown.value = 60
+  window.clearInterval(passwordTimer)
+  passwordTimer = window.setInterval(() => {
+    passwordCountdown.value -= 1
+    if (passwordCountdown.value <= 0) {
+      window.clearInterval(passwordTimer)
+      passwordTimer = null
+    }
+  }, 1000)
+}
+
+async function sendChangePasswordCode() {
+  const currentUser = getCurrentUser()
+  if (!currentUser?.email) {
+    errorMessage.value = '请先登录'
+    return
+  }
+
+  passwordSending.value = true
+  errorMessage.value = ''
+  try {
+    await sendEmailCode({ email: currentUser.email, scene: 'CHANGE_PASSWORD' })
+    showToast('验证码已发送，请查看邮箱')
+    startPasswordCountdown()
+  } catch (error) {
+    errorMessage.value = error.message
+  } finally {
+    passwordSending.value = false
+  }
+}
+
+async function changePassword() {
+  if (!passwordForm.oldPassword || !passwordForm.newPassword || !passwordForm.confirmPassword || !passwordForm.emailCode) {
+    errorMessage.value = '请完整填写修改密码信息'
+    return
+  }
+  if (passwordForm.newPassword.length < 6 || passwordForm.newPassword.length > 20) {
+    errorMessage.value = '新密码长度需要在6到20位之间'
+    return
+  }
+  if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+    errorMessage.value = '两次输入的新密码不一致'
+    return
+  }
+
+  passwordSaving.value = true
+  errorMessage.value = ''
+  successMessage.value = ''
+  try {
+    await changeUserPassword({
+      oldPassword: passwordForm.oldPassword,
+      newPassword: passwordForm.newPassword,
+      emailCode: passwordForm.emailCode,
+    })
+    Object.assign(passwordForm, { oldPassword: '', newPassword: '', confirmPassword: '', emailCode: '' })
+    successMessage.value = '密码已修改'
+  } catch (error) {
+    errorMessage.value = error.message
+  } finally {
+    passwordSaving.value = false
+  }
+}
+
 function goMatchedJobs() {
   const params = buildJobParams()
   router.push({
@@ -232,6 +317,8 @@ onMounted(loadProfile)
 
 <template>
   <section class="profile-page page-section">
+    <div v-if="toastMessage" class="toast-notice" aria-live="polite">{{ toastMessage }}</div>
+
     <div class="profile-hero">
       <div>
         <p class="eyebrow">PROFILE CENTER</p>
@@ -355,6 +442,42 @@ onMounted(loadProfile)
           </div>
         </form>
       </div>
+
+      <form class="profile-form-card" @submit.prevent="changePassword">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">SECURITY</p>
+            <h2>修改密码</h2>
+          </div>
+          <button type="submit" :disabled="passwordSaving">
+            {{ passwordSaving ? '修改中...' : '保存新密码' }}
+          </button>
+        </div>
+
+        <div class="profile-form-grid">
+          <label>
+            旧密码
+            <input v-model="passwordForm.oldPassword" type="password" placeholder="请输入旧密码" autocomplete="current-password" />
+          </label>
+          <label>
+            新密码
+            <input v-model="passwordForm.newPassword" type="password" placeholder="6到20位新密码" autocomplete="new-password" />
+          </label>
+          <label>
+            确认新密码
+            <input v-model="passwordForm.confirmPassword" type="password" placeholder="请再次输入新密码" autocomplete="new-password" />
+          </label>
+          <label>
+            邮箱验证码
+            <span class="code-input-row">
+              <input v-model.trim="passwordForm.emailCode" placeholder="请输入验证码" autocomplete="one-time-code" />
+              <button class="ghost-button" type="button" :disabled="passwordSending || passwordCountdown > 0" @click="sendChangePasswordCode">
+                {{ passwordCountdown > 0 ? `${passwordCountdown}s` : passwordSending ? '发送中' : '发送' }}
+              </button>
+            </span>
+          </label>
+        </div>
+      </form>
 
       <section class="profile-match-section">
         <div class="section-head">

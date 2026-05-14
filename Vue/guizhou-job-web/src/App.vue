@@ -27,6 +27,13 @@ function logout() {
 onMounted(() => {
   stopAuthListener = onAuthChange((user) => {
     currentUser.value = user
+    if (!user && route.meta.requiresAuth) {
+      router.replace({ path: '/login', query: { redirect: route.fullPath } })
+      return
+    }
+    if (user && route.meta.requiresAdmin && !isAdminUser(user)) {
+      router.replace('/')
+    }
   })
 })
 

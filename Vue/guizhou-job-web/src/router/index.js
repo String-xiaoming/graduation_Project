@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { getCurrentUser, isAdminUser } from '@/utils/auth'
+import { getAuthToken, getCurrentUser, isAdminUser } from '@/utils/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +28,11 @@ const router = createRouter({
       component: () => import('@/views/DashboardView.vue'),
     },
     {
+      path: '/analysis/screen',
+      name: 'analysis-screen',
+      component: () => import('@/views/AnalysisScreenView.vue'),
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: () => import('@/views/ProfileView.vue'),
@@ -49,13 +54,23 @@ const router = createRouter({
       name: 'register',
       component: () => import('@/views/RegisterView.vue'),
     },
+    {
+      path: '/password-reset',
+      name: 'password-reset',
+      component: () => import('@/views/PasswordResetView.vue'),
+    },
   ],
 })
 
 router.beforeEach((to) => {
   const currentUser = getCurrentUser()
+  const authToken = getAuthToken()
 
   if (to.meta.requiresAuth && !currentUser) {
+    return { path: '/login', query: { redirect: to.fullPath } }
+  }
+
+  if (to.meta.requiresAuth && !authToken) {
     return { path: '/login', query: { redirect: to.fullPath } }
   }
 
@@ -63,7 +78,7 @@ router.beforeEach((to) => {
     return { path: '/' }
   }
 
-  if ((to.name === 'login' || to.name === 'register') && currentUser) {
+  if ((to.name === 'login' || to.name === 'register' || to.name === 'password-reset') && currentUser && authToken) {
     return { path: isAdminUser(currentUser) ? '/admin' : '/profile' }
   }
 

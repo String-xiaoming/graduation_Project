@@ -7,6 +7,7 @@ import org.txd.guizhoujob.job.vo.JobInfoVO;
 import org.txd.guizhoujob.recommend.entity.RecommendResult;
 import org.txd.guizhoujob.recommend.mapper.RecommendMapper;
 import org.txd.guizhoujob.recommend.service.RecommendService;
+import org.txd.guizhoujob.recommend.support.ContentMatch;
 import org.txd.guizhoujob.recommend.support.RecommendScore;
 import org.txd.guizhoujob.recommend.support.RecommendScorer;
 import org.txd.guizhoujob.recommend.vo.RecommendJobVO;
@@ -16,6 +17,7 @@ import org.txd.guizhoujob.user.mapper.SysUserMapper;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -45,11 +47,12 @@ public class RecommendServiceImpl implements RecommendService {
         int resultLimit = normalizeLimit(limit);
         SysUser user = getActiveUser(userId);
         List<JobInfoVO> candidates = recommendMapper.selectCandidateJobs(user.getLocalCity(), CANDIDATE_LIMIT);
+        Map<Long, ContentMatch> contentMatches = recommendScorer.contentMatches(user, candidates);
         String batchNo = "recommend-" + System.currentTimeMillis();
         AtomicInteger rank = new AtomicInteger(1);
 
         List<RecommendResult> results = candidates.stream()
-                .map(job -> toResult(user, job, recommendScorer.score(user, job)))
+                .map(job -> toResult(user, job, recommendScorer.score(user, job, contentMatches.get(job.getId()))))
                 .sorted(Comparator.comparing(RecommendResult::getRecommendScore).reversed())
                 .limit(resultLimit)
                 .peek(result -> {

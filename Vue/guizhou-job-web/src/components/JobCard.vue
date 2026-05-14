@@ -26,29 +26,37 @@ function openDetail() {
     @keydown.enter.prevent="openDetail"
     @keydown.space.prevent="openDetail"
   >
-    <div class="job-card__head">
-      <div>
-        <span class="job-card__title">
-          {{ job.jobTitle }}
-        </span>
-        <p class="job-card__company" :title="job.companyName">{{ job.companyName }}</p>
+    <div class="job-card__main">
+      <div class="job-card__content">
+        <div class="job-card__head">
+          <div>
+            <span class="job-card__title">
+              {{ job.jobTitle }}
+            </span>
+            <p class="job-card__company" :title="job.companyName">{{ job.companyName || '公司信息待确认' }}</p>
+          </div>
+          <strong>{{ formatSalary(job) }}</strong>
+        </div>
+
+        <div class="job-card__tags">
+          <span>{{ job.city || '城市未知' }}</span>
+          <span>{{ job.educationText || '学历不限' }}</span>
+          <span>{{ job.experienceText || '经验不限' }}</span>
+        </div>
+
+        <p class="job-card__desc">
+          {{ clampText(job.jobDescription, 96) || '暂无岗位描述，点击查看岗位详情。' }}
+        </p>
       </div>
-      <strong>{{ formatSalary(job) }}</strong>
-    </div>
 
-    <div class="job-card__tags">
-      <span>{{ job.city || '城市未知' }}</span>
-      <span>{{ job.educationText || '学历不限' }}</span>
-      <span>{{ job.experienceText || '经验不限' }}</span>
+      <aside class="job-card__meta">
+        <span>{{ formatDate(job.publishTime) }}</span>
+        <button class="text-button" type="button" @click.stop="openDetail">查看详情</button>
+      </aside>
     </div>
-
-    <p class="job-card__desc">
-      {{ clampText(job.jobDescription, 130) }}
-    </p>
 
     <footer class="job-card__foot">
       <span>{{ job.workAddress || '地址待确认' }}</span>
-      <span>{{ formatDate(job.publishTime) }}</span>
     </footer>
   </article>
 </template>

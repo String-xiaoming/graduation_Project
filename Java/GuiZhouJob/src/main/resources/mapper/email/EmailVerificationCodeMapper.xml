@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.txd.guizhoujob.email.mapper.EmailVerificationCodeMapper">
+
+    <resultMap id="EmailVerificationCodeResultMap" type="org.txd.guizhoujob.email.entity.EmailVerificationCode">
+        <id property="id" column="id"/>
+        <result property="email" column="email"/>
+        <result property="scene" column="scene"/>
+        <result property="codeHash" column="code_hash"/>
+        <result property="expireTime" column="expire_time"/>
+        <result property="used" column="used"/>
+        <result property="sendIp" column="send_ip"/>
+        <result property="createTime" column="create_time"/>
+        <result property="usedTime" column="used_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.txd.guizhoujob.email.entity.EmailVerificationCode" useGeneratedKeys="true" keyProperty="id">
+        insert into email_verification_code (
+            email, scene, code_hash, expire_time, used, send_ip
+        ) values (
+            #{email}, #{scene}, #{codeHash}, #{expireTime}, #{used}, #{sendIp}
+        )
+    </insert>
+
+    <select id="selectLastCreateTime" resultType="java.time.LocalDateTime">
+        select create_time
+        from email_verification_code
+        where email = #{email}
+          and scene = #{scene}
+        order by id desc
+        limit 1
+    </select>
+
+    <select id="selectLatestAvailable" resultMap="EmailVerificationCodeResultMap">
+        select id, email, scene, code_hash, expire_time, used, send_ip, create_time, used_time
+        from email_verification_code
+        where email = #{email}
+          and scene = #{scene}
+          and used = 0
+          and expire_time &gt; #{now}
+        order by id desc
+        limit 1
+    </select>
+
+    <update id="markUsed">
+        update email_verification_code
+        set used = 1,
+            used_time = now()
+        where id = #{id}
+          and used = 0
+    </update>
+</mapper>

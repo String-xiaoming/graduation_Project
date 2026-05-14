@@ -2,7 +2,6 @@ package org.txd.guizhoujob.admin.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.txd.guizhoujob.admin.dto.AdminJobQueryDTO;
 import org.txd.guizhoujob.admin.dto.AdminJobUpdateDTO;
@@ -16,8 +15,8 @@ import org.txd.guizhoujob.job.support.JobTableResolver;
 import org.txd.guizhoujob.job.vo.JobInfoVO;
 import org.txd.guizhoujob.user.entity.SysUser;
 import org.txd.guizhoujob.user.mapper.SysUserMapper;
+import org.txd.guizhoujob.user.support.PasswordHashSupport;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -57,7 +56,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         SysUser user = buildUser(dto);
-        user.setPasswordHash(md5(dto.getPassword()));
+        user.setPasswordHash(PasswordHashSupport.encode(dto.getPassword()));
 
         int rows = sysUserMapper.insertByAdmin(user);
         if (rows <= 0) {
@@ -84,7 +83,7 @@ public class AdminServiceImpl implements AdminService {
         SysUser user = buildUser(dto);
         user.setId(id);
         if (StringUtils.hasText(dto.getPassword())) {
-            user.setPasswordHash(md5(dto.getPassword()));
+            user.setPasswordHash(PasswordHashSupport.encode(dto.getPassword()));
         }
 
         int rows = sysUserMapper.updateByAdmin(user);
@@ -216,7 +215,4 @@ public class AdminServiceImpl implements AdminService {
         dto.setPageSize(dto.getPageSize() == null || dto.getPageSize() < 1 ? 10 : Math.min(dto.getPageSize(), 100));
     }
 
-    private String md5(String source) {
-        return DigestUtils.md5DigestAsHex(source.getBytes(StandardCharsets.UTF_8));
-    }
 }

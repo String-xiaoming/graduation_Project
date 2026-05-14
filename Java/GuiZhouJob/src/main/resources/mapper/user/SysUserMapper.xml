@@ -132,4 +132,11 @@
         set status = 0, update_time = now()
         where id = #{id}
     </update>
+
+    <update id="updatePasswordHash">
+        update sys_user
+        set password_hash = #{passwordHash},
+            update_time = now()
+        where id = #{id}
+    </update>
 </mapper>

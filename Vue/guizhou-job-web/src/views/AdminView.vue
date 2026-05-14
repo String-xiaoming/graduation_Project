@@ -14,6 +14,7 @@ const activeTab = ref('users')
 const loading = ref(false)
 const message = ref('')
 const errorMessage = ref('')
+const editorOpen = ref(false)
 
 const userPage = reactive({
   pageNum: 1,
@@ -108,6 +109,11 @@ function resetUserForm() {
   })
 }
 
+function openCreateUser() {
+  resetUserForm()
+  editorOpen.value = true
+}
+
 function fillUserForm(user) {
   Object.assign(userForm, {
     id: user.id,
@@ -123,6 +129,7 @@ function fillUserForm(user) {
     expectedSalaryMax: user.expectedSalaryMax ?? '',
     skillInputText: user.skillInputText || '',
   })
+  editorOpen.value = true
 }
 
 function resetJobForm() {
@@ -157,6 +164,11 @@ function fillJobForm(job) {
     jobDescription: job.jobDescription || '',
     status: job.status ?? 1,
   })
+  editorOpen.value = true
+}
+
+function closeEditor() {
+  editorOpen.value = false
 }
 
 async function loadUsers(pageNum = userPage.pageNum) {
@@ -236,6 +248,7 @@ async function submitUser() {
       showSuccess('用户已新增')
     }
     resetUserForm()
+    closeEditor()
     await loadUsers(1)
   } catch (error) {
     showError(error)
@@ -284,6 +297,7 @@ async function submitJob() {
     await updateAdminJob(jobForm.id, payload)
     showSuccess('岗位信息已更新')
     resetJobForm()
+    closeEditor()
     await loadJobs(jobPage.pageNum)
   } catch (error) {
     showError(error)
@@ -311,6 +325,7 @@ function switchTab(tab) {
   activeTab.value = tab
   message.value = ''
   errorMessage.value = ''
+  closeEditor()
   if (tab === 'users') loadUsers(1)
   if (tab === 'jobs') loadJobs(1)
 }
@@ -371,7 +386,10 @@ onMounted(() => {
             <p class="eyebrow">USER LIST</p>
             <h2>用户列表</h2>
           </div>
-          <span>共 {{ userPage.total }} 人</span>
+          <div class="admin-panel__tools">
+            <span>共 {{ userPage.total }} 人</span>
+            <button type="button" @click="openCreateUser">新增用户</button>
+          </div>
         </div>
 
         <form class="admin-filter" @submit.prevent="loadUsers(1)">
@@ -440,7 +458,10 @@ onMounted(() => {
         </div>
       </div>
 
-      <form class="admin-editor" @submit.prevent="submitUser">
+      <button v-if="editorOpen" class="admin-drawer-backdrop" type="button" aria-label="关闭编辑栏" @click="closeEditor"></button>
+
+      <form v-if="editorOpen" class="admin-editor admin-drawer" @submit.prevent="submitUser">
+        <button class="admin-drawer-close" type="button" aria-label="关闭编辑栏" @click="closeEditor">x</button>
         <p class="eyebrow">{{ isEditingUser ? 'EDIT USER' : 'CREATE USER' }}</p>
         <h2>{{ isEditingUser ? '编辑用户' : '新增用户' }}</h2>
         <label>邮箱<input v-model.trim="userForm.email" type="email" placeholder="user@qq.com" /></label>
@@ -552,7 +573,10 @@ onMounted(() => {
         </div>
       </div>
 
-      <form class="admin-editor" @submit.prevent="submitJob">
+      <button v-if="editorOpen" class="admin-drawer-backdrop" type="button" aria-label="关闭编辑栏" @click="closeEditor"></button>
+
+      <form v-if="editorOpen" class="admin-editor admin-drawer" @submit.prevent="submitJob">
+        <button class="admin-drawer-close" type="button" aria-label="关闭编辑栏" @click="closeEditor">x</button>
         <p class="eyebrow">EDIT JOB</p>
         <h2>{{ isEditingJob ? '编辑岗位' : '选择岗位后编辑' }}</h2>
         <label>岗位名称<input v-model.trim="jobForm.jobTitle" placeholder="岗位名称" /></label>

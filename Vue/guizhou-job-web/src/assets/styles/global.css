@@ -2438,7 +2438,7 @@ button:active:not(:disabled) {
 
 .admin-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 420px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   align-items: start;
 }
@@ -2475,9 +2475,21 @@ button:active:not(:disabled) {
   font-weight: 900;
 }
 
+.admin-panel__tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-panel__tools button {
+  min-height: 42px;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+
 .admin-filter {
   display: grid;
-  grid-template-columns: minmax(340px, 1fr) 160px 160px 96px;
+  grid-template-columns: minmax(420px, 1fr) 180px 180px 112px;
   gap: 8px;
   margin-bottom: 12px;
   padding: 10px;
@@ -2510,7 +2522,7 @@ button:active:not(:disabled) {
 
 .admin-table {
   width: 100%;
-  min-width: 760px;
+  min-width: 980px;
   border-collapse: collapse;
   font-size: 14px;
 }
@@ -2599,13 +2611,53 @@ button:active:not(:disabled) {
 }
 
 .admin-editor {
-  position: sticky;
-  top: 92px;
+  position: relative;
   display: grid;
-  max-height: calc(100vh - 108px);
   gap: 10px;
   padding: 16px;
   overflow: auto;
+}
+
+.admin-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  border: 0;
+  border-radius: 0;
+  background: rgba(15, 23, 42, 0.34);
+  box-shadow: none;
+}
+
+.admin-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 70;
+  width: min(460px, calc(100vw - 28px));
+  max-height: none;
+  border-radius: 8px 0 0 8px;
+  animation: drawer-in 0.22s ease-out both;
+}
+
+.admin-drawer-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  width: 38px;
+  min-height: 38px;
+  place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--admin-muted);
+  background: #f1f5f9;
+  box-shadow: none;
+}
+
+.admin-drawer-close:hover {
+  color: var(--admin-primary-dark);
+  background: rgba(23, 108, 95, 0.1);
 }
 
 .admin-editor h2 {
@@ -2656,6 +2708,18 @@ textarea:focus {
   padding: 12px 16px 16px;
   border-top: 1px solid var(--admin-border);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), #ffffff 34%);
+}
+
+@keyframes drawer-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .notice-card {
@@ -2775,7 +2839,7 @@ textarea:focus {
     position: static;
   }
 
-  .admin-editor {
+  .admin-editor:not(.admin-drawer) {
     position: static;
     max-height: none;
   }
